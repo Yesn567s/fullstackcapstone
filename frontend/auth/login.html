@@ -1,0 +1,617 @@
+<!doctype html>
+
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CV. SUMBER ARTHA - Login</title>
+    <!-- Favicon -->
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit for Luxury Timber Aesthetic -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Main Stylesheet -->
+    <link href="../template/css/style.css" rel="stylesheet" />
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+    <link href="../template/css/responsive.css" rel="stylesheet" />
+  </head>
+  <body class="theme-focus-wireframe">
+    <!-- Ambient Background Texture & Warm Radial Glows -->
+    <div aria-hidden="true" class="bg-texture"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-1"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-2"></div>
+    <!-- Top Brand Header Bar -->
+    <header class="top-nav-bar" id="topNavBar">
+      <div class="container nav-content">
+        <div class="nav-brand-handle">
+          <img
+            alt="Logo"
+            class="nav-mini-logo"
+            src="../../assets/favicon.ico"
+          />
+          <span class="handle-tag">@situssupercanggih</span>
+          <span class="divider-dot">&bull;</span>
+          <span class="handle-tag">@sumberartha.woodwork</span>
+        </div>
+      </div>
+    </header>
+    <!-- Main Interactive Section: Center Wireframe Auth Card Flanked by Aesthetic Media -->
+    <main class="page-wrapper" id="mainWrapper">
+      <div class="container auth-stage-layout" id="authStageView">
+        <!-- =================================================================== -->
+        <!-- LEFT FLANK: Decorative Pill & Square Media (Sesuai Gambar Arsir Kuning) -->
+        <!-- =================================================================== -->
+        <aside aria-hidden="true" class="flank-side flank-left">
+          <!-- Top Pill 1: Horizontal Rounded Capsule (Interior Kayu Elegan) -->
+          <div class="media-frame pill-frame-sm" title="Interior Kayu Elegan">
+            <img
+              alt="Interior Kayu Elegan"
+              class="flank-img"
+              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+            />
+            <div class="frame-subtle-glow"></div>
+          </div>
+          <!-- Mid Pill 2: Elongated Horizontal Capsule (Bahan Baku Balok Kayu Berkualitas) -->
+          <div
+            class="media-frame pill-frame-lg"
+            title="Kayu Berkualitas Tinggi"
+          >
+            <img
+              alt="Presisi Bahan Baku Kayu"
+              class="flank-img"
+              src="https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+            />
+            <div class="frame-subtle-glow"></div>
+          </div>
+          <!-- Bottom Card: Rounded Square (Meja & Kursi Kayu Solid) -->
+          <div class="media-frame square-frame" title="Furnitur Kayu Solid">
+            <img
+              alt="Produk Furnitur Kayu Solid"
+              class="flank-img"
+              src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+            />
+            <div class="frame-subtle-glow"></div>
+          </div>
+        </aside>
+        <!-- =================================================================== -->
+        <!-- CENTER: Dedicated Authentication Card (Wireframe Exact Layout)      -->
+        <!-- =================================================================== -->
+        <section class="auth-center-column">
+          <!-- Wireframe Breadcrumb Tag (as shown in wireframe canvas) -->
+          <div class="wireframe-tag-bar">
+            <span class="wireframe-screen-name" id="tagScreenName">Login</span>
+            <span class="wireframe-badge" id="tagAuthBadge"
+              >Portal Pengguna</span
+            >
+          </div>
+          <!-- THE MAIN CARD (Wireframe Exact Structure) -->
+          <div class="auth-card" id="authCard">
+            <!-- 1. Header: Logo Box + Company Title & Subtitle (External Representation) -->
+            <header class="card-header">
+              <div class="header-branding">
+                <!-- Brand Logo using favicon.ico -->
+                <div class="brand-logo-box" title="Logo CV. Sumber Artha">
+                  <img
+                    alt="Logo CV. Sumber Artha"
+                    class="brand-logo-img"
+                    src="../../assets/favicon.ico"
+                  />
+                </div>
+                <!-- Company Identity Text (External Brand Representation) -->
+                <div class="brand-text-block">
+                  <h1 class="company-name">CV. SUMBER ARTHA</h1>
+                  <p class="company-sub">
+                    Furnitur Kayu Berkualitas untuk Hunian Elegan
+                  </p>
+                </div>
+              </div>
+              <!-- Horizontal Divider (Wireframe HR) -->
+              <hr class="card-divider" />
+            </header>
+            <!-- 2. Interactive Auth Navigation Tabs: LOGIN vs REGISTER -->
+            <div
+              aria-label="Pilih Mode Masuk atau Daftar"
+              class="auth-tab-nav"
+              role="tablist"
+            >
+              <button
+                aria-controls="loginPanel"
+                aria-selected="true"
+                class="tab-button active"
+                id="tabBtnLogin"
+                role="tab"
+                type="button"
+              >
+                <span class="tab-label">LOGIN</span>
+                <span class="tab-indicator"></span>
+              </button>
+              <a
+                class="tab-button"
+                href="register.html"
+                id="tabBtnRegister"
+                type="button"
+              >
+                <span class="tab-label">REGISTER</span>
+                <span class="tab-indicator"></span>
+              </a>
+            </div>
+            <!-- Section Title with Wireframe Indicator Bar -->
+            <div class="form-title-section">
+              <h2 class="auth-heading" id="panelHeadingText">LOGIN</h2>
+              <!-- Placeholder bar from wireframe -->
+              <div aria-hidden="true" class="wireframe-sub-bar"></div>
+            </div>
+            <!-- Alert Notification Box -->
+            <div
+              aria-live="polite"
+              class="alert-box hidden"
+              id="authAlert"
+              role="alert"
+            >
+              <svg
+                class="alert-icon"
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="18"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" x2="12" y1="8" y2="12"></line>
+                <line x1="12" x2="12.01" y1="16" y2="16"></line>
+              </svg>
+              <span class="alert-text" id="alertMessage"
+                >Pesan pemberitahuan</span
+              >
+            </div>
+            <!-- =============================================================== -->
+            <!-- TAB PANEL 1: LOGIN FORM (External Customer / Member Account)     -->
+            <!-- =============================================================== -->
+            <div
+              aria-labelledby="tabBtnLogin"
+              class="tab-panel active"
+              id="loginPanel"
+              role="tabpanel"
+            >
+              <form class="auth-form" id="loginForm" novalidate="">
+                <!-- Field 1: USERNAME ATAU EMAIL -->
+                <div class="form-group" id="groupLoginUser">
+                  <label class="form-label" for="loginUserInput">
+                    <span>USERNAME ATAU EMAIL</span>
+                    <span class="required-star">*</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <span aria-hidden="true" class="input-icon">
+                      <svg
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewbox="0 0 24 24"
+                        width="18"
+                      >
+                        <path
+                          d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                        ></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </span>
+                    <input
+                      autocomplete="username"
+                      class="form-control"
+                      id="loginUserInput"
+                      name="username"
+                      placeholder="Masukkan username atau alamat email"
+                      required=""
+                      type="text"
+                    />
+                    <button
+                      aria-label="Hapus teks"
+                      class="clear-input-btn hidden"
+                      id="btnClearLoginUser"
+                      tabindex="-1"
+                      type="button"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                  <div class="error-feedback" id="loginUserError">
+                    Username atau email wajib diisi.
+                  </div>
+                </div>
+                <!-- Field 2: PASSWORD -->
+                <div class="form-group" id="groupLoginPass">
+                  <div class="label-row">
+                    <label class="form-label" for="loginPassInput">
+                      <span>PASSWORD</span>
+                      <span class="required-star">*</span>
+                    </label>
+                    <a class="forgot-link" href="#modalHelp" id="btnForgotPwd"
+                      >Lupa Password?</a
+                    >
+                  </div>
+                  <div class="input-wrapper">
+                    <span aria-hidden="true" class="input-icon">
+                      <svg
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewbox="0 0 24 24"
+                        width="18"
+                      >
+                        <rect
+                          height="11"
+                          rx="2"
+                          ry="2"
+                          width="18"
+                          x="3"
+                          y="11"
+                        ></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      </svg>
+                    </span>
+                    <input
+                      autocomplete="current-password"
+                      class="form-control"
+                      id="loginPassInput"
+                      name="password"
+                      placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                      required=""
+                      type="password"
+                    />
+                    <!-- Toggle Password Visibility -->
+                    <button
+                      aria-label="Tampilkan atau sembunyikan password"
+                      class="toggle-password-btn"
+                      id="btnToggleLoginPass"
+                      title="Tampilkan Password"
+                      type="button"
+                    >
+                      <svg
+                        class="eye-show"
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewbox="0 0 24 24"
+                        width="18"
+                      >
+                        <path
+                          d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                        ></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      <svg
+                        class="eye-hide hidden"
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewbox="0 0 24 24"
+                        width="18"
+                      >
+                        <path
+                          d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                        ></path>
+                        <line x1="1" x2="23" y1="1" y2="23"></line>
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- Caps Lock Warning -->
+                  <div class="caps-warning hidden" id="loginCapsLockWarning">
+                    <svg
+                      fill="none"
+                      height="14"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="14"
+                    >
+                      <path d="M12 2l7 7h-4v9h-6v-9H5l7-7z"></path>
+                      <rect height="3" rx="1" width="14" x="5" y="19"></rect>
+                    </svg>
+                    <span>Caps Lock aktif</span>
+                  </div>
+                  <div class="error-feedback" id="loginPassError">
+                    Kata sandi wajib diisi (minimal 6 karakter).
+                  </div>
+                </div>
+                <!-- Remember Session Option -->
+                <div class="form-options-row">
+                  <label class="custom-checkbox-container">
+                    <input id="rememberMe" name="remember" type="checkbox" />
+                    <span class="checkmark"></span>
+                    <span class="checkbox-text"
+                      >Ingat saya di perangkat ini</span
+                    >
+                  </label>
+                </div>
+                <!-- Submit Button: MASUK KE SISTEM (Direct Wireframe Style) -->
+                <div class="form-action-group">
+                  <button
+                    class="btn-primary-auth"
+                    id="btnSubmitLogin"
+                    type="submit"
+                  >
+                    <span class="btn-text">MASUK KE SISTEM</span>
+                    <span aria-hidden="true" class="btn-spinner hidden"></span>
+                    <svg
+                      class="btn-arrow"
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2.2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
+                      <line x1="5" x2="19" y1="12" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <!-- =============================================================== -->
+            <!-- TAB PANEL 2: REGISTER FORM (External User Registration)         -->
+            <!-- =============================================================== -->
+
+            <!-- 3. Card Footer: Wireframe Placeholder Bars & Security Statement -->
+            <footer class="card-footer">
+              <div aria-hidden="true" class="wireframe-footer-bars">
+                <div class="bar-long"></div>
+                <div class="bar-medium"></div>
+              </div>
+              <p class="rbac-disclaimer">
+                Dengan mengakses akun, Anda menyetujui Ketentuan Layanan dan
+                Kebijakan Privasi resmi CV. Sumber Artha.
+              </p>
+            </footer>
+            <!-- Quick Test / Demo Credentials (Uji Coba Cepat: Admin, Op. Cutting, User) -->
+            <div class="demo-quick-box" id="demoQuickBox">
+              <div class="demo-title">
+                <svg
+                  fill="none"
+                  height="14"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewbox="0 0 24 24"
+                  width="14"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                </svg>
+                <span>Uji Coba Cepat (Klik untuk Isi Akun Demo):</span>
+              </div>
+              <div class="demo-buttons-row">
+                <button
+                  class="btn-chip"
+                  data-label="Admin"
+                  data-pass="artha1234"
+                  data-user="admin.artha"
+                  type="button"
+                >
+                  Admin
+                </button>
+                <button
+                  class="btn-chip"
+                  data-label="Op. Cutting"
+                  data-pass="potong2026"
+                  data-user="op.cutting01"
+                  type="button"
+                >
+                  Op. Cutting
+                </button>
+                <button
+                  class="btn-chip"
+                  data-label="User"
+                  data-pass="user1234"
+                  data-user="user.sumberartha"
+                  type="button"
+                >
+                  User
+                </button>
+                <button
+                  class="btn-chip btn-chip-direct-admin"
+                  id="btnQuickDirectAdmin"
+                  title="Masuk Langsung ke Dashboard Admin"
+                  type="button"
+                >
+                  ⚡ Masuk Langsung (Admin)
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- /#authCard -->
+        </section>
+        <!-- =================================================================== -->
+        <!-- RIGHT FLANK: Decorative Arch Capsule (Sesuai Gambar Arsir Kuning)     -->
+        <!-- =================================================================== -->
+        <aside aria-hidden="true" class="flank-side flank-right">
+          <!-- Large Arch / Tall Capsule Frame: Luxury Wood Architecture Showcase -->
+          <div
+            class="media-frame arch-frame"
+            title="Arsitektur Panel &amp; Furnitur Kayu"
+          >
+            <img
+              alt="Interior &amp; Arsitektur Kayu Elegan"
+              class="flank-img"
+              src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&amp;fit=crop&amp;w=800&amp;q=80"
+            />
+            <div class="frame-subtle-glow"></div>
+          </div>
+        </aside>
+      </div>
+      <!-- /.container.auth-stage-layout -->
+      <!-- ========================================================================= -->
+      <!-- ADMIN DASHBOARD: ANALYTICS & MONITORING PRODUKSI (SESUAI WIREFRAME LENGKAP) -->
+      <!-- ========================================================================= -->
+    </main>
+    <!-- Global Footer Contact Bar (Exact info and dashes from Image 2) -->
+    <footer class="site-contact-footer" id="siteContactFooter">
+      <div class="container footer-content-row">
+        <div class="contact-info-text">
+          <span class="contact-label">Kontak :</span>
+          <span class="contact-address"
+            >Jl. Mangga Muda 17A, Cilandak, Jakarta Selatan 12310 - 021 123 456
+            7890</span
+          >
+        </div>
+        <!-- Minimalist Decorative Dashes from Image 2 -->
+        <div aria-hidden="true" class="footer-dash-accents">
+          <span class="decor-dash"></span>
+          <span class="decor-dash"></span>
+        </div>
+      </div>
+    </footer>
+    <!-- ========================================================================= -->
+    <!-- MODAL: User Portal Dashboard / Login Success Simulation                   -->
+    <!-- ========================================================================= -->
+    <div
+      aria-labelledby="modalTitle"
+      aria-modal="true"
+      class="modal-backdrop hidden"
+      id="successModal"
+      role="dialog"
+    >
+      <div class="modal-card">
+        <div class="modal-header-banner">
+          <div class="modal-success-icon">
+            <svg
+              fill="none"
+              height="32"
+              stroke="currentColor"
+              stroke-width="2.5"
+              viewbox="0 0 24 24"
+              width="32"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="modal-title" id="modalTitle">Berhasil Masuk</h3>
+          <p class="modal-subtitle">
+            Selamat datang di Portal Pelanggan CV. Sumber Artha
+          </p>
+        </div>
+        <div class="modal-body">
+          <div class="user-greeting-card">
+            <div class="user-avatar-circle" id="modalUserAvatar">SA</div>
+            <div class="user-info-text">
+              <h4 id="modalUserName">pelanggan.artha</h4>
+              <span class="role-badge" id="modalUserBadge"
+                >Member Terverifikasi</span
+              >
+            </div>
+          </div>
+          <div class="module-quick-nav">
+            <p class="section-hint">Layanan &amp; Fitur Akun Anda:</p>
+            <div class="modules-grid">
+              <div class="module-item">
+                <span class="mod-icon">🪑</span>
+                <div class="mod-text">
+                  <strong>Koleksi Furnitur</strong>
+                  <small>Katalog solid teak &amp; walnut</small>
+                </div>
+              </div>
+              <div class="module-item">
+                <span class="mod-icon">📐</span>
+                <div class="mod-text">
+                  <strong>Kustomisasi Desain</strong>
+                  <small>Konsultasi ukuran &amp; bentuk</small>
+                </div>
+              </div>
+              <div class="module-item">
+                <span class="mod-icon">📦</span>
+                <div class="mod-text">
+                  <strong>Lacak Pesanan</strong>
+                  <small>Status pembuatan &amp; pengiriman</small>
+                </div>
+              </div>
+              <div class="module-item">
+                <span class="mod-icon">🛡️</span>
+                <div class="mod-text">
+                  <strong>Garansi Mebel</strong>
+                  <small>Jaminan kualitas kayu solid</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-modal-action" id="btnEnterDashboard" type="button">
+            <span>Lanjut ke Beranda Furnitur</span>
+            <svg
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-width="2.5"
+              viewbox="0 0 24 24"
+              width="16"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+          <button class="btn-modal-secondary" id="btnLogoutModal" type="button">
+            Keluar / Ganti Akun
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL: Help / Forgot Password (External Customer Support) -->
+    <div
+      aria-modal="true"
+      class="modal-backdrop hidden"
+      id="helpModal"
+      role="dialog"
+    >
+      <div class="modal-card">
+        <div class="modal-header-simple">
+          <h4>Bantuan Akun &amp; Pemulihan Kata Sandi</h4>
+          <button
+            aria-label="Tutup"
+            class="btn-close-modal"
+            id="btnCloseHelpModal"
+            type="button"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Jika Anda memerlukan bantuan untuk masuk atau mengatur ulang kata
+            sandi akun Anda, silakan hubungi Layanan Pelanggan CV. Sumber Artha:
+          </p>
+          <ul class="help-list">
+            <li>
+              <strong>WhatsApp Layanan Pelanggan:</strong> 0812-9876-5432 (Senin
+              - Minggu: 08.00 - 20.00 WIB)
+            </li>
+            <li><strong>Email Dukungan:</strong> cs@sumberartha.co.id</li>
+            <li><strong>Telepon Kantor:</strong> 021 123 456 7890</li>
+            <li>
+              <strong>Galeri Showroom:</strong> Jl. Mangga Muda 17A, Cilandak,
+              Jakarta Selatan 12310
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-modal-action" id="btnOkHelp" type="button">
+            Mengerti
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Toast Notification Container -->
+    <div aria-live="polite" class="toast-container" id="toastContainer"></div>
+    <!-- JavaScript -->
+    <script src="../template/js/common/ui.js"></script>
+    <script src="../template/js/auth/auth.js"></script>
+  </body>
+</html>

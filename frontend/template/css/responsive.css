@@ -1,0 +1,138 @@
+/* --------------------------------------------------------------------------
+   13. Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 1240px) {
+  .auth-stage-layout {
+    grid-template-columns: 1fr minmax(360px, 470px) 1fr;
+    gap: 1.5rem;
+  }
+
+  .pill-frame-lg {
+    width: 250px;
+  }
+
+  .arch-frame {
+    width: 240px;
+    height: 380px;
+  }
+}
+
+@media (max-width: 980px) {
+  .auth-stage-layout {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: 2rem;
+  }
+
+  /* On tablet & mobile, flanking images tuck or hide cleanly to preserve focus */
+  .flank-side {
+    display: none;
+  }
+
+  .page-wrapper {
+    padding: 1.5rem 0 2.5rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .auth-card {
+    padding: 1.5rem 1.25rem 1.4rem;
+  }
+
+  .company-name {
+    font-size: 0.96rem;
+  }
+
+  .company-sub {
+    font-size: 0.68rem;
+  }
+
+  .form-row-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info-text {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 0.78rem;
+  }
+
+  .nav-brand-handle {
+    font-size: 0.8rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+/* Responsive Breakpoints for Admin Dashboard */
+@media (max-width: 1120px) {
+  .kpi-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .analytics-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .admin-dashboard-wrapper {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .admin-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .admin-top-mobile-bar {
+    display: flex;
+  }
+
+  .admin-main-content {
+    padding: 1rem;
+  }
+
+  .admin-banner-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .banner-action-col {
+    width: 100%;
+  }
+
+  .btn-period-select {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 540px) {
+  .kpi-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-bars-wrap {
+    gap: 0.5rem;
+  }
+
+  .bar-track {
+    max-width: 28px;
+  }
+
+  .chart-legend-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+}
+

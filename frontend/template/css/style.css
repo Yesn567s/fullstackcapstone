@@ -1,0 +1,4 @@
+/* Compatibility stylesheet. Page-specific styles are loaded by each HTML entry. */
+@import url('base.css');
+@import url('components.css');
+@import url('responsive.css');

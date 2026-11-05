@@ -1,38 +1,72 @@
 <!doctype html>
+
 <html lang="id">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CV. SUMBER ARTHA - Admin Dashboard Analytics & TOP</title>
-
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CV. SUMBER ARTHA - Admin Dashboard Analytics &amp; TOP</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
     <!-- Google Fonts: Plus Jakarta Sans & Outfit for Luxury Timber Aesthetic -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
       rel="stylesheet"
     />
-
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="css/style.css" />
+    <link href="../template/css/style.css" rel="stylesheet" />
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/dashboard.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+    <link href="../template/css/responsive.css" rel="stylesheet" />
   </head>
   <body class="view-admin-dashboard">
     <!-- Top Return / Navigation Notice Bar -->
-    <div style="background: #111827; color: #94A3B8; font-size: 0.76rem; padding: 0.4rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08);">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981;"></span>
-        <strong style="color: #F8FAFC;">Admin - Dashboard Analytics & TOP</strong> (1440 × 1024)
+    <div
+      style="
+        background: #111827;
+        color: #94a3b8;
+        font-size: 0.76rem;
+        padding: 0.4rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 0.5rem">
+        <span
+          style="
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+          "
+        ></span>
+        <strong style="color: #f8fafc"
+          >Admin - Dashboard Analytics &amp; TOP</strong
+        >
+        (1440 &times; 1024)
       </div>
       <div>
-        <a href="index.html" style="color: #F59E0B; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
-          <span>← Kembali ke Halaman Login</span>
+        <a
+          href="../auth/login.html"
+          style="
+            color: #f59e0b;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+          "
+        >
+          <span>&larr; Kembali ke Halaman Login</span>
         </a>
       </div>
     </div>
-
     <!-- ADMIN DASHBOARD: ANALYTICS & MONITORING PRODUKSI -->
     <div class="admin-dashboard-wrapper" id="adminDashboardView">
       <!-- Left Dark Sidebar -->
@@ -40,10 +74,20 @@
         <!-- Brand / Admin Header -->
         <div class="admin-sidebar-header">
           <div class="admin-brand-box" title="Admin Control Center">
-            <svg class="admin-brand-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <svg
+              class="admin-brand-icon"
+              fill="none"
+              height="22"
+              stroke="currentColor"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="22"
+            >
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+              ></path>
               <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              <line x1="12" x2="12" y1="22.08" y2="12"></line>
             </svg>
           </div>
           <div class="admin-brand-text">
@@ -51,18 +95,26 @@
             <span class="admin-corp-tag">CV. Sumber Artha</span>
           </div>
         </div>
-
         <!-- Navigation Menu -->
-        <nav class="admin-nav" aria-label="Menu Admin">
+        <nav aria-label="Menu Admin" class="admin-nav">
           <!-- Group MAIN -->
           <div class="admin-nav-group">
             <span class="nav-group-title">MAIN</span>
             <ul class="nav-group-list">
               <li>
-                <a href="#dashboard" class="nav-item active" data-nav="dashboard">
+                <a class="nav-item active" data-nav="dashboard" href="dashboard.html">
                   <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <svg
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
+                      <path
+                        d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                      ></path>
                       <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
                   </span>
@@ -71,19 +123,27 @@
               </li>
             </ul>
           </div>
-
           <!-- Group TRANSACTION -->
           <div class="admin-nav-group">
             <span class="nav-group-title">TRANSACTION</span>
             <ul class="nav-group-list">
               <li>
-                <a href="#transaksi-po" class="nav-item" data-nav="transaksi-po">
+                <a class="nav-item" data-nav="transaksi-po" href="transaksi-po.html">
                   <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <svg
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      ></path>
                       <polyline points="14 2 14 8 20 8"></polyline>
-                      <line x1="16" y1="13" x2="8" y2="13"></line>
-                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <line x1="16" x2="8" y1="13" y2="13"></line>
+                      <line x1="16" x2="8" y1="17" y2="17"></line>
                       <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
                   </span>
@@ -92,11 +152,20 @@
                 </a>
               </li>
               <li>
-                <a href="#surat-jalan" class="nav-item" data-nav="surat-jalan">
+                <a class="nav-item" data-nav="surat-jalan" href="#">
                   <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="1" y="3" width="15" height="13"></rect>
-                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                    <svg
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
+                      <rect height="13" width="15" x="1" y="3"></rect>
+                      <polygon
+                        points="16 8 20 8 23 11 23 16 16 16 16 8"
+                      ></polygon>
                       <circle cx="5.5" cy="18.5" r="2.5"></circle>
                       <circle cx="18.5" cy="18.5" r="2.5"></circle>
                     </svg>
@@ -105,13 +174,20 @@
                 </a>
               </li>
               <li>
-                <a href="#invoice" class="nav-item" data-nav="invoice">
+                <a class="nav-item" data-nav="invoice" href="#">
                   <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                      <line x1="2" y1="10" x2="22" y2="10"></line>
-                      <line x1="7" y1="15" x2="7.01" y2="15"></line>
-                      <line x1="11" y1="15" x2="13" y2="15"></line>
+                    <svg
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
+                      <rect height="16" rx="2" width="20" x="2" y="4"></rect>
+                      <line x1="2" x2="22" y1="10" y2="10"></line>
+                      <line x1="7" x2="7.01" y1="15" y2="15"></line>
+                      <line x1="11" x2="13" y1="15" y2="15"></line>
                     </svg>
                   </span>
                   <span class="nav-text">Invoice</span>
@@ -120,30 +196,45 @@
               </li>
             </ul>
           </div>
-
           <!-- Group PRODUCTION -->
           <div class="admin-nav-group">
             <span class="nav-group-title">PRODUCTION</span>
             <ul class="nav-group-list">
               <li>
-                <a href="#cutting-optimize" class="nav-item" data-nav="cutting-optimize">
+                <a class="nav-item" data-nav="cutting-optimize" href="#">
                   <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
                       <circle cx="6" cy="6" r="3"></circle>
                       <circle cx="6" cy="18" r="3"></circle>
-                      <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
-                      <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
-                      <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+                      <line x1="20" x2="8.12" y1="4" y2="15.88"></line>
+                      <line x1="14.47" x2="20" y1="14.48" y2="20"></line>
+                      <line x1="8.12" x2="12" y1="8.12" y2="12"></line>
                     </svg>
                   </span>
                   <span class="nav-text">Cutting Optimize</span>
                 </a>
               </li>
               <li>
-                <a href="#monitoring-produksi" class="nav-item" data-nav="monitoring-produksi">
+                <a class="nav-item" data-nav="monitoring-produksi" href="#">
                   <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    <svg
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
+                      <polyline
+                        points="22 12 18 12 15 21 9 3 6 12 2 12"
+                      ></polyline>
                     </svg>
                   </span>
                   <span class="nav-text">Monitoring Produksi</span>
@@ -151,16 +242,24 @@
               </li>
             </ul>
           </div>
-
           <!-- Group INVENTORY -->
           <div class="admin-nav-group">
             <span class="nav-group-title">INVENTORY</span>
             <ul class="nav-group-list">
               <li>
-                <a href="#inventaris-offcut" class="nav-item" data-nav="inventaris-offcut">
+                <a class="nav-item" data-nav="inventaris-offcut" href="#">
                   <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <svg
+                      fill="none"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewbox="0 0 24 24"
+                      width="18"
+                    >
+                      <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                      ></path>
                     </svg>
                   </span>
                   <span class="nav-text">Inventaris Offcut</span>
@@ -169,82 +268,160 @@
             </ul>
           </div>
         </nav>
-
         <!-- Sidebar Bottom Profile & Logout -->
         <div class="admin-sidebar-footer">
           <div class="admin-user-card">
             <div class="admin-user-avatar">AD</div>
             <div class="admin-user-info">
-              <span class="admin-user-name" id="sidebarAdminUser">Administrator</span>
+              <span class="admin-user-name" id="sidebarAdminUser"
+                >Administrator</span
+              >
               <span class="admin-user-role">Super Admin Pabrik</span>
             </div>
           </div>
-          <a href="index.html" class="btn-sidebar-logout" style="text-decoration: none;" title="Keluar ke Halaman Login">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <a
+            class="btn-sidebar-logout"
+            href="../auth/login.html"
+            style="text-decoration: none"
+            title="Keluar ke Halaman Login"
+          >
+            <svg
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="16"
+            >
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
               <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
+              <line x1="21" x2="9" y1="12" y2="12"></line>
             </svg>
             <span>Keluar / Logout</span>
           </a>
         </div>
       </aside>
-
       <!-- Right Main Content Area -->
-      <section class="admin-main-content">
+      <section class="admin-main-content" id="dashboard">
         <!-- Top Mobile / Responsive Bar -->
         <div class="admin-top-mobile-bar">
-          <button type="button" class="admin-sidebar-toggle" id="btnSidebarToggle" aria-label="Toggle Menu">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
+          <button
+            aria-label="Toggle Menu"
+            class="admin-sidebar-toggle"
+            id="btnSidebarToggle"
+            type="button"
+          >
+            <svg
+              fill="none"
+              height="22"
+              stroke="currentColor"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="22"
+            >
+              <line x1="3" x2="21" y1="12" y2="12"></line>
+              <line x1="3" x2="21" y1="6" y2="6"></line>
+              <line x1="3" x2="21" y1="18" y2="18"></line>
             </svg>
           </button>
           <div class="mobile-brand-title">Admin - CV. Sumber Artha</div>
-          <a href="index.html" class="btn-mobile-logout" title="Keluar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <a class="btn-mobile-logout" href="../auth/login.html" title="Keluar">
+            <svg
+              fill="none"
+              height="18"
+              stroke="currentColor"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="18"
+            >
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
               <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
+              <line x1="21" x2="9" y1="12" y2="12"></line>
             </svg>
           </a>
         </div>
-
+        <div class="admin-view-panel" id="dashboardView">
         <!-- Top Admin Banner Card -->
         <header class="admin-banner-card">
           <div class="banner-text-col">
-            <h2 class="banner-title">Dashboard Analitik & Monitoring Produksi</h2>
+            <h2 class="banner-title">
+              Dashboard Analitik &amp; Monitoring Produksi
+            </h2>
             <p class="banner-subtitle">
-              Ringkasan efisiensi pemotongan bahan, status PO, dan proyeksi piutang TOP 90 Hari
+              Ringkasan efisiensi pemotongan bahan, status PO, dan proyeksi
+              piutang TOP 90 Hari
             </p>
           </div>
-
           <div class="banner-action-col">
             <div class="period-select-wrapper">
-              <button type="button" class="btn-period-select" id="btnPeriodDropdown" aria-haspopup="true">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
+              <button
+                aria-haspopup="true"
+                class="btn-period-select"
+                id="btnPeriodDropdown"
+                type="button"
+              >
+                <svg
+                  fill="none"
+                  height="15"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewbox="0 0 24 24"
+                  width="15"
+                >
+                  <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+                  <line x1="16" x2="16" y1="2" y2="6"></line>
+                  <line x1="8" x2="8" y1="2" y2="6"></line>
+                  <line x1="3" x2="21" y1="10" y2="10"></line>
                 </svg>
-                <span id="currentPeriodLabel">Periode: Bulan Ini (Okt 2026)</span>
-                <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <span id="currentPeriodLabel"
+                  >Periode: Bulan Ini (Okt 2026)</span
+                >
+                <svg
+                  class="chevron-icon"
+                  fill="none"
+                  height="14"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewbox="0 0 24 24"
+                  width="14"
+                >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
               <!-- Period Menu dropdown -->
               <div class="period-dropdown-menu hidden" id="periodMenu">
-                <button type="button" class="dropdown-item active" data-period="Bulan Ini (Okt 2026)">Bulan Ini (Okt 2026)</button>
-                <button type="button" class="dropdown-item" data-period="Bulan Lalu (Sep 2026)">Bulan Lalu (Sep 2026)</button>
-                <button type="button" class="dropdown-item" data-period="Kuartal 3 (Jul - Sep 2026)">Kuartal 3 (Jul - Sep 2026)</button>
-                <button type="button" class="dropdown-item" data-period="Tahun Berjalan (2026)">Tahun Berjalan (2026)</button>
+                <button
+                  class="dropdown-item active"
+                  data-period="Bulan Ini (Okt 2026)"
+                  type="button"
+                >
+                  Bulan Ini (Okt 2026)
+                </button>
+                <button
+                  class="dropdown-item"
+                  data-period="Bulan Lalu (Sep 2026)"
+                  type="button"
+                >
+                  Bulan Lalu (Sep 2026)
+                </button>
+                <button
+                  class="dropdown-item"
+                  data-period="Kuartal 3 (Jul - Sep 2026)"
+                  type="button"
+                >
+                  Kuartal 3 (Jul - Sep 2026)
+                </button>
+                <button
+                  class="dropdown-item"
+                  data-period="Tahun Berjalan (2026)"
+                  type="button"
+                >
+                  Tahun Berjalan (2026)
+                </button>
               </div>
             </div>
           </div>
         </header>
-
         <!-- Row 1: 4 KPI Cards -->
         <div class="kpi-cards-grid">
           <!-- KPI 1 -->
@@ -255,25 +432,28 @@
             </div>
             <span class="kpi-subtext" id="kpiPOSub">+2 PO bulan ini</span>
           </div>
-
           <!-- KPI 2 -->
           <div class="kpi-card" tabindex="0">
             <span class="kpi-label">Rata-rata Efisiensi Bahan</span>
             <div class="kpi-value-row">
-              <span class="kpi-value highlight-val" id="kpiEfisiensi">94,2%</span>
+              <span class="kpi-value highlight-val" id="kpiEfisiensi"
+                >94,2%</span
+              >
             </div>
-            <span class="kpi-subtext positive" id="kpiEfisiensiSub">+1,8% yield</span>
+            <span class="kpi-subtext positive" id="kpiEfisiensiSub"
+              >+1,8% yield</span
+            >
           </div>
-
           <!-- KPI 3 -->
           <div class="kpi-card" tabindex="0">
             <span class="kpi-label">Limbah Kayu (Waste)</span>
             <div class="kpi-value-row">
               <span class="kpi-value" id="kpiWaste">3,4%</span>
             </div>
-            <span class="kpi-subtext positive" id="kpiWasteSub">Turun 0,6%</span>
+            <span class="kpi-subtext positive" id="kpiWasteSub"
+              >Turun 0,6%</span
+            >
           </div>
-
           <!-- KPI 4 -->
           <div class="kpi-card" tabindex="0">
             <span class="kpi-label">Total Piutang (TOP 90)</span>
@@ -283,15 +463,15 @@
             <span class="kpi-subtext" id="kpiPiutangSub">2 invoice aktif</span>
           </div>
         </div>
-
         <!-- Row 2: Charts (Tren Efisiensi & Distribusi Penggunaan Material) -->
         <div class="analytics-charts-grid">
           <!-- Left Card: Bar Chart -->
           <div class="analytics-card bar-chart-card">
             <div class="card-top-header">
-              <h3 class="card-section-title">Tren Efisiensi Penggunaan Bahan Baku (LVB & Triplek)</h3>
+              <h3 class="card-section-title">
+                Tren Efisiensi Penggunaan Bahan Baku (LVB &amp; Triplek)
+              </h3>
             </div>
-
             <div class="chart-canvas-container">
               <!-- Bars Container -->
               <div class="chart-bars-wrap" id="chartBarsContainer">
@@ -299,63 +479,83 @@
                 <div class="bar-col" data-month="Mei" data-val="90.8%">
                   <span class="bar-val-label">90.8%</span>
                   <div class="bar-track">
-                    <div class="bar-fill" style="height: 78%;" title="Mei: 90.8%"></div>
+                    <div
+                      class="bar-fill"
+                      style="height: 78%"
+                      title="Mei: 90.8%"
+                    ></div>
                   </div>
                   <span class="bar-month-label">Mei</span>
                 </div>
-
                 <!-- Jun -->
                 <div class="bar-col" data-month="Jun" data-val="92.5%">
                   <span class="bar-val-label">92.5%</span>
                   <div class="bar-track">
-                    <div class="bar-fill" style="height: 84%;" title="Jun: 92.5%"></div>
+                    <div
+                      class="bar-fill"
+                      style="height: 84%"
+                      title="Jun: 92.5%"
+                    ></div>
                   </div>
                   <span class="bar-month-label">Jun</span>
                 </div>
-
                 <!-- Jul -->
                 <div class="bar-col" data-month="Jul" data-val="91.6%">
                   <span class="bar-val-label">91.6%</span>
                   <div class="bar-track">
-                    <div class="bar-fill" style="height: 81%;" title="Jul: 91.6%"></div>
+                    <div
+                      class="bar-fill"
+                      style="height: 81%"
+                      title="Jul: 91.6%"
+                    ></div>
                   </div>
                   <span class="bar-month-label">Jul</span>
                 </div>
-
                 <!-- Agu -->
                 <div class="bar-col" data-month="Agu" data-val="93.3%">
                   <span class="bar-val-label">93.3%</span>
                   <div class="bar-track">
-                    <div class="bar-fill" style="height: 88%;" title="Agu: 93.3%"></div>
+                    <div
+                      class="bar-fill"
+                      style="height: 88%"
+                      title="Agu: 93.3%"
+                    ></div>
                   </div>
                   <span class="bar-month-label">Agu</span>
                 </div>
-
                 <!-- Sep -->
                 <div class="bar-col" data-month="Sep" data-val="94.7%">
                   <span class="bar-val-label">94.7%</span>
                   <div class="bar-track">
-                    <div class="bar-fill" style="height: 94%;" title="Sep: 94.7%"></div>
+                    <div
+                      class="bar-fill"
+                      style="height: 94%"
+                      title="Sep: 94.7%"
+                    ></div>
                   </div>
                   <span class="bar-month-label">Sep</span>
                 </div>
-
                 <!-- Okt -->
                 <div class="bar-col" data-month="Okt" data-val="94.2%">
                   <span class="bar-val-label">94.2%</span>
                   <div class="bar-track">
-                    <div class="bar-fill" style="height: 92%;" title="Okt: 94.2%"></div>
+                    <div
+                      class="bar-fill"
+                      style="height: 92%"
+                      title="Okt: 94.2%"
+                    ></div>
                   </div>
                   <span class="bar-month-label">Okt</span>
                 </div>
               </div>
             </div>
-
             <!-- Legend / Notes below Bar Chart -->
             <div class="chart-footer-legend">
               <div class="chart-summary-stat">
                 <span class="legend-box color-yield"></span>
-                <span class="summary-text">Yield rata-rata: <strong>94,2%</strong></span>
+                <span class="summary-text"
+                  >Yield rata-rata: <strong>94,2%</strong></span
+                >
               </div>
               <div class="chart-legend-row">
                 <div class="legend-item">
@@ -373,13 +573,11 @@
               </div>
             </div>
           </div>
-
           <!-- Right Card: Material Distribution Progress Bars -->
           <div class="analytics-card distribution-card">
             <div class="card-top-header">
               <h3 class="card-section-title">Distribusi Penggunaan Material</h3>
             </div>
-
             <div class="dist-bars-container">
               <!-- Item 1: Yield -->
               <div class="dist-item">
@@ -388,10 +586,13 @@
                   <span class="dist-percentage" id="distYieldVal">94.2%</span>
                 </div>
                 <div class="dist-track">
-                  <div class="dist-fill bg-yield" id="distYieldBar" style="width: 94.2%;"></div>
+                  <div
+                    class="dist-fill bg-yield"
+                    id="distYieldBar"
+                    style="width: 94.2%"
+                  ></div>
                 </div>
               </div>
-
               <!-- Item 2: Offcut -->
               <div class="dist-item">
                 <div class="dist-label-row">
@@ -399,10 +600,13 @@
                   <span class="dist-percentage" id="distOffcutVal">2.4%</span>
                 </div>
                 <div class="dist-track">
-                  <div class="dist-fill bg-offcut" id="distOffcutBar" style="width: 2.4%;"></div>
+                  <div
+                    class="dist-fill bg-offcut"
+                    id="distOffcutBar"
+                    style="width: 2.4%"
+                  ></div>
                 </div>
               </div>
-
               <!-- Item 3: Waste -->
               <div class="dist-item">
                 <div class="dist-label-row">
@@ -410,11 +614,14 @@
                   <span class="dist-percentage" id="distWasteVal">3.4%</span>
                 </div>
                 <div class="dist-track">
-                  <div class="dist-fill bg-waste" id="distWasteBar" style="width: 3.4%;"></div>
+                  <div
+                    class="dist-fill bg-waste"
+                    id="distWasteBar"
+                    style="width: 3.4%"
+                  ></div>
                 </div>
               </div>
             </div>
-
             <!-- Legend at bottom of distribution -->
             <div class="dist-footer-legend">
               <div class="legend-item">
@@ -432,13 +639,13 @@
             </div>
           </div>
         </div>
-
         <!-- Row 3: Table Monitoring Jatuh Tempo Tagihan (TOP 90 Hari) -->
         <div class="analytics-card table-card">
           <div class="card-top-header">
-            <h3 class="card-section-title">Monitoring Jatuh Tempo Tagihan (Term of Payment 90 Hari)</h3>
+            <h3 class="card-section-title">
+              Monitoring Jatuh Tempo Tagihan (Term of Payment 90 Hari)
+            </h3>
           </div>
-
           <div class="table-responsive-wrapper">
             <table class="admin-data-table">
               <thead>
@@ -457,7 +664,9 @@
                   <td class="cell-customer">PT Artha Furnitur</td>
                   <td class="cell-tempo">10 Nov 2026</td>
                   <td class="cell-nominal">Rp 12.500.000</td>
-                  <td class="cell-status"><span class="status-text-unpaid">Belum Lunas</span></td>
+                  <td class="cell-status">
+                    <span class="status-text-unpaid">Belum Lunas</span>
+                  </td>
                   <td class="cell-action">
                     <span class="status-pill-active">Aktif</span>
                   </td>
@@ -467,7 +676,9 @@
                   <td class="cell-customer">CV Mebel Jaya</td>
                   <td class="cell-tempo">13 Nov 2026</td>
                   <td class="cell-nominal">Rp 6.000.000</td>
-                  <td class="cell-status"><span class="status-text-partial">Cicilan</span></td>
+                  <td class="cell-status">
+                    <span class="status-text-partial">Cicilan</span>
+                  </td>
                   <td class="cell-action">
                     <span class="status-pill-active">Aktif</span>
                   </td>
@@ -476,13 +687,13 @@
             </table>
           </div>
         </div>
+        </div>
       </section>
     </div>
-
     <!-- Toast Notification Container -->
-    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
-
+    <div aria-live="polite" class="toast-container" id="toastContainer"></div>
     <!-- Script -->
-    <script src="js/app.js"></script>
+    <script src="../template/js/common/ui.js"></script>
+    <script src="../template/js/dashboard/dashboard.js"></script>
   </body>
 </html>
