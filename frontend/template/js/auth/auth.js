@@ -189,16 +189,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (parent) parent.classList.add("has-focus");
     });
 
-    function toggleCustomerFields() {
-      const isCustomer = regRoleInput?.value === "customer";
-      customerFields?.classList.toggle("hidden", !isCustomer);
-      if (regCompanyInput) regCompanyInput.required = isCustomer;
-      if (regContactPersonInput) regContactPersonInput.required = isCustomer;
-      if (!isCustomer) {
-        groupRegCompany?.classList.remove("has-error");
-        groupRegContactPerson?.classList.remove("has-error");
-      }
-    }
+    // function toggleCustomerFields() {
+    //   const isCustomer = regRoleInput?.value === "customer";
+    //   customerFields?.classList.toggle("hidden", !isCustomer);
+    //   if (regCompanyInput) regCompanyInput.required = isCustomer;
+    //   if (regContactPersonInput) regContactPersonInput.required = isCustomer;
+    //   if (!isCustomer) {
+    //     groupRegCompany?.classList.remove("has-error");
+    //     groupRegContactPerson?.classList.remove("has-error");
+    //   }
+    // }
 
     regRoleInput?.addEventListener("change", () => {
       groupRegRole?.classList.remove("has-error");
@@ -218,6 +218,26 @@ document.addEventListener("DOMContentLoaded", () => {
       hideAlert();
     });
   });
+  // Event khusus untuk perubahan role
+  regRoleInput?.addEventListener("change", () => {
+    groupRegRole?.classList.remove("has-error");
+    toggleCustomerFields();
+    hideAlert();
+  });
+
+  // Atur tampilan awal
+  toggleCustomerFields();
+
+  function toggleCustomerFields() {
+    const isCustomer = regRoleInput?.value === "customer";
+    customerFields?.classList.toggle("hidden", !isCustomer);
+    if (regCompanyInput) regCompanyInput.required = isCustomer;
+    if (regContactPersonInput) regContactPersonInput.required = isCustomer;
+    if (!isCustomer) {
+      groupRegCompany?.classList.remove("has-error");
+      groupRegContactPerson?.classList.remove("has-error");
+    }
+  }
 
   function clearErrors() {
     document
