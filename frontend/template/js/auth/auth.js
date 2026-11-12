@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const panelHeadingText = document.getElementById("panelHeadingText");
   const tagScreenName = document.getElementById("tagScreenName");
   const tagAuthBadge = document.getElementById("tagAuthBadge");
-  const demoQuickBox = document.getElementById("demoQuickBox");
 
   // Login Form Elements
   const loginForm = document.getElementById("loginForm");
@@ -37,12 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const regUserInput = document.getElementById("regUserInput");
   const regEmailInput = document.getElementById("regEmailInput");
   const regPhoneInput = document.getElementById("regPhoneInput");
-  const regRoleInput = document.getElementById("regRoleInput");
   const regCompanyInput = document.getElementById("regCompanyInput");
   const regContactPersonInput = document.getElementById(
     "regContactPersonInput",
   );
-  const customerFields = document.getElementById("customerFields");
   const regPassInput = document.getElementById("regPassInput");
   const regPassConfirmInput = document.getElementById("regPassConfirmInput");
   const regTermsCheck = document.getElementById("regTermsCheck");
@@ -51,8 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const groupRegUser = document.getElementById("groupRegUser");
   const groupRegEmail = document.getElementById("groupRegEmail");
   const groupRegPhone = document.getElementById("groupRegPhone");
-  const groupRegRole = document.getElementById("groupRegRole");
-  const groupRegCompany = document.getElementById("groupRegCompany");
   const groupRegContactPerson = document.getElementById(
     "groupRegContactPerson",
   );
@@ -77,9 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnForgotPwd = document.getElementById("btnForgotPwd");
   const btnCloseHelpModal = document.getElementById("btnCloseHelpModal");
   const btnOkHelp = document.getElementById("btnOkHelp");
-
-  const demoButtons = document.querySelectorAll(".btn-chip");
-  const btnQuickDirectAdmin = document.getElementById("btnQuickDirectAdmin");
 
   // Admin Dashboard Elements
   const authStageView = document.getElementById("authStageView");
@@ -136,8 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (panelHeadingText) panelHeadingText.textContent = "REGISTER";
       if (tagScreenName) tagScreenName.textContent = "Register";
       if (tagAuthBadge) tagAuthBadge.textContent = "Pendaftaran Akun Baru";
-
-      if (demoQuickBox) demoQuickBox.classList.add("hidden");
     } else {
       if (tabBtnLogin) {
         tabBtnLogin.classList.add("active");
@@ -154,8 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (panelHeadingText) panelHeadingText.textContent = "LOGIN";
       if (tagScreenName) tagScreenName.textContent = "Login";
       if (tagAuthBadge) tagAuthBadge.textContent = "Portal Pengguna";
-
-      if (demoQuickBox) demoQuickBox.classList.remove("hidden");
     }
   }
 
@@ -174,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
     regUserInput,
     regEmailInput,
     regPhoneInput,
-    regRoleInput,
     regCompanyInput,
     regContactPersonInput,
     regPassInput,
@@ -189,24 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (parent) parent.classList.add("has-focus");
     });
 
-    // function toggleCustomerFields() {
-    //   const isCustomer = regRoleInput?.value === "customer";
-    //   customerFields?.classList.toggle("hidden", !isCustomer);
-    //   if (regCompanyInput) regCompanyInput.required = isCustomer;
-    //   if (regContactPersonInput) regContactPersonInput.required = isCustomer;
-    //   if (!isCustomer) {
-    //     groupRegCompany?.classList.remove("has-error");
-    //     groupRegContactPerson?.classList.remove("has-error");
-    //   }
-    // }
-
-    regRoleInput?.addEventListener("change", () => {
-      groupRegRole?.classList.remove("has-error");
-      toggleCustomerFields();
-      hideAlert();
-    });
-    toggleCustomerFields();
-
     input.addEventListener("blur", () => {
       if (parent) parent.classList.remove("has-focus");
     });
@@ -218,27 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
       hideAlert();
     });
   });
-  // Event khusus untuk perubahan role
-  regRoleInput?.addEventListener("change", () => {
-    groupRegRole?.classList.remove("has-error");
-    toggleCustomerFields();
-    hideAlert();
-  });
-
-  // Atur tampilan awal
-  toggleCustomerFields();
-
-  function toggleCustomerFields() {
-    const isCustomer = regRoleInput?.value === "customer";
-    customerFields?.classList.toggle("hidden", !isCustomer);
-    if (regCompanyInput) regCompanyInput.required = isCustomer;
-    if (regContactPersonInput) regContactPersonInput.required = isCustomer;
-    if (!isCustomer) {
-      groupRegCompany?.classList.remove("has-error");
-      groupRegContactPerson?.classList.remove("has-error");
-    }
-  }
-
   function clearErrors() {
     document
       .querySelectorAll(".form-group.has-error")
@@ -294,30 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------------------------------------------------------------
-  // 5. Demo Quick-Fill Credentials (Admin, Op. Cutting, User)
-  // ----------------------------------------------------------------------------
-  demoButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const user = btn.dataset.user;
-      const pass = btn.dataset.pass;
-      const label = btn.dataset.label || "Akun Demo";
-
-      if (!user || !pass || !loginUserInput || !loginPassInput) return;
-      loginUserInput.value = user;
-      loginPassInput.value = pass;
-
-      if (btnClearLoginUser) btnClearLoginUser.classList.remove("hidden");
-      [groupLoginUser, groupLoginPass].forEach((g) => {
-        if (g) g.classList.remove("has-error");
-      });
-      hideAlert();
-
-      showToast(`Akun demo [${label}] berhasil dimasukkan!`);
-    });
-  });
-
-  // ----------------------------------------------------------------------------
-  // 6. Alerts & Toast Notifications
+  // 5. Alerts & Toast Notifications
   // ----------------------------------------------------------------------------
   function showAlert(msg, type = "error") {
     if (!authAlert || !alertMessage) return;
@@ -352,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------------------------------------------------------------
-  // 7. Login Form Submission & Validation (No Roles)
+  // 6. Login Form Submission & Validation
   // ----------------------------------------------------------------------------
   function validateLoginForm() {
     let isValid = true;
@@ -379,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       if (!validateLoginForm()) {
@@ -390,33 +315,58 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const username = loginUserInput.value.trim();
-      const isAdmin = username.toLowerCase().includes("admin");
+      const portal =
+        document.body.dataset.loginRole === "staff" ? "staff" : "customer";
+      setAuthButtonLoading(btnSubmitLogin, true, "MEMVERIFIKASI...");
 
-      if (isAdmin) {
-        setAuthButtonLoading(
-          btnSubmitLogin,
-          true,
-          "MEMVERIFIKASI & MENGALIHKAN...",
+      try {
+        const response = await fetch(
+          `${window.location.protocol}//${window.location.hostname}:8000/backend/webservice/login.php`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              password: loginPassInput.value,
+              portal,
+            }),
+          },
         );
+        const result = await response.json();
 
-        setTimeout(() => {
-          setAuthButtonLoading(btnSubmitLogin, false, "MASUK KE SISTEM");
-          navigateToAdminDashboard(username);
-          showToast("Login berhasil! Mengalihkan ke Dashboard Admin...");
-        }, 650);
-      } else {
-        setAuthButtonLoading(btnSubmitLogin, true, "MEMVERIFIKASI...");
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Login gagal.");
+        }
 
-        setTimeout(() => {
-          setAuthButtonLoading(btnSubmitLogin, false, "MASUK KE SISTEM");
-          openSuccessModal(username);
-        }, 800);
+        const user = result.user;
+        const allowedRoles =
+          portal === "staff" ? ["admin", "operator"] : ["customer"];
+        if (!user || !allowedRoles.includes(user.role)) {
+          throw new Error("Akun tidak memiliki akses ke portal ini.");
+        }
+
+        if (user.role === "admin") {
+          navigateToAdminDashboard(user.username);
+        } else if (user.role === "operator") {
+          sessionStorage.setItem("operatorName", user.username);
+          window.location.href = "../operator/test.html";
+        } else {
+          window.location.href = "../customer/test.html";
+        }
+      } catch (error) {
+        showAlert(error.message || "Tidak dapat menghubungi server login.");
+      } finally {
+        setAuthButtonLoading(btnSubmitLogin, false, "MASUK KE SISTEM");
       }
     });
   }
 
   // ----------------------------------------------------------------------------
-  // 8. Register Form Submission & Validation (No Roles)
+  // 7. Customer Registration Form Submission & Validation
   // ----------------------------------------------------------------------------
   function validateRegisterForm() {
     let isValid = true;
@@ -426,7 +376,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const regUser = regUserInput.value.trim();
     const regEmail = regEmailInput.value.trim();
     const regPhone = regPhoneInput.value.trim();
-    const regRole = regRoleInput.value;
     const regPass = regPassInput.value;
     const regPassConfirm = regPassConfirmInput.value;
 
@@ -444,7 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
       groupRegUser.classList.remove("has-error");
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@gmail\.com$/i;
     if (!regEmail || !emailRegex.test(regEmail)) {
       groupRegEmail.classList.add("has-error");
       isValid = false;
@@ -459,27 +408,11 @@ document.addEventListener("DOMContentLoaded", () => {
       groupRegPhone.classList.remove("has-error");
     }
 
-    if (!regRole) {
-      groupRegRole.classList.add("has-error");
+    if (!regContactPersonInput.value.trim()) {
+      groupRegContactPerson.classList.add("has-error");
       isValid = false;
     } else {
-      groupRegRole.classList.remove("has-error");
-    }
-
-    if (regRole === "customer") {
-      if (!regCompanyInput.value.trim()) {
-        groupRegCompany.classList.add("has-error");
-        isValid = false;
-      } else {
-        groupRegCompany.classList.remove("has-error");
-      }
-
-      if (!regContactPersonInput.value.trim()) {
-        groupRegContactPerson.classList.add("has-error");
-        isValid = false;
-      } else {
-        groupRegContactPerson.classList.remove("has-error");
-      }
+      groupRegContactPerson.classList.remove("has-error");
     }
 
     if (!regPass || regPass.length < 6) {
@@ -518,14 +451,9 @@ document.addEventListener("DOMContentLoaded", () => {
         username: regUserInput.value.trim(),
         email: regEmailInput.value.trim(),
         phone: regPhoneInput.value.trim(),
-        role: regRoleInput.value,
         password: regPassInput.value,
-        companyName:
-          regRoleInput.value === "customer" ? regCompanyInput.value.trim() : "",
-        contactPerson:
-          regRoleInput.value === "customer"
-            ? regContactPersonInput.value.trim()
-            : "",
+        companyName: regCompanyInput.value.trim(),
+        contactPerson: regContactPersonInput.value.trim(),
       };
 
       setAuthButtonLoading(btnSubmitRegister, true, "MENDAFTARKAN...");
@@ -558,7 +486,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(() => {
           const newUsername = payload.username;
           registerForm.reset();
-          toggleCustomerFields();
           showToast("Pendaftaran akun berhasil!");
           window.location.href = `login.html?registered=1&username=${encodeURIComponent(newUsername)}`;
         })
@@ -591,21 +518,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------------------------------------------------------------
-  // 9. Modals (Success & Customer Help) Management
+  // 8. Modals (Success & Customer Help) Management
   // ----------------------------------------------------------------------------
-  function openSuccessModal(username) {
+  function openSuccessModal(username, role) {
     if (!successModal) return;
     modalUserName.textContent = username;
 
-    // Dynamically set user badge based on account type
     if (modalUserBadge) {
-      if (username.toLowerCase().includes("admin")) {
-        modalUserBadge.textContent = "Administrator";
-      } else if (username.toLowerCase().includes("cutting")) {
-        modalUserBadge.textContent = "Operator Cutting";
-      } else {
-        modalUserBadge.textContent = "User / Member";
-      }
+      modalUserBadge.textContent = role === "customer" ? "Pelanggan" : role;
     }
 
     const initials = username.substring(0, 2).toUpperCase();
@@ -620,18 +540,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (btnEnterDashboard) {
     btnEnterDashboard.addEventListener("click", () => {
-      const username = modalUserName.textContent || "";
-      if (username.toLowerCase().includes("admin")) {
+      showToast("Mengarahkan ke Beranda CV. Sumber Artha...");
+      setTimeout(() => {
         closeSuccessModal();
-        navigateToAdminDashboard(username);
-        showToast("Beralih ke Dashboard Analitik & Monitoring...");
-      } else {
-        showToast("Mengarahkan ke Beranda CV. Sumber Artha...");
-        setTimeout(() => {
-          closeSuccessModal();
-          showToast("Selamat menjelajahi koleksi furnitur!");
-        }, 600);
-      }
+        showToast("Selamat menjelajahi koleksi furnitur!");
+      }, 600);
     });
   }
 
@@ -640,13 +553,6 @@ document.addEventListener("DOMContentLoaded", () => {
       closeSuccessModal();
       if (loginPassInput) loginPassInput.value = "";
       showToast("Anda telah keluar dari akun.");
-    });
-  }
-
-  if (btnQuickDirectAdmin) {
-    btnQuickDirectAdmin.addEventListener("click", () => {
-      sessionStorage.setItem("adminName", "admin.artha");
-      navigateToAdminDashboard("admin.artha");
     });
   }
 
