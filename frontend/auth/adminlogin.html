@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CV. SUMBER ARTHA - Login Admin &amp; Operator</title>
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="../template/css/style.css" rel="stylesheet" />
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+    <link href="../template/css/responsive.css" rel="stylesheet" />
+  </head>
+  <body class="theme-focus-wireframe" data-login-role="staff">
+    <div aria-hidden="true" class="bg-texture"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-1"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-2"></div>
+    <main class="page-wrapper">
+      <div class="container auth-stage-layout">
+        <section class="auth-center-column">
+          <div class="wireframe-tag-bar">
+            <span class="wireframe-screen-name">Login Staff</span>
+            <span class="wireframe-badge">Portal Admin &amp; Operator</span>
+          </div>
+          <div class="auth-card">
+            <header class="card-header">
+              <div class="header-branding">
+                <div class="brand-logo-box" title="Logo CV. Sumber Artha">
+                  <img
+                    alt="Logo CV. Sumber Artha"
+                    class="brand-logo-img"
+                    src="../../assets/favicon.ico"
+                  />
+                </div>
+                <div class="brand-text-block">
+                  <h1 class="company-name">CV. SUMBER ARTHA</h1>
+                  <p class="company-sub">Portal khusus Admin dan Operator</p>
+                </div>
+              </div>
+              <hr class="card-divider" />
+            </header>
+            <div class="form-title-section">
+              <h2 class="auth-heading">LOGIN ADMIN &amp; OPERATOR</h2>
+              <div aria-hidden="true" class="wireframe-sub-bar"></div>
+            </div>
+            <div
+              aria-live="polite"
+              class="alert-box hidden"
+              id="authAlert"
+              role="alert"
+            >
+              <span class="alert-text" id="alertMessage"></span>
+            </div>
+            <form class="auth-form" id="loginForm" novalidate>
+              <div class="form-group" id="groupLoginUser">
+                <label class="form-label" for="loginUserInput">
+                  <span>USERNAME ATAU EMAIL</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <input
+                    autocomplete="username"
+                    class="form-control"
+                    id="loginUserInput"
+                    name="username"
+                    placeholder="Masukkan username atau email"
+                    required
+                    type="text"
+                  />
+                </div>
+                <div class="error-feedback" id="loginUserError">
+                  Username atau email wajib diisi.
+                </div>
+              </div>
+              <div class="form-group" id="groupLoginPass">
+                <label class="form-label" for="loginPassInput">
+                  <span>PASSWORD</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <input
+                    autocomplete="current-password"
+                    class="form-control"
+                    id="loginPassInput"
+                    name="password"
+                    placeholder="Masukkan password"
+                    required
+                    type="password"
+                  />
+                </div>
+                <div class="error-feedback" id="loginPassError">
+                  Kata sandi wajib diisi (minimal 6 karakter).
+                </div>
+              </div>
+              <div class="form-action-group">
+                <button
+                  class="btn-primary-auth"
+                  id="btnSubmitLogin"
+                  type="submit"
+                >
+                  <span class="btn-text">MASUK KE SISTEM</span>
+                  <span aria-hidden="true" class="btn-spinner hidden"></span>
+                  <svg
+                    class="btn-arrow"
+                    fill="none"
+                    height="18"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    viewBox="0 0 24 24"
+                    width="18"
+                  >
+                    <line x1="5" x2="19" y1="12" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+    <div aria-live="polite" class="toast-container" id="toastContainer"></div>
+    <script src="../template/js/common/ui.js"></script>
+    <script src="../template/js/auth/auth.js"></script>
+  </body>
+</html>

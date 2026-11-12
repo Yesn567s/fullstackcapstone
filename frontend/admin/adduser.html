@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tambah Admin atau Operator - CV. SUMBER ARTHA</title>
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="../template/css/style.css" rel="stylesheet" />
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+    <link href="../template/css/responsive.css" rel="stylesheet" />
+  </head>
+  <body class="theme-focus-wireframe">
+    <div aria-hidden="true" class="bg-texture"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-1"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-2"></div>
+    <main class="page-wrapper">
+      <div class="container auth-stage-layout">
+        <section class="auth-center-column">
+          <div class="wireframe-tag-bar">
+            <span class="wireframe-screen-name">Manajemen Pengguna</span>
+            <span class="wireframe-badge">Admin</span>
+          </div>
+          <div class="auth-card">
+            <header class="card-header">
+              <div class="header-branding">
+                <div class="brand-logo-box" title="Logo CV. Sumber Artha">
+                  <img
+                    alt="Logo CV. Sumber Artha"
+                    class="brand-logo-img"
+                    src="../../assets/favicon.ico"
+                  />
+                </div>
+                <div class="brand-text-block">
+                  <h1 class="company-name">CV. SUMBER ARTHA</h1>
+                  <p class="company-sub">Tambah akun Admin atau Operator</p>
+                </div>
+              </div>
+              <hr class="card-divider" />
+            </header>
+            <div class="form-title-section">
+              <h2 class="auth-heading">TAMBAH PENGGUNA</h2>
+              <div aria-hidden="true" class="wireframe-sub-bar"></div>
+            </div>
+            <div
+              aria-live="polite"
+              class="alert-box hidden"
+              id="userAlert"
+              role="alert"
+            >
+              <span class="alert-text" id="userAlertMessage"></span>
+            </div>
+            <form class="auth-form hidden" id="addUserForm">
+              <div class="form-group">
+                <label class="form-label" for="username">
+                  <span>USERNAME</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <input
+                    autocomplete="username"
+                    class="form-control"
+                    id="username"
+                    maxlength="50"
+                    name="username"
+                    required
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="password">
+                  <span>PASSWORD (MINIMAL 6 KARAKTER)</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <input
+                    autocomplete="new-password"
+                    class="form-control"
+                    id="password"
+                    minlength="6"
+                    name="password"
+                    required
+                    type="password"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="fullName">
+                  <span>NAMA LENGKAP</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <input
+                    autocomplete="name"
+                    class="form-control"
+                    id="fullName"
+                    maxlength="100"
+                    name="fullName"
+                    required
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="email">
+                  <span>EMAIL</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <input
+                    autocomplete="email"
+                    class="form-control"
+                    id="email"
+                    maxlength="100"
+                    name="email"
+                    placeholder="nama@gmail.com"
+                    required
+                    type="email"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">
+                  <span>NOMOR TELEPON</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <input
+                    autocomplete="tel"
+                    class="form-control"
+                    id="phone"
+                    maxlength="30"
+                    name="phone"
+                    required
+                    type="tel"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="role">
+                  <span>ROLE</span>
+                  <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                  <select class="form-control" id="role" name="role" required>
+                    <option value="">Pilih role</option>
+                    <option value="admin">Admin</option>
+                    <option value="operator">Operator</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-action-group">
+                <button
+                  class="btn-primary-auth"
+                  id="btnSubmitUser"
+                  type="submit"
+                >
+                  <span class="btn-text">TAMBAH PENGGUNA</span>
+                  <span aria-hidden="true" class="btn-spinner hidden"></span>
+                  <svg
+                    class="btn-arrow"
+                    fill="none"
+                    height="18"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    viewBox="0 0 24 24"
+                    width="18"
+                  >
+                    <line x1="5" x2="19" y1="12" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </form>
+            <footer class="card-footer">
+              <p class="rbac-disclaimer">
+                <a href="dashboard.html">Kembali ke Dashboard Admin</a>
+                <span aria-hidden="true"> &bull; </span>
+                <a href="../auth/adminlogin.html">Login Admin</a>
+              </p>
+            </footer>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script src="../template/js/dashboard/adduser.js"></script>
+  </body>
+</html>
