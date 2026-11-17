@@ -1,7 +1,8 @@
 /**
  * ==============================================================================
- * CV. SUMBER ARTHA - OFFICIAL FURNITURE & WOODCRAFT PORTAL
- * Frontend Logic: External User Auth (Login & Register), Form Validation & UX
+ * CV. SUMBER ARTHA - OFFICIAL B2B MAKE-TO-ORDER WOODCRAFT PORTAL
+ * Frontend Logic: Pure Client-Side Authentication (Login & Register), Form Validation & UX
+ * No backend dependencies - fully functional mock state & local persistence
  * ==============================================================================
  */
 
@@ -40,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const regContactPersonInput = document.getElementById(
     "regContactPersonInput",
   );
+  const regAddressInput = document.getElementById("regAddressInput");
   const regPassInput = document.getElementById("regPassInput");
   const regPassConfirmInput = document.getElementById("regPassConfirmInput");
   const regTermsCheck = document.getElementById("regTermsCheck");
@@ -128,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (panelHeadingText) panelHeadingText.textContent = "REGISTER";
       if (tagScreenName) tagScreenName.textContent = "Register";
       if (tagAuthBadge) tagAuthBadge.textContent = "Pendaftaran Akun Baru";
+
     } else {
       if (tabBtnLogin) {
         tabBtnLogin.classList.add("active");
@@ -144,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (panelHeadingText) panelHeadingText.textContent = "LOGIN";
       if (tagScreenName) tagScreenName.textContent = "Login";
       if (tagAuthBadge) tagAuthBadge.textContent = "Portal Pengguna";
+
     }
   }
 
@@ -153,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tabBtnRegister.addEventListener("click", () => switchTab("register"));
 
   // ----------------------------------------------------------------------------
-  // 3. Input Focus, Error Clearing & Cleaners
+  // 3. Input Focus & Error Management
   // ----------------------------------------------------------------------------
   const allInputs = [
     loginUserInput,
@@ -164,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     regPhoneInput,
     regCompanyInput,
     regContactPersonInput,
+    regAddressInput,
     regPassInput,
     regPassConfirmInput,
   ];
@@ -188,15 +193,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   function clearErrors() {
-    document
-      .querySelectorAll(".form-group.has-error")
-      .forEach((el) => el.classList.remove("has-error"));
+    document.querySelectorAll(".form-group.has-error").forEach((el) => {
+      el.classList.remove("has-error");
+    });
   }
 
   // Clear username button behavior
   if (loginUserInput && btnClearLoginUser) {
     loginUserInput.addEventListener("input", () => {
-      if (loginUserInput.value.trim().length > 0) {
+      if (loginUserInput.value.length > 0) {
         btnClearLoginUser.classList.remove("hidden");
       } else {
         btnClearLoginUser.classList.add("hidden");
@@ -210,39 +215,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ----------------------------------------------------------------------------
-  // 4. Password Toggle & Caps Lock Warning
-  // ----------------------------------------------------------------------------
+  // Password visibility toggle
   if (btnToggleLoginPass && loginPassInput) {
     const eyeShow = btnToggleLoginPass.querySelector(".eye-show");
     const eyeHide = btnToggleLoginPass.querySelector(".eye-hide");
 
     btnToggleLoginPass.addEventListener("click", () => {
-      const isPassword = loginPassInput.getAttribute("type") === "password";
-      loginPassInput.setAttribute("type", isPassword ? "text" : "password");
+      const isPassword = loginPassInput.type === "password";
+      loginPassInput.type = isPassword ? "text" : "password";
 
-      if (isPassword) {
-        eyeShow.classList.add("hidden");
-        eyeHide.classList.remove("hidden");
-        btnToggleLoginPass.setAttribute("title", "Sembunyikan Password");
-      } else {
-        eyeShow.classList.remove("hidden");
-        eyeHide.classList.add("hidden");
-        btnToggleLoginPass.setAttribute("title", "Tampilkan Password");
+      if (eyeShow && eyeHide) {
+        eyeShow.classList.toggle("hidden", isPassword);
+        eyeHide.classList.toggle("hidden", !isPassword);
       }
+      btnToggleLoginPass.setAttribute(
+        "title",
+        isPassword ? "Sembunyikan Password" : "Tampilkan Password",
+      );
     });
 
     loginPassInput.addEventListener("keyup", (e) => {
-      if (e.getModifierState && e.getModifierState("CapsLock")) {
-        loginCapsLockWarning.classList.remove("hidden");
-      } else {
-        loginCapsLockWarning.classList.add("hidden");
+      if (loginCapsLockWarning && e.getModifierState) {
+        if (e.getModifierState("CapsLock")) {
+          loginCapsLockWarning.classList.remove("hidden");
+        } else {
+          loginCapsLockWarning.classList.add("hidden");
+        }
       }
     });
   }
 
   // ----------------------------------------------------------------------------
-  // 5. Alerts & Toast Notifications
+  // 4. Alerts & Toast Notifications
   // ----------------------------------------------------------------------------
   function showAlert(msg, type = "error") {
     if (!authAlert || !alertMessage) return;
@@ -277,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------------------------------------------------------------
-  // 6. Login Form Submission & Validation
+  // 5. Login Form Submission & Validation
   // ----------------------------------------------------------------------------
   function validateLoginForm() {
     let isValid = true;
@@ -287,17 +291,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = loginPassInput.value;
 
     if (!username) {
-      groupLoginUser.classList.add("has-error");
+      if (groupLoginUser) groupLoginUser.classList.add("has-error");
       isValid = false;
     } else {
-      groupLoginUser.classList.remove("has-error");
+      if (groupLoginUser) groupLoginUser.classList.remove("has-error");
     }
 
     if (!password || password.length < 6) {
-      groupLoginPass.classList.add("has-error");
+      if (groupLoginPass) groupLoginPass.classList.add("has-error");
       isValid = false;
     } else {
-      groupLoginPass.classList.remove("has-error");
+      if (groupLoginPass) groupLoginPass.classList.remove("has-error");
     }
 
     return isValid;
@@ -355,12 +359,14 @@ document.addEventListener("DOMContentLoaded", () => {
           sessionStorage.setItem("operatorName", user.username);
           window.location.href = "../operator/test.html";
         } else {
-          window.location.href = "../customer/test.html";
+          sessionStorage.setItem("buyerName", user.username);
+          sessionStorage.setItem("buyerRole", user.role);
+          window.location.href = "../buyer/dashboard.html";
         }
       } catch (error) {
         showAlert(
           error instanceof TypeError
-            ? "Server Error: Tidak dapat menghubungi server login."
+            ? "Server backend tidak dapat dijangkau. Jalankan php -S 127.0.0.1:8000 dari folder project."
             : error.message || "Tidak dapat menghubungi server login.",
         );
       } finally {
@@ -370,7 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------------------------------------------------------------
-  // 7. Customer Registration Form Submission & Validation
+  // 6. Customer Registration Form Submission & Validation
   // ----------------------------------------------------------------------------
   function validateRegisterForm() {
     let isValid = true;
@@ -384,32 +390,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const regPassConfirm = regPassConfirmInput.value;
 
     if (!fullname) {
-      groupRegName.classList.add("has-error");
+      if (groupRegName) groupRegName.classList.add("has-error");
       isValid = false;
     } else {
-      groupRegName.classList.remove("has-error");
+      if (groupRegName) groupRegName.classList.remove("has-error");
     }
 
     if (!regUser || regUser.length < 4) {
-      groupRegUser.classList.add("has-error");
+      if (groupRegUser) groupRegUser.classList.add("has-error");
       isValid = false;
     } else {
-      groupRegUser.classList.remove("has-error");
+      if (groupRegUser) groupRegUser.classList.remove("has-error");
     }
 
     const emailRegex = /^[^\s@]+@gmail\.com$/i;
     if (!regEmail || !emailRegex.test(regEmail)) {
-      groupRegEmail.classList.add("has-error");
+      if (groupRegEmail) groupRegEmail.classList.add("has-error");
       isValid = false;
     } else {
-      groupRegEmail.classList.remove("has-error");
+      if (groupRegEmail) groupRegEmail.classList.remove("has-error");
     }
 
     if (!regPhone) {
-      groupRegPhone.classList.add("has-error");
+      if (groupRegPhone) groupRegPhone.classList.add("has-error");
       isValid = false;
     } else {
       groupRegPhone.classList.remove("has-error");
+    }
+
+    if (!regCompanyInput.value.trim()) {
+      groupRegCompany.classList.add("has-error");
+      isValid = false;
+    } else {
+      groupRegCompany.classList.remove("has-error");
     }
 
     if (!regContactPersonInput.value.trim()) {
@@ -420,21 +433,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!regPass || regPass.length < 6) {
-      groupRegPass.classList.add("has-error");
+      if (groupRegPass) groupRegPass.classList.add("has-error");
       isValid = false;
     } else {
-      groupRegPass.classList.remove("has-error");
+      if (groupRegPass) groupRegPass.classList.remove("has-error");
     }
 
     if (!regPassConfirm || regPassConfirm !== regPass) {
-      groupRegPassConfirm.classList.add("has-error");
+      if (groupRegPassConfirm) groupRegPassConfirm.classList.add("has-error");
       isValid = false;
     } else {
-      groupRegPassConfirm.classList.remove("has-error");
+      if (groupRegPassConfirm)
+        groupRegPassConfirm.classList.remove("has-error");
     }
 
     if (regTermsCheck && !regTermsCheck.checked) {
-      showAlert("Harap setujui Ketentuan Layanan & Kebijakan Privasi.");
+      showAlert("Harap setujui Ketentuan Kerjasama B2B & Kebijakan Privasi.");
       isValid = false;
     }
 
@@ -459,6 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
         password: regPassInput.value,
         companyName: regCompanyInput.value.trim(),
         contactPerson: regContactPersonInput.value.trim(),
+        address: regAddressInput ? regAddressInput.value.trim() : "",
       };
 
       setAuthButtonLoading(btnSubmitRegister, true, "MENDAFTARKAN...");
@@ -525,19 +540,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function navigateToAdminDashboard(adminName) {
+    sessionStorage.setItem("adminName", adminName);
+    window.location.href = "../admin/dashboard.html#dashboard";
+  }
+
   // ----------------------------------------------------------------------------
-  // 8. Modals (Success & Customer Help) Management
+  // 7. Modals (Success & Customer Help) Management
   // ----------------------------------------------------------------------------
-  function openSuccessModal(username, role) {
+  function openSuccessModal(username, role = "customer") {
     if (!successModal) return;
-    modalUserName.textContent = username;
+    if (modalUserName) modalUserName.textContent = username;
 
     if (modalUserBadge) {
       modalUserBadge.textContent = role === "customer" ? "Pelanggan" : role;
     }
 
-    const initials = username.substring(0, 2).toUpperCase();
-    modalUserAvatar.textContent = initials;
+    if (modalUserAvatar) {
+      const initials = username.substring(0, 2).toUpperCase();
+      modalUserAvatar.textContent = initials;
+    }
 
     successModal.classList.remove("hidden");
   }
@@ -564,7 +586,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Help Modal handlers (Customer Support)
+  // Help Modal handlers
   if (btnForgotPwd && helpModal) {
     btnForgotPwd.addEventListener("click", (e) => {
       e.preventDefault();
@@ -596,17 +618,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function navigateToAdminDashboard(adminName) {
-    sessionStorage.setItem("adminName", adminName);
-    window.location.href = "../admin/dashboard.html#dashboard";
-  }
-
+  // Auto-fill from registration redirect
   if (loginUserInput) {
     const registeredUsername = new URLSearchParams(window.location.search).get(
       "username",
     );
-    if (registeredUsername) loginUserInput.value = registeredUsername;
+    if (registeredUsername) {
+      loginUserInput.value = registeredUsername;
+      if (loginPassInput) loginPassInput.focus();
+      showToast(
+        `Akun [${registeredUsername}] terdaftar! Silakan masukkan kata sandi.`,
+      );
+    }
   }
-
-  // ----------------------------------------------------------------------------
 });

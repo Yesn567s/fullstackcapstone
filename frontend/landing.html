@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CV. Sumber Artha — Manufaktur Komponen Laci Kayu Dovetail</title>
+    <meta
+      name="description"
+      content="Solusi manufaktur Make-to-Order (MTO) terintegrasi untuk industri ekspor furnitur. Produksi komponen laci kayu dovetail presisi tinggi dengan optimalisasi pemotongan 2D."
+    />
+    <!-- Favicon -->
+    <link href="../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheets -->
+    <link href="template/css/base.css" rel="stylesheet" />
+    <link href="template/css/landing.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- ================================================================== -->
+    <!-- AMBIENT BACKGROUND                                                 -->
+    <!-- ================================================================== -->
+    <div aria-hidden="true" class="bg-texture"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-1"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-2"></div>
+
+    <!-- ================================================================== -->
+    <!-- A. NAVIGATION BAR                                                  -->
+    <!-- ================================================================== -->
+    <header class="lp-navbar" id="lpNavbar">
+      <div class="container lp-navbar-inner">
+        <!-- Brand -->
+        <a href="#hero" class="lp-brand">
+          <img
+            src="../assets/favicon.ico"
+            alt="Logo CV. Sumber Artha"
+            class="lp-brand-logo"
+          />
+          <div class="lp-brand-text">
+            <span class="lp-brand-name">CV. Sumber Artha</span>
+            <span class="lp-brand-sub">Manufaktur Komponen Laci Dovetail</span>
+          </div>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <nav class="lp-nav-links" id="navLinks">
+          <a href="#keunggulan" class="lp-nav-link">Keunggulan Sistem</a>
+          <a href="#material" class="lp-nav-link">Kapabilitas Material</a>
+          <a href="#alur" class="lp-nav-link">Alur Pemesanan MTO</a>
+          <a href="#portofolio" class="lp-nav-link"
+            >Portofolio &amp; Fasilitas</a
+          >
+          <a href="#kemitraan" class="lp-nav-link">Kemitraan B2B</a>
+        </nav>
+
+        <!-- CTA Buttons (Dynamic: Guest vs Authenticated User) -->
+        <div class="lp-nav-actions" id="lpNavActions">
+          <!-- Guest State -->
+          <div class="nav-auth-guest" id="navAuthGuest">
+            <a href="auth/login.html" class="btn-nav-secondary"
+              >Masuk Portal Buyer</a
+            >
+            <a href="auth/register.html" class="btn-nav-primary"
+              >Ajukan Pesanan MTO</a
+            >
+          </div>
+
+          <!-- Logged In State (Dashboard & Logout) -->
+          <div class="nav-auth-user hidden" id="navAuthUser">
+            <div class="user-pill-greeting" id="navUserPill">
+              <span class="user-avatar-dot" id="navUserAvatar">PJ</span>
+              <div class="user-greeting-meta">
+                <span class="greeting-company" id="navUserCompany"
+                  >PT Jaya Furniture</span
+                >
+                <span class="greeting-role" id="navUserRole"
+                  >Buyer &bull; TOP 90</span
+                >
+              </div>
+            </div>
+            <a
+              href="buyer/dashboard.html"
+              class="btn-nav-primary btn-nav-dashboard"
+              id="btnNavDashboard"
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              <span>Dashboard</span>
+            </a>
+            <button
+              type="button"
+              class="btn-nav-logout"
+              id="btnNavLogout"
+              title="Keluar dari akun"
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button
+          class="lp-hamburger"
+          id="hamburgerBtn"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <!-- Mobile Nav Overlay -->
+      <div class="lp-mobile-nav" id="mobileNav">
+        <nav class="lp-mobile-nav-links">
+          <a href="#keunggulan" class="lp-mobile-link">Keunggulan Sistem</a>
+          <a href="#material" class="lp-mobile-link">Kapabilitas Material</a>
+          <a href="#alur" class="lp-mobile-link">Alur Pemesanan MTO</a>
+          <a href="#portofolio" class="lp-mobile-link"
+            >Portofolio &amp; Fasilitas</a
+          >
+          <a href="#kemitraan" class="lp-mobile-link">Kemitraan B2B</a>
+        </nav>
+        <div class="lp-mobile-actions" id="lpMobileActions">
+          <!-- Mobile Guest -->
+          <div class="mobile-auth-guest" id="mobileAuthGuest">
+            <a href="auth/login.html" class="btn-nav-secondary"
+              >Masuk Portal Buyer</a
+            >
+            <a href="auth/register.html" class="btn-nav-primary"
+              >Ajukan Pesanan MTO</a
+            >
+          </div>
+
+          <!-- Mobile Logged In -->
+          <div class="mobile-auth-user hidden" id="mobileAuthUser">
+            <div class="mobile-user-greeting">
+              <span class="user-avatar-dot" id="mobileUserAvatar">PJ</span>
+              <div class="mobile-user-info">
+                <strong id="mobileUserCompany">PT Jaya Furniture</strong>
+                <span id="mobileUserRole">Mitra Buyer &bull; TOP 90 Hari</span>
+              </div>
+            </div>
+            <a
+              href="buyer/dashboard.html"
+              class="btn-nav-primary"
+              id="btnMobileDashboard"
+              style="
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+              "
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              <span>Buka Dashboard</span>
+            </a>
+            <button
+              type="button"
+              class="btn-nav-logout"
+              id="btnMobileLogout"
+              style="width: 100%; justify-content: center"
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Logout (Keluar)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================================================================== -->
+    <!-- B. SECTION 1 — HERO SECTION                                        -->
+    <!-- ================================================================== -->
+    <section class="lp-hero" id="hero">
+      <div class="container lp-hero-inner">
+        <div class="lp-hero-content">
+          <!-- Badge -->
+          <div class="lp-hero-badge">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            Mitra Subkontraktor Manufaktur Komponen Laci Ekspor — Pasuruan, Jawa
+            Timur
+          </div>
+
+          <!-- Headline -->
+          <h1 class="lp-hero-headline">
+            Produksi Komponen Laci Kayu <em>Dovetail</em> Presisi Tinggi dengan
+            Optimalisasi Pemotongan 2D
+          </h1>
+
+          <!-- Subheadline -->
+          <p class="lp-hero-sub">
+            Solusi manufaktur <strong>Make-to-Order</strong> (MTO) terintegrasi
+            untuk industri ekspor furnitur. Dilengkapi kalkulasi pola potong
+            matematis tanpa selisih bahan baku, transparansi stok konsinyasi,
+            serta pemantauan progres produksi secara <em>real-time</em>.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="lp-hero-ctas">
+            <a
+              href="auth/register.html"
+              class="btn-hero-primary"
+              id="heroCtaOrder"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="12" y1="18" x2="12" y2="12" />
+                <line x1="9" y1="15" x2="15" y2="15" />
+              </svg>
+              <span>Ajukan Pesanan &amp; Upload Drawing</span>
+            </a>
+            <a href="#alur" class="btn-hero-outline">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>Lihat Alur Kerja MTO</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Visual (Decorative Image Mosaic) -->
+        <div class="lp-hero-visual">
+          <div class="hero-img-main">
+            <img
+              src="../assets/02-dovetail-drawer-corner-detail.webp"
+              alt="Hasil komponen laci dovetail presisi tinggi"
+            />
+            <div class="hero-img-overlay"></div>
+          </div>
+          <div class="hero-img-accent">
+            <img
+              src="../assets/Figure-3-Cutting-wood-with-band-saw.jpg"
+              alt="Proses pemotongan bahan baku kayu"
+            />
+            <div class="hero-img-overlay"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Highlights -->
+      <div class="container">
+        <div class="lp-hero-highlights">
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div class="highlight-text">
+              <strong>3 mm Kerf &amp; 4 mm Dovetail</strong>
+              <span>Kalkulasi presisi mesin potong</span>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <div class="highlight-text">
+              <strong>100% Transparansi Stok</strong>
+              <span>Pencatatan digital bahan baku konsinyasi</span>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <div class="highlight-text">
+              <strong>Live PO Tracking</strong>
+              <span>Status otomatis via Portal, WhatsApp &amp; Email</span>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+            </div>
+            <div class="highlight-text">
+              <strong>TOP 90 Hari</strong>
+              <span>Termin pembayaran fleksibel B2B</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- C. SECTION 2 — KEUNGGULAN SISTEM TERINTEGRASI                      -->
+    <!-- ================================================================== -->
+    <section class="lp-section" id="keunggulan">
+      <div class="container">
+        <div class="lp-section-header">
+          <span class="lp-section-badge">Nilai Jual Utama</span>
+          <h2 class="lp-section-title">
+            Mengapa Mempercayakan Produksi Komponen Laci Anda kepada Kami?
+          </h2>
+          <p class="lp-section-desc">
+            Kami memodernisasi proses manufaktur kayu konvensional dengan sistem
+            digital terpadu untuk menjamin efisiensi material dan ketepatan
+            jadwal ekspor Anda.
+          </p>
+        </div>
+
+        <div class="lp-features-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card" data-animate>
+            <div class="feature-icon-wrap">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M3 9h18" />
+                <path d="M9 21V9" />
+              </svg>
+            </div>
+            <h3 class="feature-title">
+              Engine Optimasi Pemotongan 2D<br /><em>Zero Material Gap</em>
+            </h3>
+            <p class="feature-desc">
+              Estimasi kebutuhan lembaran kayu dihitung secara algoritmik dengan
+              memperhitungkan ketebalan bilah gergaji (<em>kerf</em>) 3 mm,
+              alokasi sambungan dovetail 4 mm, serta aturan pembelahan lurus
+              (<em>guillotine cut</em>). Menghilangkan selisih perhitungan bahan
+              baku antara pihak buyer dan pabrik.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card" data-animate>
+            <div class="feature-icon-wrap">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22.08" x2="12" y2="12" />
+              </svg>
+            </div>
+            <h3 class="feature-title">
+              Transparansi Konsinyasi Bahan Baku Titipan
+            </h3>
+            <p class="feature-desc">
+              Seluruh pasokan lembaran kayu yang Anda kirimkan ke gudang kami
+              tercatat secara digital. Pantau riwayat penerimaan material,
+              alokasi pemakaian per nomor PO, hingga saldo sisa stok bahan baku
+              Anda kapan saja.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card" data-animate>
+            <div class="feature-icon-wrap">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <h3 class="feature-title">
+              Portal Live PO Tracking &amp; Notifikasi Otomatis
+            </h3>
+            <p class="feature-desc">
+              Tidak perlu lagi melakukan konfirmasi manual berulang kali. Pantau
+              setiap tahapan pengerjaan — mulai dari
+              <em>Cutting</em>, <em>Assembly</em>, <em>QC Inspection</em>,
+              hingga <em>Shipping</em> — secara langsung di portal web dengan
+              notifikasi otomatis ke WhatsApp dan Email Anda.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="feature-card" data-animate>
+            <div class="feature-icon-wrap">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <h3 class="feature-title">
+              Sertifikasi Quality Control (QC) Digital
+            </h3>
+            <p class="feature-desc">
+              Setiap komponen laci melewati pengujian kesikuan alur
+              (<em>squareness</em>) dan presisi dimensi sebelum dikirim. Dokumen
+              Surat Jalan hanya diterbitkan setelah produk lolos uji dan
+              mendapatkan Sertifikat Kelayakan Kirim digital.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- D. SECTION 3 — KAPABILITAS MATERIAL & SPESIFIKASI TEKNIS           -->
+    <!-- ================================================================== -->
+    <section class="lp-section lp-section-alt" id="material">
+      <div class="container">
+        <div class="lp-section-header">
+          <span class="lp-section-badge">Spesifikasi Teknis</span>
+          <h2 class="lp-section-title">
+            Kapabilitas Pemrosesan Material &amp; Standar Presisi
+          </h2>
+          <p class="lp-section-desc">
+            Kami memproses bahan baku pasokan mitra buyer menjadi komponen laci
+            utuh (<em>front, back, side left, side right</em>, dan
+            <em>bottom</em>) sesuai spesifikasi gambar kerja teknis.
+          </p>
+        </div>
+
+        <!-- Material Cards -->
+        <div class="lp-material-grid">
+          <div class="material-card" data-animate>
+            <div class="material-card-header">
+              <div class="material-icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <rect x="2" y="7" width="20" height="15" rx="2" />
+                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                </svg>
+              </div>
+              <span class="material-badge">Dinding Laci</span>
+            </div>
+            <h3 class="material-name">LVB Poplar</h3>
+            <p class="material-full-name">Laminated Veneer Board</p>
+            <div class="material-spec">
+              <div class="spec-item">
+                <span class="spec-label">Ukuran Standar</span>
+                <span class="spec-value">1220 × 2440 mm</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Peruntukan</span>
+                <span class="spec-value">Front, Back, Side L/R</span>
+              </div>
+            </div>
+            <p class="material-desc">
+              Mendukung aturan arah serat kayu memanjang (<em>long grain</em>)
+              untuk estetika ekspor dan kekuatan sambungan dovetail.
+            </p>
+          </div>
+
+          <div class="material-card" data-animate>
+            <div class="material-card-header">
+              <div class="material-icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <rect x="2" y="7" width="20" height="15" rx="2" />
+                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                </svg>
+              </div>
+              <span class="material-badge">Dinding Laci</span>
+            </div>
+            <h3 class="material-name">LVB Sengon</h3>
+            <p class="material-full-name">Laminated Veneer Board</p>
+            <div class="material-spec">
+              <div class="spec-item">
+                <span class="spec-label">Ukuran Standar</span>
+                <span class="spec-value">1220 × 2440 mm</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Peruntukan</span>
+                <span class="spec-value">Front, Back, Side L/R</span>
+              </div>
+            </div>
+            <p class="material-desc">
+              Pemotongan presisi dengan kompensasi kerf 3 mm dan alokasi alur
+              dovetail 4 mm untuk mencegah retak tepi.
+            </p>
+          </div>
+
+          <div class="material-card" data-animate>
+            <div class="material-card-header">
+              <div class="material-icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <rect x="1" y="4" width="22" height="16" rx="2" />
+                  <line x1="1" y1="10" x2="23" y2="10" />
+                </svg>
+              </div>
+              <span class="material-badge">Alas Laci</span>
+            </div>
+            <h3 class="material-name">Plywood / MDF</h3>
+            <p class="material-full-name">Ketebalan 12 mm</p>
+            <div class="material-spec">
+              <div class="spec-item">
+                <span class="spec-label">Ukuran Standar</span>
+                <span class="spec-value">1220 × 2440 mm</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Peruntukan</span>
+                <span class="spec-value">Drawer Base / Bottom</span>
+              </div>
+            </div>
+            <p class="material-desc">
+              Dipotong presisi menyesuaikan alur (<em>groove</em>) panel dinding
+              laci agar perakitan siku dan kokoh.
+            </p>
+          </div>
+        </div>
+
+        <!-- Standar Teknis -->
+        <div class="lp-tech-standards">
+          <h3 class="tech-standards-title">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+              />
+            </svg>
+            Standar Teknis Mesin &amp; Pengelolaan Offcut
+          </h3>
+          <div class="tech-standards-grid">
+            <div class="tech-item">
+              <div class="tech-item-marker">01</div>
+              <div>
+                <strong>Aturan Guillotine Cut</strong>
+                <p>
+                  Jalur pemotongan lurus dan putus dari ujung ke ujung lembaran
+                  sesuai karakteristik mesin gergaji industri.
+                </p>
+              </div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-item-marker">02</div>
+              <div>
+                <strong>Kontrol Arah Serat (Grain Orientation)</strong>
+                <p>
+                  Sistem mengunci orientasi panel agar pola serat kayu seragam
+                  sesuai standar kualitas furnitur ekspor.
+                </p>
+              </div>
+            </div>
+            <div class="tech-item">
+              <div class="tech-item-marker">03</div>
+              <div>
+                <strong>Pemanfaatan Sisa Potongan (Offcut Management)</strong>
+                <p>
+                  Sisa potongan kayu yang masih bernilai pakai (minimal 100 ×
+                  100 mm) didata untuk dialokasikan sebagai komponen pendukung
+                  atau dikatalogisasi kembali.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- E. SECTION 4 — ALUR KERJA PEMESANAN MTO (5 LANGKAH)               -->
+    <!-- ================================================================== -->
+    <section class="lp-section" id="alur">
+      <div class="container">
+        <div class="lp-section-header">
+          <span class="lp-section-badge">5 Langkah Mudah</span>
+          <h2 class="lp-section-title">
+            Alur Kemitraan &amp; Pemesanan Make-to-Order
+          </h2>
+          <p class="lp-section-desc">
+            Proses pemesanan terstruktur dari pengajuan gambar kerja hingga
+            pengiriman bertahap ke gudang Anda.
+          </p>
+        </div>
+
+        <div class="lp-steps-timeline">
+          <!-- Step 1 -->
+          <div class="step-card" data-animate>
+            <div class="step-number">01</div>
+            <div class="step-connector"></div>
+            <div class="step-content">
+              <h3 class="step-title">Registrasi &amp; Unggah Drawing MTO</h3>
+              <p class="step-desc">
+                Daftar sebagai mitra Buyer, masukkan rincian dimensi laci
+                (panjang, lebar, tinggi), kuantitas unit, serta unggah berkas
+                gambar kerja teknis (<em>drawing</em>).
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card" data-animate>
+            <div class="step-number">02</div>
+            <div class="step-connector"></div>
+            <div class="step-content">
+              <h3 class="step-title">Penawaran Harga &amp; Kontrak Digital</h3>
+              <p class="step-desc">
+                Tinjau rincian penawaran harga (<em>Quotation</em>) presisi dari
+                tim kami, lalu setujui Kontrak Digital (<em>Legal Lock-in</em>)
+                yang menjamin standar toleransi ukuran dan keamanan transaksi
+                kedua belah pihak.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card" data-animate>
+            <div class="step-number">03</div>
+            <div class="step-connector"></div>
+            <div class="step-content">
+              <h3 class="step-title">
+                Verifikasi DP &amp; Pengiriman Bahan Baku
+              </h3>
+              <p class="step-desc">
+                Lakukan pembayaran uang muka (Down Payment sesuai skema kredit)
+                dan kirimkan pasokan lembaran kayu LVB serta drawer base ke
+                pabrik kami untuk dicatat pada sistem konsinyasi.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-card" data-animate>
+            <div class="step-number">04</div>
+            <div class="step-connector"></div>
+            <div class="step-content">
+              <h3 class="step-title">
+                Produksi Teroptimasi &amp; Live Tracking
+              </h3>
+              <p class="step-desc">
+                Tim produksi memproses pemotongan berdasarkan pola 2D
+                teroptimasi. Anda dapat memantau progres pemotongan, perakitan
+                dovetail, dan QC secara real-time dari portal web.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="step-card" data-animate>
+            <div class="step-number">05</div>
+            <div class="step-connector"></div>
+            <div class="step-content">
+              <h3 class="step-title">Inspeksi QC &amp; Pengiriman Bertahap</h3>
+              <p class="step-desc">
+                Komponen yang lolos QC dikirim secara bertahap menggunakan
+                armada truk (kapasitas rata-rata ±350 pcs per pengiriman)
+                lengkap dengan Surat Jalan dan Invoice parsial otomatis.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- F. SECTION 5 — GALERI PORTOFOLIO & VISUALISASI 2D                  -->
+    <!-- ================================================================== -->
+    <section class="lp-section lp-section-alt" id="portofolio">
+      <div class="container">
+        <div class="lp-section-header">
+          <span class="lp-section-badge">Portofolio</span>
+          <h2 class="lp-section-title">
+            Dokumentasi Produksi &amp; Teknologi Pemotongan 2D
+          </h2>
+        </div>
+
+        <div class="lp-portfolio-grid">
+          <!-- Card 1 -->
+          <div class="portfolio-card" data-animate>
+            <div class="portfolio-img-wrap">
+              <img
+                src="../assets/02-dovetail-drawer-corner-detail.webp"
+                alt="Hasil Komponen Laci Dovetail"
+              />
+              <div class="portfolio-img-overlay"></div>
+            </div>
+            <div class="portfolio-body">
+              <h3>Hasil Komponen Laci Dovetail</h3>
+              <p>
+                Foto detail sambungan dovetail pada kayu LVB Poplar dan Sengon
+                yang halus, siku, dan siap rakit.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="portfolio-card" data-animate>
+            <div class="portfolio-img-wrap">
+              <img
+                src="../assets/visual.png"
+                alt="Engine Optimasi Pola Potong 2D"
+              />
+              <div class="portfolio-img-overlay"></div>
+            </div>
+            <div class="portfolio-body">
+              <h3>Antarmuka Engine Optimasi Pola Potong 2D</h3>
+              <p>
+                Cuplikan kanvas visualisasi tata letak pemotongan lembaran 1220
+                × 2440 mm yang meminimalkan limbah kayu.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="portfolio-card" data-animate>
+            <div class="portfolio-img-wrap">
+              <img
+                src="../assets/lantai.png"
+                alt="Lantai Produksi dan Mesin Gergaji"
+              />
+              <div class="portfolio-img-overlay"></div>
+            </div>
+            <div class="portfolio-body">
+              <h3>Lantai Produksi &amp; Mesin Gergaji</h3>
+              <p>
+                Foto operasional pemotongan di pabrik CV. Sumber Artha
+                (Pasuruan) dilengkapi layar monitor terminal operator.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- G. SECTION 6 — SKEMA KEMITRAAN B2B & TESTIMONI                     -->
+    <!-- ================================================================== -->
+    <section class="lp-section" id="kemitraan">
+      <div class="container">
+        <div class="lp-section-header">
+          <span class="lp-section-badge">Kemitraan B2B</span>
+          <h2 class="lp-section-title">
+            Keuntungan Kemitraan Jangka Panjang (B2B)
+          </h2>
+        </div>
+
+        <div class="lp-partnership-grid">
+          <!-- Card 1: TOP 90 Hari -->
+          <div class="partnership-card" data-animate>
+            <div class="partnership-icon">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+            </div>
+            <h3 class="partnership-title">Skema Kredit TOP 90 Hari</h3>
+            <p class="partnership-desc">
+              Fasilitas pembayaran bertempo 90 hari sejak tanggal Surat
+              Jalan/Invoice diterbitkan (dengan DP 30%–50%) bagi mitra dengan
+              riwayat evaluasi kredit yang baik.
+            </p>
+          </div>
+
+          <!-- Card 2: Loyalty -->
+          <div class="partnership-card" data-animate>
+            <div class="partnership-icon">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                />
+              </svg>
+            </div>
+            <h3 class="partnership-title">
+              Program Loyalty Discount &amp; Prioritas Antrean
+            </h3>
+            <p class="partnership-desc">
+              Mitra dengan frekuensi pemesanan tinggi dan pelunasan tepat waktu
+              otomatis mendapatkan tingkatan Loyalty Tier (Bronze, Silver, Gold,
+              Platinum) berupa potongan harga khusus serta prioritas jadwal
+              mesin produksi.
+            </p>
+            <div class="loyalty-tiers">
+              <span class="tier tier-bronze">Bronze</span>
+              <span class="tier tier-silver">Silver</span>
+              <span class="tier tier-gold">Gold</span>
+              <span class="tier tier-platinum">Platinum</span>
+            </div>
+          </div>
+
+          <!-- Card 3: RMA -->
+          <div class="partnership-card" data-animate>
+            <div class="partnership-icon">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+            </div>
+            <h3 class="partnership-title">
+              Garansi Klaim Terstruktur (RMA System)
+            </h3>
+            <p class="partnership-desc">
+              Jika ditemukan komponen di luar batas toleransi ukuran saat
+              penerimaan, ajukan klaim berbasis bukti foto/video langsung
+              melalui sistem untuk mendapatkan penggantian unit
+              (<em>replacement</em>) atau pemotongan tagihan (<em
+                >credit note</em
+              >).
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimoni -->
+        <div class="lp-testimonial" data-animate>
+          <div class="testimonial-quote-icon">
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              opacity="0.15"
+            >
+              <path
+                d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"
+              />
+            </svg>
+          </div>
+          <blockquote class="testimonial-text">
+            "Sejak bermitra dengan CV. Sumber Artha, selisih perhitungan
+            kebutuhan lembaran LVB Poplar kami berkurang drastis. Fitur Live
+            Tracking dan laporan stok bahan titipan sangat membantu tim PPIC
+            kami mengatur jadwal kontainer ekspor."
+          </blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MP</div>
+            <div>
+              <strong>Manajer Pengadaan &amp; PPIC</strong>
+              <span>Perusahaan Eksportir Furnitur — Jawa Timur</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- H. SECTION 7 — CTA PENUTUP & FOOTER                               -->
+    <!-- ================================================================== -->
+    <!-- CTA Banner -->
+    <section class="lp-cta-banner">
+      <div class="container lp-cta-inner">
+        <h2 class="lp-cta-title">
+          Siap Meningkatkan Efisiensi Produksi Komponen Laci Furnitur Anda?
+        </h2>
+        <p class="lp-cta-desc">
+          Daftarkan perusahaan Anda sekarang dan ajukan spesifikasi drawing
+          pertama Anda untuk mendapatkan kalkulasi kebutuhan material yang
+          presisi.
+        </p>
+        <div class="lp-cta-actions">
+          <a
+            href="auth/register.html"
+            class="btn-cta-primary"
+            id="bannerCtaPrimary"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="8.5" cy="7" r="4" />
+              <line x1="20" y1="8" x2="20" y2="14" />
+              <line x1="23" y1="11" x2="17" y2="11" />
+            </svg>
+            <span>Daftar Akun Buyer Sekarang</span>
+          </a>
+          <a
+            href="auth/login.html"
+            class="btn-cta-outline"
+            id="bannerCtaSecondary"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span>Masuk ke Portal Klien</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="lp-footer">
+      <div class="container lp-footer-inner">
+        <div class="lp-footer-top">
+          <!-- Brand Column -->
+          <div class="footer-brand-col">
+            <div class="footer-brand">
+              <img
+                src="../assets/favicon.ico"
+                alt="Logo CV. Sumber Artha"
+                class="footer-logo"
+              />
+              <div>
+                <strong>CV. Sumber Artha</strong>
+                <span
+                  >Spesialis Subkontraktor Manufaktur Komponen Laci Kayu
+                  (Dovetail Drawer Box)</span
+                >
+              </div>
+            </div>
+            <p class="footer-location">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Desa Sidowayah, Kec. Beji, Kab. Pasuruan, Jawa Timur
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="footer-links-col">
+            <h4>Tautan Cepat</h4>
+            <a href="auth/login.html">Login Portal</a>
+            <a href="auth/register.html">Registrasi Buyer</a>
+            <a href="#alur">Alur Pemesanan</a>
+            <a href="#material">Kapabilitas Material</a>
+          </div>
+
+          <!-- Contact -->
+          <div class="footer-links-col">
+            <h4>Navigasi</h4>
+            <a href="#keunggulan">Keunggulan Sistem</a>
+            <a href="#portofolio">Portofolio &amp; Fasilitas</a>
+            <a href="#kemitraan">Kemitraan B2B</a>
+            <a href="#hero">Kembali ke Atas</a>
+          </div>
+        </div>
+
+        <div class="lp-footer-bottom">
+          <p>&copy; 2026 CV. Sumber Artha. Seluruh Hak Cipta Dilindungi.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="lp-back-to-top" id="backToTop" aria-label="Kembali ke atas">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+      >
+        <polyline points="18 15 12 9 6 15" />
+      </svg>
+    </button>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- JavaScript -->
+    <script src="template/js/landing.js"></script>
+  </body>
+</html>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>CV. SUMBER ARTHA - Register</title>
+    <title>CV. SUMBER ARTHA - Registrasi Akun Mitra B2B</title>
     <!-- Favicon -->
     <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
     <!-- Google Fonts: Plus Jakarta Sans & Outfit for Luxury Timber Aesthetic -->
@@ -89,7 +89,7 @@
               >Register</span
             >
             <span class="wireframe-badge" id="tagAuthBadge"
-              >Portal Pengguna</span
+              >Pendaftaran Mitra B2B</span
             >
           </div>
           <!-- THE MAIN CARD (Wireframe Exact Structure) -->
@@ -109,7 +109,7 @@
                 <div class="brand-text-block">
                   <h1 class="company-name">CV. SUMBER ARTHA</h1>
                   <p class="company-sub">
-                    Furnitur Kayu Berkualitas untuk Hunian Elegan
+                    Manufaktur Komponen Laci Dovetail &amp; Optimasi 2D
                   </p>
                 </div>
               </div>
@@ -317,22 +317,23 @@
                   <div class="form-group" id="groupRegCompany">
                     <label class="form-label" for="regCompanyInput">
                       <span>NAMA PERUSAHAAN</span>
+                      <span class="required-star">*</span>
                     </label>
                     <div class="input-wrapper">
                       <input
                         class="form-control"
                         id="regCompanyInput"
                         name="companyName"
-                        placeholder="Nama perusahaan"
+                        required=""
+                        placeholder="Contoh: PT Jaya Furniture Ekspor"
                         type="text"
                         value=""
                       />
                     </div>
-                    <small class="field-hint">Leave blank for individual</small>
                   </div>
                   <div class="form-group" id="groupRegContactPerson">
                     <label class="form-label" for="regContactPersonInput">
-                      <span>CONTACT PERSON</span>
+                      <span>PENANGGUNG JAWAB (PIC)</span>
                       <span class="required-star">*</span>
                     </label>
                     <div class="input-wrapper">
@@ -340,15 +341,31 @@
                         class="form-control"
                         id="regContactPersonInput"
                         name="contactPerson"
-                        placeholder="Nama contact person"
+                        placeholder="Nama manajer/PIC pengadaan"
                         required=""
                         type="text"
                         value=""
                       />
                     </div>
                     <div class="error-feedback" id="regContactPersonError">
-                      Contact person wajib diisi.
+                      Nama PIC wajib diisi.
                     </div>
+                  </div>
+                </div>
+                <!-- Field R-Address: ALAMAT KANTOR / GUDANG BUYER -->
+                <div class="form-group" id="groupRegAddress">
+                  <label class="form-label" for="regAddressInput">
+                    <span>ALAMAT KANTOR / GUDANG PABRIK BUYER</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input
+                      class="form-control"
+                      id="regAddressInput"
+                      name="address"
+                      placeholder="Alamat lengkap tujuan pengiriman komponen laci"
+                      type="text"
+                      value=""
+                    />
                   </div>
                 </div>
                 <!-- PASSWORD & KONFIRMASI PASSWORD (Grid 2 Kolom) -->
@@ -495,20 +512,28 @@
       <!-- ADMIN DASHBOARD: ANALYTICS & MONITORING PRODUKSI (SESUAI WIREFRAME LENGKAP) -->
       <!-- ========================================================================= -->
     </main>
-    <!-- Global Footer Contact Bar (Exact info and dashes from Image 2) -->
+    <!-- Global Footer Contact Bar (Sesuai Blueprint CV. Sumber Artha) -->
     <footer class="site-contact-footer" id="siteContactFooter">
       <div class="container footer-content-row">
         <div class="contact-info-text">
-          <span class="contact-label">Kontak :</span>
+          <span class="contact-label">Pabrik &amp; Kantor :</span>
           <span class="contact-address"
-            >Jl. Mangga Muda 17A, Cilandak, Jakarta Selatan 12310 - 021 123 456
-            7890</span
+            >Desa Sidowayah, Kec. Beji, Kab. Pasuruan, Jawa Timur 67154 —
+            Layanan Kemitraan B2B: (0343) 631-889</span
           >
         </div>
-        <!-- Minimalist Decorative Dashes from Image 2 -->
+        <!-- Minimalist Decorative Dashes -->
         <div aria-hidden="true" class="footer-dash-accents">
-          <span class="decor-dash"></span>
-          <span class="decor-dash"></span>
+          <a
+            href="../landing.html"
+            style="
+              color: var(--wood-primary);
+              text-decoration: none;
+              font-size: 0.82rem;
+              font-weight: 600;
+            "
+            >&larr; Kembali ke Landing Page</a
+          >
         </div>
       </div>
     </footer>

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tahap 2 &amp; 3: Quotation, Kontrak &amp; DP — CV. Sumber Artha</title>
+    <!-- Favicon -->
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheets -->
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/buyer.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+  </head>
+  <body class="buyer-layout">
+    <div aria-hidden="true" class="bg-texture"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="buyer-sidebar" id="buyerSidebar">
+      <div class="buyer-sidebar-header">
+        <img src="../../assets/favicon.ico" alt="Logo CV. Sumber Artha" class="buyer-brand-logo" />
+        <div class="buyer-brand-meta">
+          <h2>CV. Sumber Artha</h2>
+          <p>Portal Manufaktur MTO</p>
+        </div>
+      </div>
+
+      <div class="buyer-sidebar-profile">
+        <div class="profile-company-tag">
+          <span class="company-badge-pill">B2B BUYER</span>
+        </div>
+        <div class="profile-company-name live-company-name">PT Jaya Furniture Ekspor</div>
+        <p style="font-size: 0.7rem; color: #DFC8B4; margin-bottom: 0.5rem;" class="live-pic-name">PIC: Ir. Hendra Kusuma</p>
+        <div class="profile-badges-row">
+          <span class="tier-badge tier-gold">Gold Tier (-5%)</span>
+          <span class="top-status-badge">TOP 90 Hari</span>
+        </div>
+      </div>
+
+      <nav class="buyer-sidebar-nav">
+        <span class="nav-section-label">Alur Pemesanan MTO</span>
+        <a href="dashboard.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Ringkasan Dashboard</span>
+        </a>
+        <a href="pengajuan-po.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>01. Pengajuan PO &amp; Drawing</span>
+        </a>
+        <a href="quotation-kontrak.html" class="buyer-nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          <span>02. Quotation, Kontrak &amp; DP</span>
+          <span class="nav-badge-count">1</span>
+        </a>
+        <a href="tracking-tagihan.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span>03. Tracking, Surat Jalan &amp; RMA</span>
+        </a>
+
+        <span class="nav-section-label" style="margin-top: 0.5rem;">Informasi &amp; Bantuan</span>
+        <a href="../landing.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Landing Page Utama</span>
+        </a>
+      </nav>
+
+      <div class="buyer-sidebar-footer">
+        <button class="btn-sidebar-logout btn-buyer-logout" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Keluar Sesi</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <main class="buyer-main-wrapper">
+      <header class="buyer-topbar">
+        <div class="topbar-left">
+          <button class="btn-mobile-sidebar-toggle" id="btnMobileSidebar" aria-label="Toggle Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb-flow">
+            <a href="dashboard.html">Portal Buyer</a>
+            <span>/</span>
+            <span class="current-crumb">Tahap 2 &amp; 3: Quotation, Kontrak &amp; Pembayaran DP</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="notification-pill">
+            <span class="pulse-dot"></span>
+            <span>Legal Lock-in: SHA-256 Signature Verification Ready</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="buyer-page-content">
+        <!-- Stepper -->
+        <div class="mto-workflow-stepper">
+          <div class="stepper-header">
+            <div class="stepper-title">
+              <span>Alur Pemesanan MTO — Langkah 2 &amp; 3 dari 8</span>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--wood-primary); font-weight: 700;">Quotation &bull; Legal Lock-in &bull; DP 30% TOP 90 Hari</span>
+          </div>
+          <div class="stepper-track">
+            <div class="stepper-progress-line">
+              <div class="stepper-progress-fill" style="width: 37%;"></div>
+            </div>
+            <a href="pengajuan-po.html" class="stepper-step completed">
+              <div class="step-node">✓</div>
+              <span class="step-label">1. Pengajuan &amp; Drawing</span>
+            </a>
+            <div class="stepper-step active">
+              <div class="step-node">2</div>
+              <span class="step-label">2. Quotation &amp; Kontrak</span>
+            </div>
+            <div class="stepper-step active">
+              <div class="step-node">3</div>
+              <span class="step-label">3. Verifikasi DP</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">4</div>
+              <span class="step-label">4. Konsinyasi Bahan</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">5</div>
+              <span class="step-label">5. Live PO Tracking</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">6</div>
+              <span class="step-label">6. Kirim &amp; Invoice</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">7</div>
+              <span class="step-label">7. Pelunasan TOP 90</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">8</div>
+              <span class="step-label">8. Klaim RMA</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; align-items: flex-start;">
+          <!-- Left Column: Quotation Breakdown & Credit Scoring -->
+          <div>
+            <!-- Quotation Card -->
+            <div class="portal-card">
+              <div class="portal-card-header">
+                <div>
+                  <h3 class="portal-card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                    <span>Penawaran Harga Resmi (Official Quotation)</span>
+                  </h3>
+                  <small style="color: var(--text-light); font-size: 0.72rem;">No. Referensi PO: <strong>PO-2026-MTO-088</strong> &bull; Diterbitkan: 12 Nov 2026</small>
+                </div>
+                <span class="status-pill status-quotation">Quotation Approved</span>
+              </div>
+
+              <!-- Product Specs Recap -->
+              <div style="background: var(--bg-card-subtle); border-radius: 8px; padding: 0.85rem; margin-bottom: 1.25rem; border: 1px solid var(--wireframe-border); font-size: 0.78rem;">
+                <div style="font-weight: 700; color: var(--wood-darkest);">Komponen Laci Dovetail Ekspor (Poplar 450×380×140 mm)</div>
+                <div style="color: var(--text-muted); margin-top: 2px;">Jumlah: 500 unit &bull; Gambar Kerja: <code>DRAWING-REV3-JAYA-DOVETAIL.pdf</code></div>
+              </div>
+
+              <!-- Quotation Table -->
+              <div class="quotation-summary-card">
+                <div class="quotation-row">
+                  <span>Harga Satuan Tetap (Fixed Unit Price)</span>
+                  <strong>Rp 125.000 / unit</strong>
+                </div>
+                <div class="quotation-row">
+                  <span>Subtotal Dasar (500 unit × Rp 125.000)</span>
+                  <span>Rp 62.500.000</span>
+                </div>
+                <div class="quotation-row" style="color: var(--status-success);">
+                  <span>Potongan Loyalty Tier (Gold Tier - 5%)</span>
+                  <strong>- Rp 3.125.000</strong>
+                </div>
+                <div class="quotation-row">
+                  <span>Subtotal Setelah Diskon</span>
+                  <span>Rp 59.375.000</span>
+                </div>
+                <div class="quotation-row">
+                  <span>Pajak Pertambahan Nilai (PPN 11%)</span>
+                  <span>Rp 6.531.250</span>
+                </div>
+                <div class="quotation-row total-row">
+                  <span>Total Nilai Kontrak Pemesanan:</span>
+                  <span style="color: var(--wood-primary);">Rp 65.906.250</span>
+                </div>
+              </div>
+
+              <!-- Credit Scoring Result Box -->
+              <div style="background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 10px; padding: 1.15rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <strong style="color: #166534; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Evaluasi Credit Scoring: Fasilitas TOP 90 Hari Diterima!
+                  </strong>
+                  <span style="font-size: 0.72rem; font-weight: 800; background: #DCFCE7; color: #166534; padding: 0.2rem 0.5rem; border-radius: 4px;">Skor 740 / 1000</span>
+                </div>
+                <p style="font-size: 0.75rem; color: #15803D; line-height: 1.5;">
+                  Profil <strong>PT Jaya Furniture Ekspor</strong> memiliki riwayat pelunasan tepat waktu. 
+                  Anda berhak atas termin pembayaran bertempo <strong>90 hari kalender</strong> sejak barang dan invoice dikirimkan, 
+                  dengan kewajiban uang muka (DP) sebesar <strong>30%</strong> (Rp 19.771.875).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Digital Contract & DP Payment -->
+          <div>
+            <!-- Digital Contract Card -->
+            <div class="portal-card">
+              <div class="portal-card-header">
+                <h3 class="portal-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>Kontrak Digital (Legal Lock-in)</span>
+                </h3>
+              </div>
+
+              <div class="contract-scroll-preview">
+                <p><strong>SURAT PERJANJIAN SUBKONTRAKTOR MANUFAKTUR MTO</strong></p>
+                <p><strong>Nomor Kontrak:</strong> CT-2026-MTO-088 / SA-JAYA</p>
+                <p style="margin-top: 0.5rem;"><strong>PASAL 1 — TOLERANSI PRESISI &amp; QUALITY CONTROL:</strong></p>
+                <p>CV. Sumber Artha menjamin seluruh pemotongan komponen laci kayu dovetail memenuhi toleransi maksimal ± 0.5 mm sesuai gambar kerja teknis yang telah disetujui. Kesikuan alur diuji secara digital sebelum Surat Jalan diterbitkan.</p>
+                <p style="margin-top: 0.5rem;"><strong>PASAL 2 — KETENTUAN PEMBATALAN (LOCK-IN):</strong></p>
+                <p>Setelah bahan baku lembaran dipotong berdasarkan pola 2D teroptimasi, pesanan tidak dapat dibatalkan sepihak. Pembatalan setelah proses cutting dikenakan ganti rugi 100% dari nilai bahan yang telah terproses.</p>
+                <p style="margin-top: 0.5rem;"><strong>PASAL 3 — HAK &amp; KEWAJIBAN BAHAN KONSINYASI:</strong></p>
+                <p>Bahan baku yang dititipkan Buyer di gudang CV. Sumber Artha diasuransikan terhadap risiko kebakaran dan kehilangan selama masa produksi.</p>
+              </div>
+
+              <!-- Checkbox Persetujuan -->
+              <div style="margin-bottom: 1rem;">
+                <label class="custom-checkbox-container" style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+                  <input type="checkbox" id="contractAgreeCheck" style="margin-top: 3px;" checked />
+                  <span style="font-size: 0.78rem; color: var(--text-main); line-height: 1.4;">
+                    Saya telah membaca, memahami, dan menyetujui seluruh klausul <strong>Legal Lock-in</strong> serta batas toleransi presisi ekspor.
+                  </span>
+                </label>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1rem;">
+                <label class="form-label" for="digitalSignerName">NAMA PENANGGUNG JAWAB (DIGITAL SIGNER PIC)</label>
+                <input type="text" id="digitalSignerName" class="form-control" value="Ir. Hendra Kusuma (Manajer Pengadaan)" required />
+                <span style="font-size: 0.68rem; color: var(--text-light); margin-top: 3px; display: block;">Stempel Waktu Digital: <code>SHA256: 9b2d...a81e &bull; 2026-11-13 15:40:12 WIB</code></span>
+              </div>
+
+              <!-- Button Sign -->
+              <button type="button" class="btn-primary-auth" id="btnSignContract" style="width: 100%; height: 44px; border-radius: 8px;">
+                <span class="btn-text">TANDATANGANI &amp; KUNCI KONTRAK DIGITAL</span>
+              </button>
+
+              <div id="contractSignedNotice" style="background: #E8F5EE; border-radius: 8px; padding: 0.75rem 1rem; border: 1px solid #A7F3D0; margin-top: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E6B4F" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style="font-size: 0.75rem; color: #2E6B4F; font-weight: 700;">Kontrak Terkunci Digital &bull; Dokumen PDF Resmi Disimpan</span>
+              </div>
+            </div>
+
+            <!-- DP Payment Card (Tahap 3) -->
+            <div class="portal-card" id="dpPaymentSection">
+              <div class="portal-card-header">
+                <h3 class="portal-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                  <span>Tahap 3: Pembayaran Uang Muka (DP 30%)</span>
+                </h3>
+              </div>
+
+              <div style="background: var(--bg-card-subtle); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--wireframe-border);">
+                <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Nominal DP Wajib Ditransfer:</div>
+                <div style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; color: var(--wood-primary); margin: 3px 0;">
+                  Rp 19.771.875
+                </div>
+                <div style="font-size: 0.7rem; color: var(--text-light);">Sisa tagihan Rp 46.134.375 dibayar dengan fasilitas TOP 90 Hari</div>
+              </div>
+
+              <!-- Bank Virtual Account -->
+              <div style="font-size: 0.78rem; line-height: 1.6; margin-bottom: 1rem;">
+                <div>Rekening Resmi Subkontrak CV. Sumber Artha:</div>
+                <div style="background: #FFFFFF; border: 1px solid var(--wireframe-border); padding: 0.5rem 0.75rem; border-radius: 6px; margin-top: 0.35rem; display: flex; justify-content: space-between; align-items: center;">
+                  <strong>Bank Mandiri: 142-00-8899221-3</strong>
+                  <span style="font-size: 0.7rem; color: var(--text-light);">a.n. CV. SUMBER ARTHA</span>
+                </div>
+              </div>
+
+              <!-- Upload Bukti Transfer DP -->
+              <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label class="form-label" for="dpReceiptInput">UNGGAH BUKTI TRANSFER DP (STRUK / PDF)</label>
+                <input type="file" id="dpReceiptInput" class="form-control" accept=".jpg,.png,.pdf" />
+                <span style="font-size: 0.68rem; color: var(--text-light); margin-top: 2px; display: block;">Format: JPG, PNG, atau PDF (Maks. 5 MB)</span>
+              </div>
+
+              <button type="button" class="btn-primary-auth" id="btnSubmitDP" style="width: 100%; height: 46px; border-radius: 8px; background: #2E6B4F;">
+                <span class="btn-text">KIRIM BUKTI DP &amp; MULAI PRODUKSI (READY)</span>
+                <svg fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="../template/js/buyer/buyer.js"></script>
+  </body>
+</html>
