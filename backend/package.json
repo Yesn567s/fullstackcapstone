@@ -1,0 +1,33 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "node/src/server.js",
+  "scripts": {
+    "start": "node node/src/server.js",
+    "dev": "nodemon node/src/server.js",
+    "test": "jest --runInBand"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "joi": "^18.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.6",
+    "nodemailer": "^10.6.0",
+    "twilio": "^6.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^10.15.0",
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.10.1",
+    "supertest": "^7.3.2"
+  }
+}

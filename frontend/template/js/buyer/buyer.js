@@ -188,7 +188,26 @@ function initBuyerUI() {
   // Logout Buttons
   const logoutBtns = document.querySelectorAll(".btn-buyer-logout");
   logoutBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
+      try {
+        const response = await fetch(
+          `${window.location.protocol}//${window.location.hostname}:4000/api/auth/logout`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: { Accept: "application/json" },
+          },
+        );
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Logout tidak berhasil.");
+        }
+      } catch (error) {
+        showToast(error.message || "Tidak dapat menghubungi server logout.");
+        return;
+      }
+
       sessionStorage.removeItem("buyerName");
       sessionStorage.removeItem("buyerCompany");
       sessionStorage.removeItem("buyerRole");

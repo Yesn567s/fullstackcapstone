@@ -25,12 +25,25 @@ README.md
 
 ## Running
 
-Open the frontend with Live Server at `http://127.0.0.1:5500`, then run the
-backend from the project root in a separate terminal:
+Set these values in `backend/.env` to match the MySQL setup:
 
-```sh
-php -S 127.0.0.1:8000
+```env
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=db_sumber_artha_v3
+DB_USER=root
+DB_PASSWORD=
+JWT_SECRET=replace-with-a-long-random-secret
+FRONTEND_ORIGINS=http://127.0.0.1:5500,http://localhost:5500
 ```
 
-Keep the backend terminal running while using the customer or staff login.
-Use `127.0.0.1` consistently in the frontend URL; do not mix it with `localhost`.
+From the `backend/` directory, install dependencies and start the Node.js API:
+
+```sh
+npm install
+npm start
+```
+
+Open the frontend with Live Server at `http://127.0.0.1:5500` and keep the API
+running at `http://127.0.0.1:4000`. Use `127.0.0.1` consistently; do not mix it
+with `localhost`.

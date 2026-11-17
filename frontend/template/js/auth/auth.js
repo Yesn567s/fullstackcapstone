@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         const response = await fetch(
-          `${window.location.protocol}//${window.location.hostname}:8000/backend/webservice/login.php`,
+          `${window.location.protocol}//${window.location.hostname}:4000/api/auth/login`,
           {
             method: "POST",
             credentials: "include",
@@ -366,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         showAlert(
           error instanceof TypeError
-            ? "Server backend tidak dapat dijangkau. Jalankan php -S 127.0.0.1:8000 dari folder project."
+            ? "Node.js backend tidak dapat dijangkau. Jalankan npm start dari folder backend."
             : error.message || "Tidak dapat menghubungi server login.",
         );
       } finally {
@@ -479,9 +479,10 @@ document.addEventListener("DOMContentLoaded", () => {
       setAuthButtonLoading(btnSubmitRegister, true, "MENDAFTARKAN...");
 
       fetch(
-        `${window.location.protocol}//${window.location.hostname}:8000/backend/webservice/register.php`,
+        `${window.location.protocol}//${window.location.hostname}:4000/api/auth/register`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -513,7 +514,12 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = `login.html?registered=1&username=${encodeURIComponent(newUsername)}`;
         })
         .catch((error) => {
-          showAlert(error.message, "error");
+          showAlert(
+            error instanceof TypeError
+              ? "Node.js backend tidak dapat dijangkau. Jalankan npm start dari folder backend."
+              : error.message,
+            "error",
+          );
         })
         .finally(() => {
           setAuthButtonLoading(btnSubmitRegister, false, "DAFTAR AKUN BARU");

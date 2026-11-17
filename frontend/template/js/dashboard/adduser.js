@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const alertMessage = document.getElementById("userAlertMessage");
   const submitButton = document.getElementById("btnSubmitUser");
   const emailInput = form.elements.email;
-  const endpoint = `${window.location.protocol}//${window.location.hostname}:8000/backend/webservice/create-user.php`;
+  const endpoint = `${window.location.protocol}//${window.location.hostname}:4000/api/admin/users`;
 
   function showMessage(message, type = "error") {
     alertMessage.textContent = message;
@@ -50,7 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       form.classList.remove("hidden");
     } catch (error) {
-      showMessage(error.message || "Login sebagai admin untuk melanjutkan.");
+      showMessage(
+        error instanceof TypeError
+          ? "Node.js backend tidak dapat dijangkau. Jalankan npm start dari folder backend."
+          : error.message || "Login sebagai admin untuk melanjutkan.",
+      );
     }
   }
 
@@ -89,7 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
       form.reset();
       showMessage(result.message, "success");
     } catch (error) {
-      showMessage(error.message || "Pengguna tidak dapat ditambahkan.");
+      showMessage(
+        error instanceof TypeError
+          ? "Node.js backend tidak dapat dijangkau. Jalankan npm start dari folder backend."
+          : error.message || "Pengguna tidak dapat ditambahkan.",
+      );
     } finally {
       setLoading(false);
     }

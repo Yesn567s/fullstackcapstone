@@ -39,29 +39,39 @@ document.addEventListener("DOMContentLoaded", () => {
     animateDashboardStats();
   }
 
-  function navigateToAuthStage() {
-    document.body.classList.remove("view-admin-dashboard");
-    if (adminSidebar) adminSidebar.classList.remove("mobile-open");
+  async function logoutAdmin() {
+    try {
+      const response = await fetch(
+        `${window.location.protocol}//${window.location.hostname}:4000/api/auth/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { Accept: "application/json" },
+        },
+      );
+      const result = await response.json();
 
-    if (authStageView) authStageView.classList.remove("hidden");
-    if (adminDashboardView) adminDashboardView.classList.add("hidden");
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Logout tidak berhasil.");
+      }
 
-    window.location.href = "../auth/login.html";
-    window.scrollTo({ top: 0, behavior: "smooth" });
+      sessionStorage.removeItem("adminName");
+      window.location.href = "../auth/login.html";
+    } catch (error) {
+      showToast(error.message || "Tidak dapat menghubungi server logout.");
+    }
   }
 
   // Logout Handlers
   if (btnAdminLogout) {
     btnAdminLogout.addEventListener("click", () => {
-      navigateToAuthStage();
-      showToast("Anda telah keluar dari sesi Admin.");
+      logoutAdmin();
     });
   }
 
   if (btnMobileLogout) {
     btnMobileLogout.addEventListener("click", () => {
-      navigateToAuthStage();
-      showToast("Anda telah keluar dari sesi Admin.");
+      logoutAdmin();
     });
   }
 
