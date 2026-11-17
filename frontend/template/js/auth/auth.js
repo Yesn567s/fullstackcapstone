@@ -40,7 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const regPhoneInput = document.getElementById("regPhoneInput");
   const regRoleInput = document.getElementById("regRoleInput");
   const regCompanyInput = document.getElementById("regCompanyInput");
-  const regContactPersonInput = document.getElementById("regContactPersonInput");
+  const regContactPersonInput = document.getElementById(
+    "regContactPersonInput",
+  );
   const regAddressInput = document.getElementById("regAddressInput");
   const customerFields = document.getElementById("customerFields");
   const regPassInput = document.getElementById("regPassInput");
@@ -53,7 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const groupRegPhone = document.getElementById("groupRegPhone");
   const groupRegRole = document.getElementById("groupRegRole");
   const groupRegCompany = document.getElementById("groupRegCompany");
-  const groupRegContactPerson = document.getElementById("groupRegContactPerson");
+  const groupRegContactPerson = document.getElementById(
+    "groupRegContactPerson",
+  );
   const groupRegAddress = document.getElementById("groupRegAddress");
   const groupRegPass = document.getElementById("groupRegPass");
   const groupRegPassConfirm = document.getElementById("groupRegPassConfirm");
@@ -127,15 +131,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  if (tabBtnLogin) tabBtnLogin.addEventListener("click", () => switchTab("login"));
-  if (tabBtnRegister) tabBtnRegister.addEventListener("click", () => switchTab("register"));
+  if (tabBtnLogin)
+    tabBtnLogin.addEventListener("click", () => switchTab("login"));
+  if (tabBtnRegister)
+    tabBtnRegister.addEventListener("click", () => switchTab("register"));
 
   // ----------------------------------------------------------------------------
   // 3. Customer Role Fields Toggle
   // ----------------------------------------------------------------------------
   function toggleCustomerFields() {
     if (!regRoleInput) return;
-    const isCustomer = regRoleInput.value === "customer" || regRoleInput.value === "";
+    const isCustomer =
+      regRoleInput.value === "customer" || regRoleInput.value === "";
     if (customerFields) {
       customerFields.classList.toggle("hidden", !isCustomer);
     }
@@ -228,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       btnToggleLoginPass.setAttribute(
         "title",
-        isPassword ? "Sembunyikan Password" : "Tampilkan Password"
+        isPassword ? "Sembunyikan Password" : "Tampilkan Password",
       );
     });
 
@@ -272,13 +279,19 @@ document.addEventListener("DOMContentLoaded", () => {
         username: "buyer.jaya",
         company: "PT Jaya Furniture Ekspor",
         role: "customer",
-        pic: "Ir. Hendra Kusuma"
+        pic: "Ir. Hendra Kusuma",
       };
       sessionStorage.setItem("buyerName", "buyer.jaya");
       sessionStorage.setItem("buyerCompany", "PT Jaya Furniture Ekspor");
       sessionStorage.setItem("buyerRole", "customer");
-      sessionStorage.setItem("sumberartha_logged_user", JSON.stringify(buyerUser));
-      localStorage.setItem("sumberartha_logged_user", JSON.stringify(buyerUser));
+      sessionStorage.setItem(
+        "sumberartha_logged_user",
+        JSON.stringify(buyerUser),
+      );
+      localStorage.setItem(
+        "sumberartha_logged_user",
+        JSON.stringify(buyerUser),
+      );
 
       showToast("Masuk sebagai Mitra Buyer! Mengalihkan ke Landing Page...");
       setTimeout(() => {
@@ -293,11 +306,17 @@ document.addEventListener("DOMContentLoaded", () => {
         username: "admin.artha",
         company: "CV. Sumber Artha",
         role: "admin",
-        pic: "Administrator Pabrik"
+        pic: "Administrator Pabrik",
       };
       sessionStorage.setItem("adminName", "admin.artha");
-      sessionStorage.setItem("sumberartha_logged_user", JSON.stringify(adminUser));
-      localStorage.setItem("sumberartha_logged_user", JSON.stringify(adminUser));
+      sessionStorage.setItem(
+        "sumberartha_logged_user",
+        JSON.stringify(adminUser),
+      );
+      localStorage.setItem(
+        "sumberartha_logged_user",
+        JSON.stringify(adminUser),
+      );
 
       showToast("Masuk sebagai Admin! Mengalihkan ke Landing Page...");
       setTimeout(() => {
@@ -373,7 +392,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       if (!validateLoginForm()) {
-        showAlert("Silakan masukkan username/email dan kata sandi Anda dengan benar.");
+        showAlert(
+          "Silakan masukkan username/email dan kata sandi Anda dengan benar.",
+        );
         return;
       }
 
@@ -390,11 +411,17 @@ document.addEventListener("DOMContentLoaded", () => {
             username: username,
             company: "CV. Sumber Artha (Pabrik)",
             role: "admin",
-            pic: "Administrator Pabrik"
+            pic: "Administrator Pabrik",
           };
           sessionStorage.setItem("adminName", username);
-          sessionStorage.setItem("sumberartha_logged_user", JSON.stringify(adminUser));
-          localStorage.setItem("sumberartha_logged_user", JSON.stringify(adminUser));
+          sessionStorage.setItem(
+            "sumberartha_logged_user",
+            JSON.stringify(adminUser),
+          );
+          localStorage.setItem(
+            "sumberartha_logged_user",
+            JSON.stringify(adminUser),
+          );
 
           showToast("Login Berhasil! Mengalihkan ke Halaman Depan...");
           setTimeout(() => {
@@ -402,22 +429,31 @@ document.addEventListener("DOMContentLoaded", () => {
           }, 600);
         } else {
           // Buyer / Customer Account
-          const savedUsers = JSON.parse(localStorage.getItem("sumberartha_users") || "{}");
-          const company = savedUsers[username]?.company || "PT Jaya Furniture Ekspor";
+          const savedUsers = JSON.parse(
+            localStorage.getItem("sumberartha_users") || "{}",
+          );
+          const company =
+            savedUsers[username]?.company || "PT Jaya Furniture Ekspor";
           const pic = savedUsers[username]?.fullname || "Ir. Hendra Kusuma";
 
           const buyerUser = {
             username: username,
             company: company,
             role: "customer",
-            pic: pic
+            pic: pic,
           };
 
           sessionStorage.setItem("buyerName", username);
           sessionStorage.setItem("buyerRole", "customer");
           sessionStorage.setItem("buyerCompany", company);
-          sessionStorage.setItem("sumberartha_logged_user", JSON.stringify(buyerUser));
-          localStorage.setItem("sumberartha_logged_user", JSON.stringify(buyerUser));
+          sessionStorage.setItem(
+            "sumberartha_logged_user",
+            JSON.stringify(buyerUser),
+          );
+          localStorage.setItem(
+            "sumberartha_logged_user",
+            JSON.stringify(buyerUser),
+          );
 
           openSuccessModal(username, company);
         }
@@ -478,10 +514,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (regContactPersonInput && !regContactPersonInput.value.trim()) {
-        if (groupRegContactPerson) groupRegContactPerson.classList.add("has-error");
+        if (groupRegContactPerson)
+          groupRegContactPerson.classList.add("has-error");
         isValid = false;
       } else {
-        if (groupRegContactPerson) groupRegContactPerson.classList.remove("has-error");
+        if (groupRegContactPerson)
+          groupRegContactPerson.classList.remove("has-error");
       }
     }
 
@@ -496,7 +534,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (groupRegPassConfirm) groupRegPassConfirm.classList.add("has-error");
       isValid = false;
     } else {
-      if (groupRegPassConfirm) groupRegPassConfirm.classList.remove("has-error");
+      if (groupRegPassConfirm)
+        groupRegPassConfirm.classList.remove("has-error");
     }
 
     if (regTermsCheck && !regTermsCheck.checked) {
@@ -517,16 +556,24 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const username = regUserInput.value.trim();
-      const company = regCompanyInput ? regCompanyInput.value.trim() : "Mitra B2B Ekspor";
+      const company = regCompanyInput
+        ? regCompanyInput.value.trim()
+        : "Mitra B2B Ekspor";
       const fullname = regNameInput ? regNameInput.value.trim() : "";
 
-      setAuthButtonLoading(btnSubmitRegister, true, "MENDAFTARKAN MITRA B2B...");
+      setAuthButtonLoading(
+        btnSubmitRegister,
+        true,
+        "MENDAFTARKAN MITRA B2B...",
+      );
 
       // Pure frontend mock persistence
       setTimeout(() => {
         setAuthButtonLoading(btnSubmitRegister, false, "DAFTAR AKUN BARU");
 
-        const savedUsers = JSON.parse(localStorage.getItem("sumberartha_users") || "{}");
+        const savedUsers = JSON.parse(
+          localStorage.getItem("sumberartha_users") || "{}",
+        );
         savedUsers[username] = {
           fullname: fullname,
           company: company,
@@ -540,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sessionStorage.setItem("buyerRole", "customer");
 
         showToast("Pendaftaran berhasil! Akun B2B Anda telah siap.");
-        
+
         // Redirect to login or success view
         setTimeout(() => {
           window.location.href = `login.html?registered=1&username=${encodeURIComponent(username)}`;
@@ -647,11 +694,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Auto-fill from registration redirect
   if (loginUserInput) {
-    const registeredUsername = new URLSearchParams(window.location.search).get("username");
+    const registeredUsername = new URLSearchParams(window.location.search).get(
+      "username",
+    );
     if (registeredUsername) {
       loginUserInput.value = registeredUsername;
       if (loginPassInput) loginPassInput.focus();
-      showToast(`Akun [${registeredUsername}] terdaftar! Silakan masukkan kata sandi.`);
+      showToast(
+        `Akun [${registeredUsername}] terdaftar! Silakan masukkan kata sandi.`,
+      );
     }
   }
 });
