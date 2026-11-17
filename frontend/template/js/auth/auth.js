@@ -358,7 +358,11 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = "../customer/test.html";
         }
       } catch (error) {
-        showAlert(error.message || "Tidak dapat menghubungi server login.");
+        showAlert(
+          error instanceof TypeError
+            ? "Server Error: Tidak dapat menghubungi server login."
+            : error.message || "Tidak dapat menghubungi server login.",
+        );
       } finally {
         setAuthButtonLoading(btnSubmitLogin, false, "MASUK KE SISTEM");
       }
@@ -451,6 +455,7 @@ document.addEventListener("DOMContentLoaded", () => {
         username: regUserInput.value.trim(),
         email: regEmailInput.value.trim(),
         phone: regPhoneInput.value.trim(),
+        role: "customer",
         password: regPassInput.value,
         companyName: regCompanyInput.value.trim(),
         contactPerson: regContactPersonInput.value.trim(),
@@ -458,14 +463,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       setAuthButtonLoading(btnSubmitRegister, true, "MENDAFTARKAN...");
 
-      fetch("http://localhost:8000/backend/webservice/register.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
+      fetch(
+        `${window.location.protocol}//${window.location.hostname}:8000/backend/webservice/register.php`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      })
+      )
         .then(async (response) => {
           const responseText = await response.text();
           let result;

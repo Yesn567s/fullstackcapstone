@@ -25,7 +25,12 @@ README.md
 
 ## Running
 
-Open `index.html` in a browser. The entry page redirects to the authentication login page.
+Open the frontend with Live Server at `http://127.0.0.1:5500`, then run the
+backend from the project root in a separate terminal:
 
--- Run nya pake ini
-php -S localhost:8000
+```sh
+php -S 127.0.0.1:8000
+```
+
+Keep the backend terminal running while using the customer or staff login.
+Use `127.0.0.1` consistently in the frontend URL; do not mix it with `localhost`.

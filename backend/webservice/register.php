@@ -32,6 +32,10 @@ if (!is_array($input)) {
     return;
 }
 
+if (!isset($input["role"]) || trim((string) $input["role"]) === "") {
+    $input["role"] = "customer";
+}
+
 $required = ["fullname", "username", "email", "phone", "role", "password"];
 $missing = [];
 foreach ($required as $field) {
