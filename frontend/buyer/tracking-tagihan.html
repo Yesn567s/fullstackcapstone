@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tahap 4–8: Tracking, Konsinyasi &amp; Tagihan — CV. Sumber Artha</title>
+    <!-- Favicon -->
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheets -->
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/buyer.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+  </head>
+  <body class="buyer-layout">
+    <div aria-hidden="true" class="bg-texture"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="buyer-sidebar" id="buyerSidebar">
+      <div class="buyer-sidebar-header">
+        <img src="../../assets/favicon.ico" alt="Logo CV. Sumber Artha" class="buyer-brand-logo" />
+        <div class="buyer-brand-meta">
+          <h2>CV. Sumber Artha</h2>
+          <p>Portal Manufaktur MTO</p>
+        </div>
+      </div>
+
+      <div class="buyer-sidebar-profile">
+        <div class="profile-company-tag">
+          <span class="company-badge-pill">B2B BUYER</span>
+        </div>
+        <div class="profile-company-name live-company-name">PT Jaya Furniture Ekspor</div>
+        <p style="font-size: 0.7rem; color: #DFC8B4; margin-bottom: 0.5rem;" class="live-pic-name">PIC: Ir. Hendra Kusuma</p>
+        <div class="profile-badges-row">
+          <span class="tier-badge tier-gold">Gold Tier (-5%)</span>
+          <span class="top-status-badge">TOP 90 Hari</span>
+        </div>
+      </div>
+
+      <nav class="buyer-sidebar-nav">
+        <span class="nav-section-label">Alur Pemesanan MTO</span>
+        <a href="dashboard.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Ringkasan Dashboard</span>
+        </a>
+        <a href="pengajuan-po.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>01. Pengajuan PO &amp; Drawing</span>
+        </a>
+        <a href="quotation-kontrak.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          <span>02. Quotation, Kontrak &amp; DP</span>
+          <span class="nav-badge-count">1</span>
+        </a>
+        <a href="tracking-tagihan.html" class="buyer-nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span>03. Tracking, Surat Jalan &amp; RMA</span>
+        </a>
+
+        <span class="nav-section-label" style="margin-top: 0.5rem;">Informasi &amp; Bantuan</span>
+        <a href="../landing.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Landing Page Utama</span>
+        </a>
+      </nav>
+
+      <div class="buyer-sidebar-footer">
+        <button class="btn-sidebar-logout btn-buyer-logout" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Keluar Sesi</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <main class="buyer-main-wrapper">
+      <header class="buyer-topbar">
+        <div class="topbar-left">
+          <button class="btn-mobile-sidebar-toggle" id="btnMobileSidebar" aria-label="Toggle Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb-flow">
+            <a href="dashboard.html">Portal Buyer</a>
+            <span>/</span>
+            <span class="current-crumb">Tahap 4–8: Tracking Produksi, Konsinyasi &amp; Tagihan</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="notification-pill">
+            <span class="pulse-dot"></span>
+            <span>WhatsApp &amp; Email Notifikasi Aktif: 0812-3456-7890</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="buyer-page-content">
+        <!-- Stepper -->
+        <div class="mto-workflow-stepper">
+          <div class="stepper-header">
+            <div class="stepper-title">
+              <span>Alur Pemesanan MTO — Langkah 4 sampai 8</span>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--wood-primary); font-weight: 700;">Konsinyasi &bull; Live PO &bull; Pengiriman Truk &bull; TOP 90 &bull; RMA</span>
+          </div>
+          <div class="stepper-track">
+            <div class="stepper-progress-line">
+              <div class="stepper-progress-fill" style="width: 75%;"></div>
+            </div>
+            <a href="pengajuan-po.html" class="stepper-step completed">
+              <div class="step-node">✓</div>
+              <span class="step-label">1. Pengajuan &amp; Drawing</span>
+            </a>
+            <a href="quotation-kontrak.html" class="stepper-step completed">
+              <div class="step-node">✓</div>
+              <span class="step-label">2. Quotation &amp; Kontrak</span>
+            </a>
+            <a href="quotation-kontrak.html" class="stepper-step completed">
+              <div class="step-node">✓</div>
+              <span class="step-label">3. Verifikasi DP</span>
+            </a>
+            <div class="stepper-step completed">
+              <div class="step-node">✓</div>
+              <span class="step-label">4. Konsinyasi Bahan</span>
+            </div>
+            <div class="stepper-step active">
+              <div class="step-node">5</div>
+              <span class="step-label">5. Live PO Tracking</span>
+            </div>
+            <div class="stepper-step active">
+              <div class="step-node">6</div>
+              <span class="step-label">6. Kirim &amp; Invoice</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">7</div>
+              <span class="step-label">7. Pelunasan TOP 90</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">8</div>
+              <span class="step-label">8. Klaim RMA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 1: Live PO Tracking (Tahap 5) -->
+        <div class="portal-card">
+          <div class="portal-card-header">
+            <div>
+              <h3 class="portal-card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>Tahap 5: Portal Live PO Tracking (Real-Time Terminal Pasuruan)</span>
+              </h3>
+              <small style="color: var(--text-light); font-size: 0.72rem;">No. PO: <strong>PO-2026-MTO-088</strong> &bull; 500 unit Komponen Laci LVB Poplar</small>
+            </div>
+            <span class="status-pill status-production">
+              <span class="pulse-dot"></span>
+              Progres Produksi: 65% Selesai
+            </span>
+          </div>
+
+          <div class="tracking-timeline-flow">
+            <!-- Node 1: Pemotongan Selesai -->
+            <div class="track-node-item done">
+              <div class="track-node-dot"></div>
+              <div class="track-node-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                  <strong style="color: var(--status-success); font-size: 0.85rem;">01. Pemotongan Pola 2D Teroptimasi (Cutting Job) — SELESAI</strong>
+                  <span style="font-size: 0.7rem; color: var(--text-light);">11 Nov 2026, 16:40 WIB</span>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+                  Pemotongan 42 lembar LVB Poplar selesai menggunakan mesin gergaji vertikal. Yield efisiensi 91.8%, kerf allowance 3 mm presisi.
+                </p>
+              </div>
+            </div>
+
+            <!-- Node 2: Assembly Sedang Berjalan -->
+            <div class="track-node-item in-progress">
+              <div class="track-node-dot"></div>
+              <div class="track-node-body" style="border-left: 3px solid var(--wood-primary);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                  <strong style="color: var(--wood-primary); font-size: 0.85rem;">02. Pembuatan Alur Sambungan Dovetail (Assembly) — SEDANG BERLANGSUNG</strong>
+                  <span style="font-size: 0.7rem; color: var(--wood-primary); font-weight: 700;">Live Update: Operator 02</span>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+                  Pembuatan alur dovetail pin &amp; tail 4 mm pada dinding samping dan depan. Tercapai 325 dari 500 unit (65%).
+                </p>
+                <div style="margin-top: 0.5rem; background: var(--bg-card-subtle); padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.7rem; color: var(--text-muted);">
+                  Notifikasi otomatis diteruskan ke WhatsApp Manajer Pengadaan.
+                </div>
+              </div>
+            </div>
+
+            <!-- Node 3: QC Inspection Pending -->
+            <div class="track-node-item">
+              <div class="track-node-dot"></div>
+              <div class="track-node-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                  <strong style="color: var(--text-muted); font-size: 0.85rem;">03. Inspeksi Quality Control Kesikuan Digital (QC Passed)</strong>
+                  <span style="font-size: 0.7rem; color: var(--text-light);">Estimasi: 14 Nov 2026</span>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+                  Pengujian kesikuan alur 90 derajat dan toleransi ukuran ±0.5 mm sebelum Surat Jalan terbit.
+                </p>
+              </div>
+            </div>
+
+            <!-- Node 4: Pengiriman -->
+            <div class="track-node-item">
+              <div class="track-node-dot"></div>
+              <div class="track-node-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                  <strong style="color: var(--text-muted); font-size: 0.85rem;">04. Pengiriman Armada Truk Bertahap &amp; Split Invoice TOP 90 Hari</strong>
+                  <span style="font-size: 0.7rem; color: var(--text-light);">Jadwal Rit 1: 16 Nov 2026 (±350 pcs)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Consignment Stock Balance (Tahap 4) -->
+        <div class="portal-card" id="konsinyasi">
+          <div class="portal-card-header">
+            <h3 class="portal-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <span>Tahap 4: Transparansi Stok Bahan Titipan (Konsinyasi Gudang Pasuruan)</span>
+            </h3>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Diperbarui Otomatis Berdasarkan Surat Jalan Masuk</span>
+          </div>
+
+          <div class="portal-table-wrap">
+            <table class="portal-table">
+              <thead>
+                <tr>
+                  <th>Jenis Material</th>
+                  <th>Ukuran Standar</th>
+                  <th>Total Diterima</th>
+                  <th>Alokasi Terpakai di PO</th>
+                  <th>Saldo Sisa di Pabrik</th>
+                  <th>Status Pasokan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>LVB Poplar</strong></td>
+                  <td>1220 × 2440 mm</td>
+                  <td>240 Lembar</td>
+                  <td>160 Lembar (PO-088: 42 lbr)</td>
+                  <td><strong style="color: var(--status-success);">80 Lembar</strong></td>
+                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>LVB Sengon</strong></td>
+                  <td>1220 × 2440 mm</td>
+                  <td>180 Lembar</td>
+                  <td>110 Lembar (PO-087: 35 lbr)</td>
+                  <td><strong style="color: var(--status-success);">70 Lembar</strong></td>
+                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Plywood / MDF 12 mm</strong></td>
+                  <td>1220 × 2440 mm</td>
+                  <td>150 Lembar</td>
+                  <td>95 Lembar (Alas Laci)</td>
+                  <td><strong style="color: var(--status-success);">55 Lembar</strong></td>
+                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 3: Partial Shipments & Auto-Split Invoices (Tahap 6 & 7) -->
+        <div class="portal-card">
+          <div class="portal-card-header">
+            <div>
+              <h3 class="portal-card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <span>Tahap 6 &amp; 7: Pengiriman Bertahap, Surat Jalan &amp; Invoice TOP 90 Hari</span>
+              </h3>
+              <small style="color: var(--text-light); font-size: 0.72rem;">Armada Truk Kapasitas ±350 pcs/Rit &bull; Auto-Split Invoicing</small>
+            </div>
+          </div>
+
+          <div class="portal-table-wrap">
+            <table class="portal-table">
+              <thead>
+                <tr>
+                  <th>No. Pengiriman</th>
+                  <th>Truk &amp; Sopir</th>
+                  <th>Kuantitas</th>
+                  <th>No. Surat Jalan</th>
+                  <th>Invoice Parsial</th>
+                  <th>Jatuh Tempo (TOP 90)</th>
+                  <th>Status &amp; Tindakan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Rit #1 (PO-087)</strong></td>
+                  <td>
+                    <div>N-8451-UC</div>
+                    <small style="color: var(--text-muted);">Sopir: Hariyanto</small>
+                  </td>
+                  <td>350 pcs</td>
+                  <td>
+                    <span style="font-family: monospace; font-size: 0.75rem;">SJ-SA-2026-1102</span>
+                    <span style="display: block; font-size: 0.68rem; color: var(--status-success);">✓ QC Passed</span>
+                  </td>
+                  <td>
+                    <strong>Rp 28.418.775</strong>
+                    <small style="display: block; color: var(--text-light);">INV-2026-PARS-041</small>
+                  </td>
+                  <td>
+                    <strong style="color: var(--wood-primary);">06 Feb 2027</strong>
+                    <small style="display: block; color: var(--text-muted);">(90 hari sejak SJ)</small>
+                  </td>
+                  <td>
+                    <button type="button" class="btn-chip btn-simulate-pay" data-inv="INV-2026-PARS-041" style="background: var(--wood-primary); color: #fff;">
+                      Simulasi Bayar Lunas
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Rit #1 (PO-088)</strong></td>
+                  <td>
+                    <div>N-8942-UB</div>
+                    <small style="color: var(--text-muted);">Sopir: Slamet Riyadi</small>
+                  </td>
+                  <td>350 pcs</td>
+                  <td>
+                    <span style="color: var(--text-light); font-style: italic;">Menunggu QC</span>
+                  </td>
+                  <td>
+                    <span style="color: var(--text-light); font-style: italic;">Auto-Split Terbit saat SJ</span>
+                  </td>
+                  <td>
+                    <span style="color: var(--text-light);">-</span>
+                  </td>
+                  <td>
+                    <span class="status-pill status-ready">Jadwal: 16 Nov 2026</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 4: Return Merchandise Authorization (RMA Engine - Tahap 8) -->
+        <div class="portal-card" id="rma">
+          <div class="portal-card-header">
+            <div>
+              <h3 class="portal-card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                <span>Tahap 8: Pengajuan Klaim Cacat Produksi (RMA Engine)</span>
+              </h3>
+              <small style="color: var(--text-light); font-size: 0.72rem;">Garansi Kesikuan &amp; Toleransi Dimensi Sesuai Klausul Kontrak Legal Lock-in</small>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: flex-start;">
+            <!-- Form Klaim -->
+            <form id="rmaClaimForm" style="background: var(--bg-card-subtle); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--wireframe-border);">
+              <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--wood-darkest); margin-bottom: 0.75rem;">Buat Tiket Klaim Baru</h4>
+              <div class="form-group">
+                <label class="form-label" for="rmaPoSelect">PILIH NOMOR PO</label>
+                <select id="rmaPoSelect" class="form-control select-control" required>
+                  <option value="PO-2026-MTO-087">PO-2026-MTO-087 (Sengon 350 pcs Terkirim)</option>
+                  <option value="PO-2026-MTO-088">PO-2026-MTO-088 (Poplar 500 pcs)</option>
+                </select>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 0.75rem;">
+                <div class="form-group">
+                  <label class="form-label" for="rmaItemName">KOMPONEN YANG BERMASALAH</label>
+                  <input type="text" id="rmaItemName" class="form-control" placeholder="Contoh: Front Panel / Alur Dovetail" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="rmaQty">JUMLAH (PCS)</label>
+                  <input type="number" id="rmaQty" class="form-control" value="2" min="1" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="rmaReason">ALASAN KLAIM CACAT / DEVIASI TOLERANSI</label>
+                <textarea id="rmaReason" class="form-control" rows="2" placeholder="Jelaskan ketidaksesuaian ukuran dari batas toleransi ±0.5 mm" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="rmaResolution">OPSI PENANGANAN YANG DIINGINKAN</label>
+                <select id="rmaResolution" class="form-control select-control" required>
+                  <option value="replacement" selected>Replacement (Pemotongan Ulang &amp; Kirim Unit Baru)</option>
+                  <option value="credit_note">Credit Note (Pemotongan Nilai Tagihan pada Invoice)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">UNGGAH BUKTI FOTO / VIDEO KERUSAKAN</label>
+                <input type="file" class="form-control" accept="image/*,video/*" />
+              </div>
+
+              <button type="submit" class="btn-primary-auth" style="width: 100%; height: 42px; border-radius: 8px; margin-top: 0.5rem;">
+                <span class="btn-text">KIRIM TIKET KLAIM GARANSI</span>
+              </button>
+            </form>
+
+            <!-- Tabel Tiket RMA -->
+            <div>
+              <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--wood-darkest); margin-bottom: 0.75rem;">Riwayat Tiket Klaim Garansi</h4>
+              <div class="portal-table-wrap">
+                <table class="portal-table">
+                  <thead>
+                    <tr>
+                      <th>No. Tiket</th>
+                      <th>PO &amp; Komponen</th>
+                      <th>Jumlah</th>
+                      <th>Solusi</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>RMA-2026-004</strong></td>
+                      <td>
+                        <div>PO-087</div>
+                        <small style="color: var(--text-muted);">Front Panel</small>
+                      </td>
+                      <td>4 pcs</td>
+                      <td><span style="font-size: 0.7rem; font-weight: 700; color: var(--wood-primary);">Replacement</span></td>
+                      <td><span class="status-pill status-ready">Diproses Pabrik</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="../template/js/buyer/buyer.js"></script>
+  </body>
+</html>

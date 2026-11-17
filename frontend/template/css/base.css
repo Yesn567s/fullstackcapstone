@@ -1,0 +1,297 @@
+/* ==========================================================================
+   CV. SUMBER ARTHA - SISTEM PENJUALAN, PRODUKSI & CUTTING OPTIMIZATION
+   Focus Wireframe Layout with Ambient Flanking Timber Aesthetics
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens & CSS Custom Properties
+   -------------------------------------------------------------------------- */
+:root {
+  /* Warm Earthy & Timber Tones (Extracted from Brand Reference) */
+  --bg-primary: #F7F3EE;            /* Warm almond cream/ivory background */
+  --bg-secondary: #F2EBE1;          /* Secondary warmer beige tone */
+  --bg-card: #FFFFFF;               /* Clean white surface from wireframe */
+  --bg-card-subtle: #FAF7F2;        /* Subtle warm card accent */
+  
+  /* Wood Tones */
+  --wood-darkest: #27170E;          /* Deep espresso timber */
+  --wood-dark: #442818;             /* Rich dark walnut */
+  --wood-primary: #6D4327;          /* Classic walnut brown */
+  --wood-medium: #8A5936;           /* Teak / caramel timber */
+  --wood-accent: #B07D53;           /* Warm tan / oak */
+  --wood-light: #DFC8B4;            /* Soft wood grain highlight */
+  --wood-pale: #F3EBE1;             /* Ultra light wood cream */
+  
+  /* Wireframe Neutral & Border Tones */
+  --wireframe-bar: #D5C9BC;         /* Placeholder bar color from wireframe */
+  --wireframe-border: #E2D7CC;      /* Subtle border line */
+  --wireframe-input-bg: #F9F7F4;    /* Input field background tint */
+  --wireframe-input-border: #DCD2C6;/* Input box border */
+  
+  /* Text Colors */
+  --text-main: #2A1C14;             /* High contrast dark text */
+  --text-muted: #6B5B50;            /* Neutral secondary label */
+  --text-light: #8E7D72;            /* Subtle hint text */
+  --text-white: #FFFFFF;            /* White text for badges & primary buttons */
+
+  /* Status Colors */
+  --status-success: #2E6B4F;
+  --status-success-bg: #E8F5EE;
+  --status-warning: #94601A;
+  --status-warning-bg: #FEF6E8;
+  --status-error: #9E2A2B;
+  --status-error-bg: #FBECEB;
+
+  /* Typography */
+  --font-display: 'Outfit', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Shadows & Elevations */
+  --shadow-sm: 0 2px 6px rgba(44, 25, 14, 0.04);
+  --shadow-md: 0 8px 24px rgba(44, 25, 14, 0.08);
+  --shadow-lg: 0 16px 40px rgba(44, 25, 14, 0.12);
+  --shadow-card: 0 14px 34px rgba(44, 25, 14, 0.07), 0 2px 6px rgba(44, 25, 14, 0.04);
+  --shadow-pill: 0 10px 28px rgba(44, 25, 14, 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & Global Base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  background-color: #E2D5C5;
+}
+
+/* Background Subtle Dot Pattern & Ambient Warm Radial Glows */
+.bg-texture {
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(109, 67, 39, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+}
+
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+.bg-glow-1 {
+  width: 500px;
+  height: 500px;
+  top: -80px;
+  left: -80px;
+  background: radial-gradient(circle, #EAD7C2 0%, transparent 70%);
+}
+
+.bg-glow-2 {
+  width: 550px;
+  height: 550px;
+  bottom: -100px;
+  right: -60px;
+  background: radial-gradient(circle, #DFCBBA 0%, transparent 70%);
+}
+
+.container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Top Brand Header Bar (Simplified & Clean)
+   -------------------------------------------------------------------------- */
+.top-nav-bar {
+  position: relative;
+  z-index: 10;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(109, 67, 39, 0.08);
+  background: rgba(247, 243, 238, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.nav-brand-handle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--wood-primary);
+  letter-spacing: 0.3px;
+}
+
+.nav-mini-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.divider-dot {
+  opacity: 0.4;
+  font-size: 0.8rem;
+}
+
+/* --------------------------------------------------------------------------
+   4. Page Wrapper & Stage Layout (Centered Card Flanked by Yellow-Hatched Media)
+   -------------------------------------------------------------------------- */
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.2rem 0;
+}
+
+.auth-stage-layout {
+  display: grid;
+  grid-template-columns: 1fr minmax(380px, 490px) 1fr;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   5. Decorative Media Frames (Sesuai Gambar Arsir Kuning)
+   -------------------------------------------------------------------------- */
+.flank-side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none; /* purely ambient visual elements */
+}
+
+/* Base styling for all decorative frames */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  border: 3.5px solid #FFFFFF;
+  background-color: var(--bg-secondary);
+  box-shadow: var(--shadow-pill);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  pointer-events: auto;
+}
+
+.media-frame:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.flank-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.media-frame:hover .flank-img {
+  transform: scale(1.06);
+}
+
+.frame-subtle-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(44, 25, 14, 0.1) 100%);
+  pointer-events: none;
+}
+
+/* LEFT FLANK MEDIA (Top 2 Horizontal Pills + Bottom Square) */
+.flank-left {
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding-left: 0.5rem;
+}
+
+/* Top Pill 1: Horizontal Rounded Capsule */
+.pill-frame-sm {
+  width: 220px;
+  height: 64px;
+  border-radius: 9999px;
+  margin-left: 10px;
+}
+
+/* Mid Pill 2: Elongated Horizontal Capsule (directly underneath) */
+.pill-frame-lg {
+  width: 320px;
+  height: 74px;
+  border-radius: 9999px;
+  margin-left: -5px;
+}
+
+/* Bottom Card: Rounded Square */
+.square-frame {
+  width: 180px;
+  height: 180px;
+  border-radius: 32px;
+  margin-top: 1rem;
+  margin-left: 40px;
+}
+
+/* RIGHT FLANK MEDIA (Large Arch / Tall Capsule Frame) */
+.flank-right {
+  align-items: flex-end;
+  justify-content: center;
+  padding-right: 0.5rem;
+}
+
+/* Large Arch Frame matching the yellow sketch on the right */
+.arch-frame {
+  width: 300px;
+  height: 420px;
+  border-radius: 150px 150px 36px 36px;
+  margin-right: 15px;
+}
+
+/* --------------------------------------------------------------------------

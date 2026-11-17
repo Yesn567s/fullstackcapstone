@@ -1,0 +1,908 @@
+/* ==========================================================================
+   CV. SUMBER ARTHA — BUYER PORTAL STYLESHEET
+   Aesthetic B2B Timber & Precision Make-to-Order Styling
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Portal Layout Framework
+   -------------------------------------------------------------------------- */
+.buyer-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  position: relative;
+}
+
+/* Sidebar Navigation */
+.buyer-sidebar {
+  width: 275px;
+  background: var(--wood-darkest);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 90;
+  box-shadow: 4px 0 20px rgba(39, 23, 14, 0.15);
+  transition: transform var(--transition-normal);
+}
+
+.buyer-sidebar-header {
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.buyer-brand-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px;
+  object-fit: contain;
+}
+
+.buyer-brand-meta h2 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.buyer-brand-meta p {
+  font-size: 0.7rem;
+  color: var(--wood-light);
+  letter-spacing: 0.3px;
+}
+
+/* Buyer Profile Banner inside Sidebar */
+.buyer-sidebar-profile {
+  padding: 1.15rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.profile-company-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.company-badge-pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: #3B2618;
+  color: #DFC8B4;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid rgba(223, 200, 180, 0.2);
+}
+
+.profile-company-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tier-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tier-gold {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.top-status-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(46, 107, 79, 0.25);
+  color: #A7F3D0;
+  border: 1px solid rgba(167, 243, 208, 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* Sidebar Navigation Items */
+.buyer-sidebar-nav {
+  flex: 1;
+  padding: 1.25rem 0.75rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nav-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 0.75rem 0.75rem 0.35rem;
+}
+
+.buyer-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+}
+
+.buyer-nav-item svg {
+  flex-shrink: 0;
+  opacity: 0.75;
+  transition: opacity var(--transition-fast);
+}
+
+.buyer-nav-item:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.buyer-nav-item:hover svg {
+  opacity: 1;
+}
+
+.buyer-nav-item.active {
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--wood-primary) 0%, var(--wood-medium) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.buyer-nav-item.active svg {
+  opacity: 1;
+}
+
+.nav-badge-count {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.15rem 0.45rem;
+  border-radius: 9999px;
+}
+
+/* Sidebar Footer */
+.buyer-sidebar-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #F87171;
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  transition: background var(--transition-fast);
+}
+
+.btn-sidebar-logout:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   2. Main Content Canvas
+   -------------------------------------------------------------------------- */
+.buyer-main-wrapper {
+  flex: 1;
+  margin-left: 275px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Buyer Topbar */
+.buyer-topbar {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--wireframe-border);
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 80;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-mobile-sidebar-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 6px;
+  padding: 0.4rem;
+  cursor: pointer;
+  color: var(--wood-darkest);
+}
+
+.breadcrumb-flow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.breadcrumb-flow a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb-flow .current-crumb {
+  color: var(--wood-darkest);
+  font-weight: 700;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.notification-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(46, 107, 79, 0.2);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+  animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.btn-portal-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--wood-primary);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn-portal-action:hover {
+  background: var(--wood-darkest);
+}
+
+/* Page Content Body */
+.buyer-page-content {
+  padding: 2rem;
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   3. Workflow Progress Stepper (MTO Lifecycle)
+   -------------------------------------------------------------------------- */
+.mto-workflow-stepper {
+  background: #FFFFFF;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 14px;
+  padding: 1.25rem 1.75rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.stepper-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.stepper-title {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--wood-darkest);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stepper-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.stepper-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  text-decoration: none;
+  color: var(--text-muted);
+  width: 120px;
+  text-align: center;
+}
+
+.step-node {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-card-subtle);
+  border: 2px solid var(--wireframe-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
+.step-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.stepper-step.completed .step-node {
+  background: var(--status-success);
+  border-color: var(--status-success);
+  color: #FFFFFF;
+}
+
+.stepper-step.completed .step-label {
+  color: var(--wood-darkest);
+}
+
+.stepper-step.active .step-node {
+  background: var(--wood-primary);
+  border-color: var(--wood-primary);
+  color: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(109, 67, 39, 0.2);
+}
+
+.stepper-step.active .step-label {
+  color: var(--wood-primary);
+  font-weight: 800;
+}
+
+.stepper-progress-line {
+  position: absolute;
+  top: 17px;
+  left: 60px;
+  right: 60px;
+  height: 2px;
+  background: var(--wireframe-border);
+  z-index: 1;
+}
+
+.stepper-progress-fill {
+  height: 100%;
+  background: var(--status-success);
+  transition: width 0.4s ease;
+}
+
+/* --------------------------------------------------------------------------
+   4. Dashboard Widgets & Key Metrics Grid
+   -------------------------------------------------------------------------- */
+.dashboard-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card-buyer {
+  background: #FFFFFF;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all var(--transition-normal);
+}
+
+.metric-card-buyer:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--wood-light);
+}
+
+.metric-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(109, 67, 39, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wood-primary);
+  flex-shrink: 0;
+}
+
+.metric-card-body h4 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.metric-card-val {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--wood-darkest);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.metric-card-sub {
+  font-size: 0.7rem;
+  color: var(--text-light);
+}
+
+/* Two-column Overview Grid */
+.dashboard-columns-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Content Cards */
+.portal-card {
+  background: #FFFFFF;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+
+.portal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--wireframe-border);
+}
+
+.portal-card-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--wood-darkest);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-action-link {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--wood-primary);
+  text-decoration: none;
+}
+
+.card-action-link:hover {
+  text-decoration: underline;
+}
+
+/* Data Tables */
+.portal-table-wrap {
+  overflow-x: auto;
+}
+
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.portal-table th {
+  background: var(--bg-card-subtle);
+  color: var(--text-muted);
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--wireframe-border);
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+}
+
+.portal-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(109, 67, 39, 0.06);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.portal-table tr:hover td {
+  background-color: #FAF7F2;
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.status-draft {
+  background: #E5E7EB;
+  color: #374151;
+}
+
+.status-quotation {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.status-dp-pending {
+  background: #FFEDD5;
+  color: #9A3412;
+}
+
+.status-ready {
+  background: #E0E7FF;
+  color: #3730A3;
+}
+
+.status-production {
+  background: #EDE9FE;
+  color: #5B21B6;
+}
+
+.status-shipped {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.status-completed {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+/* --------------------------------------------------------------------------
+   5. MTO PO Submission Form (Tahap 1)
+   -------------------------------------------------------------------------- */
+.mto-form-section {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--wireframe-border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.mto-section-heading {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--wood-darkest);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.dim-calculator-box {
+  background: #FFFFFF;
+  border: 1px dashed var(--wood-accent);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calc-result-text strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--wood-darkest);
+}
+
+.calc-result-text span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Drawing Upload Box */
+.drawing-upload-zone {
+  border: 2px dashed var(--wireframe-border);
+  border-radius: 12px;
+  background: #FFFFFF;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.drawing-upload-zone:hover,
+.drawing-upload-zone.dragover {
+  border-color: var(--wood-primary);
+  background: var(--bg-card-subtle);
+}
+
+.upload-icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(109, 67, 39, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wood-primary);
+  margin: 0 auto 0.85rem;
+}
+
+/* --------------------------------------------------------------------------
+   6. Quotation, Digital Contract & DP Payment (Tahap 2 & 3)
+   -------------------------------------------------------------------------- */
+.quotation-summary-card {
+  background: #FFFFFF;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.quotation-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  font-size: 0.82rem;
+  border-bottom: 1px dashed var(--wireframe-border);
+}
+
+.quotation-row.total-row {
+  border-bottom: none;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--wood-darkest);
+  padding-top: 1rem;
+}
+
+/* Digital Contract Box (Legal Lock-in) */
+.legal-lockin-box {
+  background: #FAF8F5;
+  border: 1.5px solid var(--wood-accent);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.contract-scroll-preview {
+  height: 180px;
+  overflow-y: auto;
+  background: #FFFFFF;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.signature-pad-container {
+  background: #FFFFFF;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.signature-canvas {
+  width: 100%;
+  height: 120px;
+  border: 1px dashed #D5C9BC;
+  border-radius: 6px;
+  cursor: crosshair;
+}
+
+/* DP Payment Calculation Box */
+.dp-split-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.dp-tier-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--wireframe-border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  position: relative;
+}
+
+.dp-tier-card.selected {
+  border-color: var(--wood-primary);
+  box-shadow: 0 0 0 2px rgba(109, 67, 39, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   7. Live PO Tracking Timeline & Consignment (Tahap 4 & 5)
+   -------------------------------------------------------------------------- */
+.tracking-timeline-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+  padding-left: 2rem;
+  margin: 1.5rem 0;
+}
+
+.tracking-timeline-flow::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 8px;
+  width: 2px;
+  background: var(--wireframe-border);
+}
+
+.track-node-item {
+  position: relative;
+}
+
+.track-node-dot {
+  position: absolute;
+  left: -2rem;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 3px solid var(--wireframe-border);
+}
+
+.track-node-item.done .track-node-dot {
+  background: var(--status-success);
+  border-color: var(--status-success);
+}
+
+.track-node-item.in-progress .track-node-dot {
+  background: var(--wood-primary);
+  border-color: var(--wood-light);
+  box-shadow: 0 0 0 3px rgba(109, 67, 39, 0.2);
+}
+
+.track-node-body {
+  background: #FFFFFF;
+  border: 1px solid var(--wireframe-border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   8. Responsive Behavior
+   -------------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .dashboard-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-columns-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .buyer-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .buyer-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .buyer-main-wrapper {
+    margin-left: 0;
+  }
+
+  .btn-mobile-sidebar-toggle {
+    display: block;
+  }
+
+  .buyer-topbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .buyer-page-content {
+    padding: 1rem;
+  }
+
+  .mto-workflow-stepper {
+    overflow-x: auto;
+  }
+
+  .stepper-track {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 580px) {
+  .dashboard-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dp-split-container {
+    grid-template-columns: 1fr;
+  }
+}

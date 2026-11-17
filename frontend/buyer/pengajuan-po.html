@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tahap 1: Pengajuan Pesanan MTO &amp; Drawing — CV. Sumber Artha</title>
+    <!-- Favicon -->
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheets -->
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/buyer.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+  </head>
+  <body class="buyer-layout">
+    <div aria-hidden="true" class="bg-texture"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="buyer-sidebar" id="buyerSidebar">
+      <div class="buyer-sidebar-header">
+        <img src="../../assets/favicon.ico" alt="Logo CV. Sumber Artha" class="buyer-brand-logo" />
+        <div class="buyer-brand-meta">
+          <h2>CV. Sumber Artha</h2>
+          <p>Portal Manufaktur MTO</p>
+        </div>
+      </div>
+
+      <div class="buyer-sidebar-profile">
+        <div class="profile-company-tag">
+          <span class="company-badge-pill">B2B BUYER</span>
+        </div>
+        <div class="profile-company-name live-company-name">PT Jaya Furniture Ekspor</div>
+        <p style="font-size: 0.7rem; color: #DFC8B4; margin-bottom: 0.5rem;" class="live-pic-name">PIC: Ir. Hendra Kusuma</p>
+        <div class="profile-badges-row">
+          <span class="tier-badge tier-gold">Gold Tier (-5%)</span>
+          <span class="top-status-badge">TOP 90 Hari</span>
+        </div>
+      </div>
+
+      <nav class="buyer-sidebar-nav">
+        <span class="nav-section-label">Alur Pemesanan MTO</span>
+        <a href="dashboard.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Ringkasan Dashboard</span>
+        </a>
+        <a href="pengajuan-po.html" class="buyer-nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>01. Pengajuan PO &amp; Drawing</span>
+        </a>
+        <a href="quotation-kontrak.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          <span>02. Quotation, Kontrak &amp; DP</span>
+          <span class="nav-badge-count">1</span>
+        </a>
+        <a href="tracking-tagihan.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span>03. Tracking, Surat Jalan &amp; RMA</span>
+        </a>
+
+        <span class="nav-section-label" style="margin-top: 0.5rem;">Informasi &amp; Bantuan</span>
+        <a href="../landing.html" class="buyer-nav-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Landing Page Utama</span>
+        </a>
+      </nav>
+
+      <div class="buyer-sidebar-footer">
+        <button class="btn-sidebar-logout btn-buyer-logout" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Keluar Sesi</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <main class="buyer-main-wrapper">
+      <header class="buyer-topbar">
+        <div class="topbar-left">
+          <button class="btn-mobile-sidebar-toggle" id="btnMobileSidebar" aria-label="Toggle Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb-flow">
+            <a href="dashboard.html">Portal Buyer</a>
+            <span>/</span>
+            <span class="current-crumb">Tahap 1: Pengajuan Pesanan MTO</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">Status Entitas: <strong>Draft PO Baru</strong></span>
+        </div>
+      </header>
+
+      <div class="buyer-page-content">
+        <!-- Stepper -->
+        <div class="mto-workflow-stepper">
+          <div class="stepper-header">
+            <div class="stepper-title">
+              <span>Alur Pemesanan MTO — Langkah 1 dari 8</span>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--wood-primary); font-weight: 700;">Pengajuan Spesifikasi Teknis &amp; Upload Drawing</span>
+          </div>
+          <div class="stepper-track">
+            <div class="stepper-progress-line">
+              <div class="stepper-progress-fill" style="width: 12%;"></div>
+            </div>
+            <div class="stepper-step active">
+              <div class="step-node">1</div>
+              <span class="step-label">1. Pengajuan &amp; Drawing</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">2</div>
+              <span class="step-label">2. Quotation &amp; Kontrak</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">3</div>
+              <span class="step-label">3. Verifikasi DP</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">4</div>
+              <span class="step-label">4. Konsinyasi Bahan</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">5</div>
+              <span class="step-label">5. Live PO Tracking</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">6</div>
+              <span class="step-label">6. Kirim &amp; Invoice</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">7</div>
+              <span class="step-label">7. Pelunasan TOP 90</span>
+            </div>
+            <div class="stepper-step">
+              <div class="step-node">8</div>
+              <span class="step-label">8. Klaim RMA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Grid -->
+        <form id="mtoOrderForm">
+          <div style="display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.5rem; align-items: flex-start;">
+            <!-- Left Column: Specs & Drawing -->
+            <div>
+              <div class="portal-card">
+                <div class="portal-card-header">
+                  <h3 class="portal-card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    <span>1. Spesifikasi Komponen Laci (Make-to-Order)</span>
+                  </h3>
+                </div>
+
+                <!-- 5 Components Check -->
+                <div style="background: var(--bg-card-subtle); border-radius: 8px; padding: 0.85rem; margin-bottom: 1.25rem; border: 1px solid var(--wireframe-border);">
+                  <span style="font-size: 0.72rem; font-weight: 700; color: var(--wood-dark); text-transform: uppercase;">Paket Komponen Laci Utuh Termasuk:</span>
+                  <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.4rem; font-size: 0.78rem;">
+                    <span>✓ Front Panel</span>
+                    <span>✓ Back Panel</span>
+                    <span>✓ Side Left (Dovetail)</span>
+                    <span>✓ Side Right (Dovetail)</span>
+                    <span>✓ Bottom Base (Groove Fit)</span>
+                  </div>
+                </div>
+
+                <!-- Dimension Input Row -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.25rem;">
+                  <div class="form-group">
+                    <label class="form-label" for="calcPanjang">PANJANG BERSIH (P)</label>
+                    <div class="input-wrapper">
+                      <input type="number" id="calcPanjang" class="form-control" value="450" min="150" max="1200" required />
+                      <span style="position: absolute; right: 12px; font-size: 0.75rem; color: var(--text-light);">mm</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="calcLebar">LEBAR BERSIH (L)</label>
+                    <div class="input-wrapper">
+                      <input type="number" id="calcLebar" class="form-control" value="380" min="150" max="1000" required />
+                      <span style="position: absolute; right: 12px; font-size: 0.75rem; color: var(--text-light);">mm</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="calcTinggi">TINGGI BERSIH (T)</label>
+                    <div class="input-wrapper">
+                      <input type="number" id="calcTinggi" class="form-control" value="140" min="60" max="500" required />
+                      <span style="position: absolute; right: 12px; font-size: 0.75rem; color: var(--text-light);">mm</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Material & Quantity Row -->
+                <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                  <div class="form-group">
+                    <label class="form-label" for="calcMaterial">PILIHAN MATERIAL DINDING LACI</label>
+                    <div class="select-wrapper">
+                      <select id="calcMaterial" class="form-control select-control" required>
+                        <option value="LVB Poplar (Long Grain Ekspor)" selected>LVB Poplar (Long Grain Ekspor - 1220×2440 mm)</option>
+                        <option value="LVB Sengon (Kompensasi Kerf 3mm)">LVB Sengon (Kompensasi Kerf 3mm - 1220×2440 mm)</option>
+                      </select>
+                      <span class="select-chevron">&#9662;</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="calcQty">KUANTITAS (UNIT LACI)</label>
+                    <div class="input-wrapper">
+                      <input type="number" id="calcQty" class="form-control" value="500" min="50" step="50" required />
+                      <span style="position: absolute; right: 12px; font-size: 0.75rem; color: var(--text-light);">pcs</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">MATERIAL ALAS LACI (BOTTOM BASE)</label>
+                  <input type="text" class="form-control" value="Plywood / MDF 12 mm (Standar Alur Presisi)" readonly style="background: var(--bg-card-subtle); color: var(--text-muted);" />
+                </div>
+
+                <!-- Catatan Tambahan -->
+                <div class="form-group">
+                  <label class="form-label" for="orderNotes">CATATAN KHUSUS / PERSYARATAN TOLERANSI BUYER</label>
+                  <textarea id="orderNotes" class="form-control" rows="2" placeholder="Contoh: Sambungan dovetail rapat tanpa dempul, kehalusan grit 240, standar ekspor Eropa."></textarea>
+                </div>
+              </div>
+
+              <!-- Drawing Upload Zone -->
+              <div class="portal-card">
+                <div class="portal-card-header">
+                  <h3 class="portal-card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>2. Unggah Gambar Kerja Teknis (Technical Drawing)</span>
+                  </h3>
+                </div>
+
+                <div class="drawing-upload-zone" id="fileDropZone">
+                  <div class="upload-icon-circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/></svg>
+                  </div>
+                  <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--wood-darkest); margin-bottom: 0.25rem;">Klik atau Tarik File Drawing ke Sini</h4>
+                  <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem;">Mendukung format CAD &amp; Dokumen: PDF, DWG, DXF, PNG, JPG (Maks. 25 MB)</p>
+                  <input type="file" id="drawingFileInput" class="hidden" accept=".pdf,.dwg,.dxf,.png,.jpg,.jpeg" />
+                  <button type="button" class="btn-chip" style="pointer-events: none;">Pilih Berkas dari Komputer</button>
+                </div>
+
+                <div id="uploadedFileInfo" class="hidden" style="margin-top: 1rem; background: var(--bg-card-subtle); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--wireframe-border); display: flex; align-items: center; justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" color="var(--wood-primary)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                    <div>
+                      <strong id="fileNameDisplay" style="font-size: 0.82rem; color: var(--wood-darkest);">DRAWING-REV3-JAYA.pdf</strong>
+                      <span style="font-size: 0.68rem; color: var(--status-success); display: block;">✓ Terlampir sebagai acuan resmi standar produksi</span>
+                    </div>
+                  </div>
+                  <span style="font-size: 0.72rem; color: var(--text-light);">Siap Diproses</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Live 2D Estimation & Submission -->
+            <div>
+              <!-- 2D Engine Estimation Card -->
+              <div class="portal-card" style="border: 2px solid var(--wood-accent);">
+                <div class="portal-card-header">
+                  <h3 class="portal-card-title" style="color: var(--wood-primary);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                    <span>Kalkulasi Engine Optimasi 2D</span>
+                  </h3>
+                </div>
+
+                <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                  Estimasi otomatis dengan memperhitungkan tebal bilah gergaji <strong>Kerf 3 mm</strong>, 
+                  alokasi sambungan <strong>Dovetail 4 mm</strong>, dan pola belah <em>Guillotine</em>:
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                  <div class="dim-calculator-box">
+                    <div class="calc-result-text">
+                      <span style="font-size: 0.7rem; text-transform: uppercase;">Estimasi Lembaran Kayu:</span>
+                      <strong id="resEstimatedSheets" style="font-size: 1.15rem; color: var(--wood-darkest);">42 Lembar Standar</strong>
+                    </div>
+                    <span style="font-size: 0.7rem; background: #E8DFC8; color: var(--wood-dark); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 700;">1220×2440 mm</span>
+                  </div>
+
+                  <div class="dim-calculator-box">
+                    <div class="calc-result-text">
+                      <span style="font-size: 0.7rem; text-transform: uppercase;">Efisiensi Pola Potong (Yield):</span>
+                      <strong id="resEstimatedWaste" style="font-size: 1rem; color: var(--status-success);">± 8.5% Waste (91.5% Efisiensi)</strong>
+                    </div>
+                  </div>
+
+                  <div class="dim-calculator-box">
+                    <div class="calc-result-text">
+                      <span style="font-size: 0.7rem; text-transform: uppercase;">Estimasi Biaya Satuan:</span>
+                      <strong id="resEstimatedUnitCost" style="font-size: 1.1rem; color: var(--wood-primary);">Rp 118.750 / Unit</strong>
+                    </div>
+                    <span class="tier-badge tier-gold">Disc 5% (Gold)</span>
+                  </div>
+                </div>
+
+                <!-- B2B Credit Notice -->
+                <div style="background: rgba(46, 107, 79, 0.08); border-radius: 8px; padding: 0.85rem; border: 1px solid rgba(46, 107, 79, 0.2); margin-top: 1.25rem;">
+                  <strong style="display: block; font-size: 0.78rem; color: var(--status-success); margin-bottom: 0.2rem;">Evaluasi Kredit: TOP 90 Hari Memenuhi Syarat</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;">
+                    Berdasarkan skor kredit akun <strong>740/1000</strong>, pesanan ini berhak menggunakan skema <strong>DP 30%</strong> dan pelunasan bertempo <strong>90 hari kalender</strong> setelah Surat Jalan/Invoice terbit.
+                  </p>
+                </div>
+
+                <!-- Form Action Buttons -->
+                <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.65rem;">
+                  <button type="submit" class="btn-primary-auth" style="width: 100%; height: 48px; border-radius: 10px;">
+                    <span class="btn-text">AJUKAN PESANAN &amp; TINJAU QUOTATION</span>
+                    <svg class="btn-arrow" fill="none" height="18" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  </button>
+                  <a href="dashboard.html" style="text-align: center; font-size: 0.8rem; color: var(--text-muted); text-decoration: none; padding: 0.4rem;">Batal &amp; Kembali ke Dashboard</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="../template/js/buyer/buyer.js"></script>
+  </body>
+</html>

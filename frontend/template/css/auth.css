@@ -1,0 +1,724 @@
+/*6. Center Authentication Column (Dedicated Wireframe Form)*/
+-------------------------------------------------------------------------- */
+.auth-center-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 490px;
+  margin: 0 auto;
+}
+
+/* Wireframe tag marker (Top Left 'Login' as seen in Image 1 canvas) */
+.wireframe-tag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.35rem;
+}
+
+.wireframe-screen-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+.wireframe-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  background: #E8DFC8;
+  color: var(--wood-dark);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+/* THE CARD: Exact Wireframe Structure Elevated by Timber Aesthetics */
+.auth-card {
+  background: var(--bg-card);
+  border: 1px solid var(--wireframe-border);
+  border-radius: 14px;
+  padding: 2.2rem 2.2rem 1.8rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.auth-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: #D2C4B4;
+}
+
+/* Card Header: Logo box + CV. Sumber Artha */
+.card-header {
+  margin-bottom: 1.15rem;
+}
+
+.header-branding {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Brand Logo Container (using favicon.ico) */
+.brand-logo-box {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card-subtle);
+  border: 1.5px solid var(--wireframe-border);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(44, 25, 14, 0.05);
+  transition: transform var(--transition-bounce), box-shadow var(--transition-fast);
+}
+
+.auth-card:hover .brand-logo-box {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(109, 67, 39, 0.12);
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+}
+
+.brand-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.company-name {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--wood-darkest);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.company-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* Horizontal Divider (Wireframe HR) */
+.card-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--wireframe-border);
+  margin-top: 1.15rem;
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   7. Auth Navigation Tabs (LOGIN vs REGISTER)
+   -------------------------------------------------------------------------- */
+.auth-tab-nav {
+  display: flex;
+  align-items: center;
+  border-bottom: 1.5px solid var(--wireframe-border);
+  margin-top: 0.85rem;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 0.6rem 0.25rem 0.75rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.tab-button:hover {
+  color: var(--wood-dark);
+}
+
+.tab-button.active {
+  color: var(--wood-darkest);
+}
+
+.tab-button .tab-indicator {
+  position: absolute;
+  bottom: -1.5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--wood-primary);
+  border-radius: 9999px;
+  transition: width var(--transition-normal);
+}
+
+.tab-button.active .tab-indicator {
+  width: 100%;
+}
+
+/* Section Title & Wireframe Placeholder Bar */
+.form-title-section {
+  margin-bottom: 1.25rem;
+}
+
+.auth-heading {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--wood-darkest);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.wireframe-sub-bar {
+  width: 85px;
+  height: 5px;
+  background-color: var(--wireframe-bar);
+  border-radius: 9999px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.auth-card:hover .wireframe-sub-bar {
+  width: 115px;
+  background-color: var(--wood-accent);
+}
+
+/* Alert Notification Box */
+.alert-box {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  animation: slideDownAlert 0.25s ease forwards;
+}
+
+@keyframes slideDownAlert {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-box.alert-error {
+  background-color: var(--status-error-bg);
+  border: 1px solid rgba(158, 42, 43, 0.3);
+  color: var(--status-error);
+}
+
+.alert-box.alert-success {
+  background-color: var(--status-success-bg);
+  border: 1px solid rgba(46, 107, 79, 0.3);
+  color: var(--status-success);
+}
+
+/* Tab Panels */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeInPanel 0.25s ease forwards;
+}
+
+@keyframes fadeInPanel {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. Form Controls & Inputs (Matching Wireframe Field Layout)
+   -------------------------------------------------------------------------- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  position: relative;
+}
+
+.form-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.form-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  color: var(--wood-darkest);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.required-star {
+  color: var(--status-error);
+  font-size: 0.85rem;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.forgot-link {
+  font-size: 0.74rem;
+  color: var(--wood-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.forgot-link:hover {
+  color: var(--wood-darkest);
+  text-decoration: underline;
+}
+
+/* Input Wrappers & Icon styling */
+.input-wrapper,
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wood-accent);
+  pointer-events: none;
+  z-index: 2;
+  transition: color var(--transition-fast);
+}
+
+/* The Input Field (Designed around the wireframe rounded-rectangular box) */
+.form-control {
+  width: 100%;
+  height: 44px;
+  background-color: var(--wireframe-input-bg);
+  border: 1.5px solid var(--wireframe-input-border);
+  border-radius: 8px;
+  padding: 0 2.5rem 0 2.6rem;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--wood-darkest);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: #A09488;
+  font-size: 0.82rem;
+}
+
+.form-control:hover {
+  border-color: #BCAF9F;
+  background-color: #FAF8F5;
+}
+
+.form-control:focus {
+  border-color: var(--wood-primary);
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3.5px rgba(109, 67, 39, 0.14);
+}
+
+.form-group.has-focus .input-icon {
+  color: var(--wood-primary);
+}
+
+/* Error validation state */
+.form-group.has-error .form-control {
+  border-color: var(--status-error);
+  background-color: #FFF9F9;
+}
+
+.form-group.has-error .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(158, 42, 43, 0.15);
+}
+
+.error-feedback {
+  display: none;
+  font-size: 0.72rem;
+  color: var(--status-error);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.form-group.has-error .error-feedback {
+  display: block;
+}
+
+/* Clear Input Button */
+.clear-input-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.15rem;
+  color: #A89B8D;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.clear-input-btn:hover {
+  color: var(--wood-darkest);
+}
+
+/* Toggle Password Visibility Button */
+.toggle-password-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #8C7B6D;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 4px;
+  transition: color var(--transition-fast);
+}
+
+.toggle-password-btn:hover {
+  color: var(--wood-primary);
+}
+
+/* Caps lock detector */
+.caps-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--status-warning);
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+/* Select Control */
+.select-control {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: 2.5rem;
+}
+
+.select-chevron {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: var(--wood-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.select-control:focus + .select-chevron {
+  transform: rotate(180deg);
+}
+
+/* Remember Session Checkbox */
+.form-options-row {
+  display: flex;
+  align-items: center;
+  margin-top: -0.2rem;
+}
+
+.custom-checkbox-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.custom-checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  width: 17px;
+  height: 17px;
+  background-color: var(--wireframe-input-bg);
+  border: 1.5px solid var(--wireframe-input-border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.custom-checkbox-container:hover .checkmark {
+  border-color: var(--wood-primary);
+}
+
+.custom-checkbox-container input:checked ~ .checkmark {
+  background-color: var(--wood-primary);
+  border-color: var(--wood-primary);
+}
+
+.custom-checkbox-container input:checked ~ .checkmark::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  border: solid #FFFFFF;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   9. Submit Buttons: MASUK KE SISTEM & DAFTAR (Wireframe Replica)
+   -------------------------------------------------------------------------- */
+.form-action-group {
+  margin-top: 0.35rem;
+}
+
+.btn-primary-auth {
+  width: 100%;
+  height: 48px;
+  background-color: #2F1E15; /* Dark espresso / charcoal wireframe button tone */
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 14px rgba(47, 30, 21, 0.25);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary-auth:hover {
+  background-color: var(--wood-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(109, 67, 39, 0.35);
+}
+
+.btn-primary-auth:active {
+  transform: translateY(0);
+}
+
+.btn-primary-auth:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-arrow {
+  transition: transform var(--transition-fast);
+}
+
+.btn-primary-auth:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   10. Card Footer & RBAC Disclaimer (Wireframe Bars & Text)
+   -------------------------------------------------------------------------- */
+.card-footer {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  text-align: center;
+}
+
+/* Wireframe Placeholder Bars at bottom of card */
+.wireframe-footer-bars {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.bar-long {
+  width: 160px;
+  height: 5px;
+  background-color: var(--wireframe-bar);
+  border-radius: 9999px;
+}
+
+.bar-medium {
+  width: 110px;
+  height: 4px;
+  background-color: var(--wireframe-bar);
+  border-radius: 9999px;
+  opacity: 0.8;
+}
+
+.rbac-disclaimer {
+  font-size: 0.71rem;
+  color: var(--text-light);
+  line-height: 1.4;
+  max-width: 390px;
+}
+
+/* Quick Demo Selector Box */
+.demo-quick-box {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--wireframe-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.demo-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--wood-primary);
+}
+
+.demo-buttons-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-chip {
+  background: var(--wireframe-input-bg);
+  border: 1px solid var(--wireframe-input-border);
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--wood-darkest);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-chip:hover {
+  background-color: var(--wood-primary);
+  color: #FFFFFF;
+  border-color: var(--wood-primary);
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   11. Site Contact Footer (Exact Info & Dashes from Image 2)
+   -------------------------------------------------------------------------- */
+.site-contact-footer {
+  position: relative;
+  z-index: 10;
+  padding: 1.25rem 0;
+  border-top: 1px solid rgba(109, 67, 39, 0.08);
+  background: rgba(247, 243, 238, 0.95);
+  font-size: 0.85rem;
+}
+
+.footer-content-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contact-info-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--wood-darkest);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.contact-label {
+  font-weight: 700;
+  color: var(--wood-primary);
+}
+
+/* Dashes '--' replicated from Image 2 bottom-right */
+.footer-dash-accents {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.decor-dash {
+  width: 18px;
+  height: 2.5px;
+  background-color: var(--wood-primary);
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
