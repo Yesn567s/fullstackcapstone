@@ -32,9 +32,13 @@ if (!is_array($input)) {
     return;
 }
 
-if (!isset($input["role"]) || trim((string) $input["role"]) === "") {
-    $input["role"] = "customer";
+$role = trim((string) ($input["role"] ?? "customer"));
+if ($role !== "customer") {
+    http_response_code(422);
+    echo json_encode(["success" => false, "message" => "Pendaftaran publik hanya tersedia untuk customer."]);
+    return;
 }
+$input["role"] = $role;
 
 $required = ["fullname", "username", "email", "phone", "role", "password"];
 $missing = [];
@@ -42,14 +46,6 @@ foreach ($required as $field) {
     if (!isset($input[$field]) || trim((string) $input[$field]) === "") {
         $missing[] = $field;
     }
-}
-
-$allowedRoles = ["admin", "operator", "customer"];
-$role = trim((string) ($input["role"] ?? ""));
-if (!in_array($role, $allowedRoles, true)) {
-    http_response_code(422);
-    echo json_encode(["success" => false, "message" => "Role tidak valid."]);
-    return;
 }
 
 if ($missing) {
@@ -72,6 +68,7 @@ if (strlen(trim((string) $input["username"])) < 4 || strlen((string) $input["pas
 
 $companyName = trim((string) ($input["companyName"] ?? ""));
 $contactPerson = trim((string) ($input["contactPerson"] ?? ""));
+$address = trim((string) ($input["address"] ?? ""));
 if ($role === "customer" && ($companyName === "" || $contactPerson === "")) {
     http_response_code(422);
     echo json_encode(["success" => false, "message" => "Nama perusahaan dan contact person wajib diisi."]);
@@ -98,8 +95,8 @@ try {
     $userId = (int) $db->lastInsertId();
     if ($role === "customer") {
         $statement = $db->prepare(
-            "INSERT INTO customers (user_id, company_name, contact_person, phone, email)
-             VALUES (:user_id, :company_name, :contact_person, :phone, :email)"
+            "INSERT INTO customers (user_id, company_name, contact_person, phone, email, address)
+             VALUES (:user_id, :company_name, :contact_person, :phone, :email, :address)"
         );
         $statement->execute([
             "user_id" => $userId,
@@ -107,6 +104,7 @@ try {
             "contact_person" => $contactPerson,
             "phone" => trim((string) $input["phone"]),
             "email" => trim((string) $input["email"]),
+            "address" => $address,
         ]);
     }
 
