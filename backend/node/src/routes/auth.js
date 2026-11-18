@@ -24,7 +24,7 @@ const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
   companyName: Joi.string().trim().min(1).max(150).required(),
   contactPerson: Joi.string().trim().min(1).max(100).required(),
-  address: Joi.string().allow('').default(''),
+  address: Joi.string().trim().min(1).required(),
 }).unknown(false);
 
 const loginSchema = Joi.object({

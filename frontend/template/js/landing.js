@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const companyName = user.company || (isAdmin ? 'CV. Sumber Artha (Admin)' : 'Mitra Buyer B2B');
       const initials = (companyName || user.username || 'SA').substring(0, 2).toUpperCase();
       const roleText = isAdmin ? 'Admin Manufaktur' : 'Buyer B2B • TOP 90';
-      const dashboardUrl = isAdmin ? 'admin/dashboard.html#dashboard' : 'buyer/dashboard.html';
+      const dashboardUrl = isAdmin ? '../admin/dashboard.html#dashboard' : 'buyer/dashboard.html';
 
       // Desktop Navbar
       if (navAuthGuest) navAuthGuest.classList.add('hidden');
@@ -208,14 +208,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Update Hero CTA
       if (heroCtaOrder) {
-        heroCtaOrder.href = isAdmin ? 'admin/transaksi-po.html' : 'buyer/pengajuan-po.html';
+        heroCtaOrder.href = isAdmin ? '../admin/transaksi-po.html' : 'buyer/pengajuan-po.html';
         const heroSpan = heroCtaOrder.querySelector('span');
         if (heroSpan) heroSpan.textContent = isAdmin ? 'Kelola Transaksi PO' : 'Ajukan Pesanan MTO & Drawing';
       }
 
       // Update Section 7 Banner CTAs
       if (bannerCtaPrimary) {
-        bannerCtaPrimary.href = isAdmin ? 'admin/dashboard.html#dashboard' : 'buyer/pengajuan-po.html';
+        bannerCtaPrimary.href = isAdmin ? '../admin/dashboard.html#dashboard' : 'buyer/pengajuan-po.html';
         const span1 = bannerCtaPrimary.querySelector('span');
         if (span1) span1.textContent = isAdmin ? 'Buka Dashboard Admin' : 'Ajukan Pesanan MTO Baru';
       }
@@ -233,18 +233,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (mobileAuthUser) mobileAuthUser.classList.add('hidden');
 
       if (heroCtaOrder) {
-        heroCtaOrder.href = 'auth/register.html';
+        heroCtaOrder.href = '../auth/register.html';
         const heroSpan = heroCtaOrder.querySelector('span');
         if (heroSpan) heroSpan.textContent = 'Ajukan Pesanan & Upload Drawing';
       }
 
       if (bannerCtaPrimary) {
-        bannerCtaPrimary.href = 'auth/register.html';
+        bannerCtaPrimary.href = '../auth/register.html';
         const span1 = bannerCtaPrimary.querySelector('span');
         if (span1) span1.textContent = 'Daftar Akun Buyer Sekarang';
       }
       if (bannerCtaSecondary) {
-        bannerCtaSecondary.href = 'auth/login.html';
+        bannerCtaSecondary.href = '../auth/login.html';
         const span2 = bannerCtaSecondary.querySelector('span');
         if (span2) span2.textContent = 'Masuk ke Portal Klien';
       }

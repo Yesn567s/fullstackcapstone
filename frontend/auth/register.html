@@ -356,6 +356,7 @@
                 <div class="form-group" id="groupRegAddress">
                   <label class="form-label" for="regAddressInput">
                     <span>ALAMAT KANTOR / GUDANG PABRIK BUYER</span>
+                    <span class="required-star">*</span>
                   </label>
                   <div class="input-wrapper">
                     <input
@@ -363,9 +364,13 @@
                       id="regAddressInput"
                       name="address"
                       placeholder="Alamat lengkap tujuan pengiriman komponen laci"
+                      required=""
                       type="text"
                       value=""
                     />
+                  </div>
+                  <div class="error-feedback" id="regAddressError">
+                    Alamat wajib diisi.
                   </div>
                 </div>
                 <!-- PASSWORD & KONFIRMASI PASSWORD (Grid 2 Kolom) -->
@@ -525,7 +530,7 @@
         <!-- Minimalist Decorative Dashes -->
         <div aria-hidden="true" class="footer-dash-accents">
           <a
-            href="../landing.html"
+            href="../customer/landing.html"
             style="
               color: var(--wood-primary);
               text-decoration: none;

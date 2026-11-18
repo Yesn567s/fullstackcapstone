@@ -40,7 +40,7 @@ if ($role !== "customer") {
 }
 $input["role"] = $role;
 
-$required = ["fullname", "username", "email", "phone", "role", "password"];
+$required = ["fullname", "username", "email", "phone", "role", "password", "address"];
 $missing = [];
 foreach ($required as $field) {
     if (!isset($input[$field]) || trim((string) $input[$field]) === "") {

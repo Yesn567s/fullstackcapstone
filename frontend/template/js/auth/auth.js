@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const groupRegContactPerson = document.getElementById(
     "groupRegContactPerson",
   );
+  const groupRegAddress = document.getElementById("groupRegAddress");
   const groupRegPass = document.getElementById("groupRegPass");
   const groupRegPassConfirm = document.getElementById("groupRegPassConfirm");
   const btnSubmitRegister = document.getElementById("btnSubmitRegister");
@@ -361,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           sessionStorage.setItem("buyerName", user.username);
           sessionStorage.setItem("buyerRole", user.role);
-          window.location.href = "../buyer/dashboard.html";
+          window.location.href = "../customer/buyer/dashboard.html";
         }
       } catch (error) {
         showAlert(
@@ -430,6 +431,13 @@ document.addEventListener("DOMContentLoaded", () => {
       isValid = false;
     } else {
       groupRegContactPerson.classList.remove("has-error");
+    }
+
+    if (!regAddressInput.value.trim()) {
+      groupRegAddress.classList.add("has-error");
+      isValid = false;
+    } else {
+      groupRegAddress.classList.remove("has-error");
     }
 
     if (!regPass || regPass.length < 6) {

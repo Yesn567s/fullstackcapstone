@@ -40,6 +40,23 @@ describe('Authentication API', () => {
     expect(response.body.success).toBe(false);
   });
 
+  test('rejects public registration with an empty address', async () => {
+    const response = await request(app).post('/api/auth/register').send({
+      fullname: 'Customer Example',
+      username: 'customer-example',
+      email: 'customer@example.com',
+      phone: '08123456789',
+      role: 'customer',
+      password: 'password123',
+      companyName: 'Example Company',
+      contactPerson: 'Customer Example',
+      address: '   ',
+    });
+
+    expect(response.status).toBe(422);
+    expect(response.body.success).toBe(false);
+  });
+
   test('requires a valid portal on login', async () => {
     const response = await request(app).post('/api/auth/login').send({
       username: 'customer',
