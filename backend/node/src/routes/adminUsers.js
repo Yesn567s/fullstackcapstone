@@ -5,6 +5,7 @@ const { createUser } = require('../controllers/adminUserController');
 const { authMiddleware } = require('../middleware/auth');
 const requireAdmin = require('../middleware/requireAdmin');
 const validateBody = require('../middleware/validateBody');
+const { ALLOWED_EMAIL_PATTERN } = require('../utils/email');
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ const createUserSchema = Joi.object({
   email: Joi.string()
     .trim()
     .email()
-    .pattern(/@gmail\.com$/i)
+    .pattern(ALLOWED_EMAIL_PATTERN)
     .max(100)
     .required(),
   phone: Joi.string().trim().min(1).max(30).required(),
@@ -31,7 +32,7 @@ router.post(
   '/',
   validateBody(
     createUserSchema,
-    'Periksa kembali data Gmail, password minimal 6 karakter, dan role admin atau operator.',
+    'Gunakan email Gmail, Yahoo, Outlook, Hotmail, atau iCloud yang valid; password minimal 6 karakter dan role admin atau operator.',
   ),
   createUser,
 );

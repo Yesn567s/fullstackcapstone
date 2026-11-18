@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Verifikasi Email</title>
+  </head>
+  <body>
+    <h1 id="verificationTitle">Memverifikasi email...</h1>
+    <p id="verificationMessage"></p>
+    <a hidden href="../auth/login.html" id="loginLink">Masuk ke akun</a>
+    <script>
+      const title = document.getElementById("verificationTitle");
+      const message = document.getElementById("verificationMessage");
+      const loginLink = document.getElementById("loginLink");
+      const apiBaseUrl = `${window.location.protocol}//${window.location.hostname}:4000`;
+
+      fetch(`${apiBaseUrl}/api/verification/email${window.location.search}`, {
+        headers: { Accept: "application/json" },
+      })
+        .then(async (response) => {
+          const result = await response.json();
+          if (!response.ok || !result.success) {
+            throw new Error(result.message || "Verifikasi email gagal.");
+          }
+          return result;
+        })
+        .then((result) => {
+          title.textContent = "Email berhasil diverifikasi";
+          message.textContent = result.message;
+          loginLink.hidden = false;
+        })
+        .catch((error) => {
+          title.textContent = "Verifikasi email gagal";
+          message.textContent = error.message || "Silakan coba lagi.";
+        });
+    </script>
+  </body>
+</html>

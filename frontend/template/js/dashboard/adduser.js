@@ -63,9 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
     alertBox.classList.add("hidden");
 
     emailInput.setCustomValidity(
-      /^[^\s@]+@gmail\.com$/i.test(emailInput.value.trim())
+      /^[^\s@]+@(?:gmail|yahoo|outlook|hotmail|icloud)\.com$/i.test(
+        emailInput.value.trim(),
+      )
         ? ""
-        : "Gunakan alamat Gmail yang valid.",
+        : "Gunakan alamat Gmail, Yahoo, Outlook, Hotmail, atau iCloud yang valid.",
     );
     if (!form.reportValidity()) return;
 

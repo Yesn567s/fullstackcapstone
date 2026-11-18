@@ -404,7 +404,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (groupRegUser) groupRegUser.classList.remove("has-error");
     }
 
-    const emailRegex = /^[^\s@]+@gmail\.com$/i;
+    const emailRegex =
+      /^[^\s@]+@(?:gmail|yahoo|outlook|hotmail|icloud)\.com$/i;
     if (!regEmail || !emailRegex.test(regEmail)) {
       if (groupRegEmail) groupRegEmail.classList.add("has-error");
       isValid = false;
@@ -515,11 +516,11 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           return result;
         })
-        .then(() => {
+        .then((result) => {
           const newUsername = payload.username;
           registerForm.reset();
-          showToast("Pendaftaran akun berhasil!");
-          window.location.href = `login.html?registered=1&username=${encodeURIComponent(newUsername)}`;
+          const verificationSent = result.verificationEmailSent ? "1" : "0";
+          window.location.href = `login.html?registered=1&verificationEmailSent=${verificationSent}&username=${encodeURIComponent(newUsername)}`;
         })
         .catch((error) => {
           showAlert(
@@ -634,14 +635,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Auto-fill from registration redirect
   if (loginUserInput) {
-    const registeredUsername = new URLSearchParams(window.location.search).get(
-      "username",
-    );
+    const searchParams = new URLSearchParams(window.location.search);
+    const registeredUsername = searchParams.get("username");
     if (registeredUsername) {
       loginUserInput.value = registeredUsername;
       if (loginPassInput) loginPassInput.focus();
-      showToast(
-        `Akun [${registeredUsername}] terdaftar! Silakan masukkan kata sandi.`,
+      const verificationSent =
+        searchParams.get("verificationEmailSent") === "1";
+      showAlert(
+        verificationSent
+          ? "Pendaftaran berhasil. Periksa email dan verifikasi akun sebelum masuk."
+          : "Pendaftaran berhasil, tetapi email belum terkirim. Masukkan kata sandi untuk mencoba mengirim tautan lagi.",
+        verificationSent ? "success" : "error",
       );
     }
   }
