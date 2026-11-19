@@ -372,9 +372,59 @@ CREATE TABLE activity_logs (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE SET NULL
 );
 
+CREATE TABLE email_verification_tokens (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  token VARCHAR(64) NOT NULL,
+  expires_at DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY uq_user_token (user_id, token)
+);
+
+ALTER TABLE users ADD COLUMN email_verified BOOLEAN NOT NULL DEFAULT FALSE;
+
 -- ============================================================================
 -- DATA MASTER DEFAULT
 -- ============================================================================
 INSERT INTO loyalty_tiers (id, tier_name, min_repeat_orders, discount_percentage, priority_level) 
 VALUES (1, 'Bronze', 0, 0.00, 1)
 ON DUPLICATE KEY UPDATE tier_name=VALUES(tier_name);
+
+-- AKUN DUMMY UNTUK PENGUJIAN (password tersimpan dalam format bcrypt)
+INSERT INTO users (
+    username,
+    password_hash,
+    full_name,
+    email,
+    phone,
+    role,
+    email_verified
+)
+VALUES
+    ('demo_admin', '$2b$12$sn8YSXGibvTp2oLQAzL2Iu1TH.sDuKJhSnEXY1PsufCiiD3WV7TQ.', 'Demo Admin', 'admin@example.com', '080000000001', 'admin', TRUE),
+    ('demo_operator', '$2b$12$SNqP73fqA.9QehzWK7fEBeBlV19BFyGZPflMse6qWcKIeOCiDxcoa', 'Demo Operator', 'operator@example.com', '080000000002', 'operator', TRUE),
+    ('demo_customer', '$2b$12$fkD43JrnLSXmMYrWIfsCje9uaZUSY/CC5wPfophuXCjYL0FtGZUYW', 'Demo Customer', 'customer@example.com', '080000000003', 'customer', TRUE);
+
+INSERT INTO customers (
+    user_id,
+    company_name,
+    contact_person,
+    phone,
+    email,
+    address
+)
+SELECT
+    users.id,
+    'Demo Customer Company',
+    'Demo Customer',
+    users.phone,
+    users.email,
+    'Jl. Contoh No. 1, Surabaya'
+FROM users
+WHERE users.username = 'demo_customer'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM customers
+      WHERE customers.user_id = users.id
+  );

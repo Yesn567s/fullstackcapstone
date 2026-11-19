@@ -39,6 +39,14 @@ FRONTEND_ORIGINS=http://127.0.0.1:5500,http://localhost:5500
 
 From the `backend/` directory, install dependencies and start the Node.js API:
 
+jadi gini cara runnya
+
+1. buka terminal (disarankan pakai powershell)
+2. cd ...\fullstackcapstone\backend (masukinnya full path)
+3. npm i (kalau belum ada node module)
+4. npm start
+5. cari yang namanya index.html (di paling bawah harusnya) lalu klik kanan open with live server
+
 ```sh
 npm install
 npm start

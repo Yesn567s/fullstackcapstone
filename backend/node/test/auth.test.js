@@ -2,8 +2,20 @@ process.env.JWT_SECRET = 'test-secret-for-auth-route-tests';
 
 const request = require('supertest');
 const app = require('../src/app');
+const { ALLOWED_EMAIL_PATTERN } = require('../src/utils/email');
 
 describe('Authentication API', () => {
+  test.each(['gmail', 'yahoo', 'outlook', 'hotmail', 'icloud'])(
+    'allows %s email domains',
+    (provider) => {
+      expect(ALLOWED_EMAIL_PATTERN.test(`person@${provider}.com`)).toBe(true);
+    },
+  );
+
+  test('does not allow email domains outside the supported providers', () => {
+    expect(ALLOWED_EMAIL_PATTERN.test('person@example.com')).toBe(false);
+  });
+
   test('exposes a health check', async () => {
     const response = await request(app).get('/api/health');
 
@@ -51,6 +63,23 @@ describe('Authentication API', () => {
       companyName: 'Example Company',
       contactPerson: 'Customer Example',
       address: '   ',
+    });
+
+    expect(response.status).toBe(422);
+    expect(response.body.success).toBe(false);
+  });
+
+  test('rejects public registration with an unsupported email domain', async () => {
+    const response = await request(app).post('/api/auth/register').send({
+      fullname: 'Customer Example',
+      username: 'customer-example',
+      email: 'customer@example.com',
+      phone: '08123456789',
+      role: 'customer',
+      password: 'password123',
+      companyName: 'Example Company',
+      contactPerson: 'Customer Example',
+      address: 'Example Street',
     });
 
     expect(response.status).toBe(422);

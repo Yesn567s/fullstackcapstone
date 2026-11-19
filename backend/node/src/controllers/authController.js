@@ -5,6 +5,7 @@ const {
   generateToken,
   setAuthCookie,
 } = require('../middleware/auth');
+const { sendVerificationEmailForUser } = require('../services/emailVerification');
 
 async function register(req, res) {
   const {
@@ -38,10 +39,23 @@ async function register(req, res) {
 
     await connection.commit();
     transactionStarted = false;
+    connection.release();
+    connection = null;
+
+    let verificationEmailSent = true;
+    try {
+      await sendVerificationEmailForUser(userResult.insertId, email);
+    } catch (error) {
+      verificationEmailSent = false;
+      console.error('Registration verification email error:', error);
+    }
 
     return res.status(201).json({
       success: true,
-      message: 'Pendaftaran berhasil.',
+      message: verificationEmailSent
+        ? 'Pendaftaran berhasil. Silakan periksa email untuk memverifikasi akun.'
+        : 'Pendaftaran berhasil, tetapi email verifikasi belum dapat dikirim. Masuk kembali untuk mencoba lagi.',
+      verificationEmailSent,
       userId: userResult.insertId,
     });
   } catch (error) {
@@ -78,14 +92,14 @@ async function login(req, res) {
   try {
     connection = await db.getConnection();
     const [usernameRows] = await connection.execute(
-      'SELECT id, username, password_hash, role FROM users WHERE username = ? LIMIT 1',
+      'SELECT id, username, password_hash, role, email, email_verified FROM users WHERE username = ? LIMIT 1',
       [identifier],
     );
     let user = usernameRows[0];
 
     if (!user) {
       const [emailRows] = await connection.execute(
-        'SELECT id, username, password_hash, role FROM users WHERE email = ? LIMIT 1',
+        'SELECT id, username, password_hash, role, email, email_verified FROM users WHERE email = ? LIMIT 1',
         [identifier],
       );
       user = emailRows[0];
@@ -103,6 +117,28 @@ async function login(req, res) {
         success: false,
         message:
           'Username/email atau password tidak benar, atau akun tidak memiliki akses ke portal ini.',
+      });
+    }
+
+    if (user.role === 'customer' && Number(user.email_verified) !== 1) {
+      clearAuthCookie(res);
+      connection.release();
+      connection = null;
+      try {
+        await sendVerificationEmailForUser(user.id, user.email);
+      } catch (error) {
+        console.error('Login verification email error:', error);
+        return res.status(503).json({
+          success: false,
+          message:
+            'Email belum diverifikasi dan tautan verifikasi belum dapat dikirim. Silakan coba lagi.',
+        });
+      }
+
+      return res.status(403).json({
+        success: false,
+        message:
+          'Email belum diverifikasi. Tautan verifikasi baru telah dikirim.',
       });
     }
 
