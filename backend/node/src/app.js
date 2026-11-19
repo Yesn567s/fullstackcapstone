@@ -10,6 +10,7 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const adminUserRoutes = require('./routes/adminUsers');
 const authRoutes = require('./routes/auth');
 const verificationRoutes = require('./routes/verification');
+const phoneRoutes = require('./routes/phone');
 const cuttingRoutes = require('./routes/cutting');
 const apiRouter = require('./routes/api'); // health & generic routes
 
@@ -44,6 +45,7 @@ app.use('/api', apiRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin/users', adminUserRoutes);
 app.use('/api/verification', verificationRoutes);
+app.use('/api/phone', phoneRoutes);
 app.use('/api/cutting', cuttingRoutes);
 
 // 404 for unknown /api/* routes

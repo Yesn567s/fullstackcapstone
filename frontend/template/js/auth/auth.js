@@ -344,6 +344,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (!response.ok || !result.success) {
+          if (result.activationRequired && result.userId) {
+            window.location.href = `registration-success.html?uid=${encodeURIComponent(result.userId)}`;
+            return;
+          }
           throw new Error(result.message || "Login gagal.");
         }
 
@@ -517,10 +521,9 @@ document.addEventListener("DOMContentLoaded", () => {
           return result;
         })
         .then((result) => {
-          const newUsername = payload.username;
           registerForm.reset();
           const verificationSent = result.verificationEmailSent ? "1" : "0";
-          window.location.href = `login.html?registered=1&verificationEmailSent=${verificationSent}&username=${encodeURIComponent(newUsername)}`;
+          window.location.href = `registration-success.html?uid=${encodeURIComponent(result.userId)}&emailSent=${verificationSent}`;
         })
         .catch((error) => {
           showAlert(

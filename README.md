@@ -37,6 +37,7 @@ JWT_SECRET=replace-with-a-long-random-secret
 FRONTEND_ORIGINS=http://127.0.0.1:5500,http://localhost:5500
 PHONE_DEFAULT_REGION=ID
 NUMVERIFY_KEY=your-numverify-access-key
+EMAIL_HOST=smtp.gmail.com
 EMAIL_USER=your-gmail-address@gmail.com
 EMAIL_PASS=your-google-app-password
 FRONTEND_BASE_URL=http://127.0.0.1:5500/frontend

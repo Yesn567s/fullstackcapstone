@@ -16,6 +16,8 @@ jest.mock('../src/config/db', () => ({
 }));
 
 const db = require('../src/config/db');
+const request = require('supertest');
+const app = require('../src/app');
 const {
   sendVerificationEmailForUser,
 } = require('../src/services/emailVerification');
@@ -67,12 +69,54 @@ describe('Email verification', () => {
 
     await sendEmailVerification({ user: { userId: 42 } }, response);
 
-    expect(mockDbExecute.mock.calls[0][1]).toEqual([42]);
+    expect(mockDbExecute.mock.calls[0][1]).toEqual([42, 'customer']);
     expect(mockSendMail.mock.calls[0][0].to).toBe('person@gmail.com');
     expect(response.json).toHaveBeenCalledWith({
       success: true,
       message: 'Email verifikasi telah dikirim.',
     });
+  });
+
+  test('returns the email and phone verification status for a registered customer', async () => {
+    mockDbExecute.mockResolvedValueOnce([
+      [{ email_verified: 1, phone_verified: 0 }],
+      [],
+    ]);
+
+    const response = await request(app).get(
+      '/api/verification/status?userId=42',
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      success: true,
+      emailVerified: true,
+      phoneVerified: false,
+    });
+  });
+
+  test('resends email verification to the requested customer without login', async () => {
+    mockDbExecute.mockResolvedValueOnce([
+      [{ email: 'person@gmail.com', email_verified: 0 }],
+      [],
+    ]);
+
+    const response = await request(app)
+      .post('/api/verification/email/resend')
+      .send({ userId: 42 });
+
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(mockSendMail.mock.calls[0][0].to).toBe('person@gmail.com');
+  });
+
+  test('rejects invalid verification status IDs without querying the database', async () => {
+    const response = await request(app).get(
+      '/api/verification/status?userId=invalid',
+    );
+
+    expect(response.status).toBe(422);
+    expect(mockDbExecute).not.toHaveBeenCalled();
   });
 
   test('marks a valid token verified and consumes it once', async () => {

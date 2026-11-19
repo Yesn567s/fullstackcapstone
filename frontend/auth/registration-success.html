@@ -130,10 +130,17 @@
       }
 
       async function refreshStatus() {
-        const result = await requestJson(
-          `/api/verification/status?userId=${encodeURIComponent(userId)}`,
-          { headers: { Accept: "application/json" } },
-        );
+        let result;
+        try {
+          result = await requestJson(
+            `/api/verification/status?userId=${encodeURIComponent(userId)}`,
+            { headers: { Accept: "application/json" } },
+          );
+        } catch (error) {
+          emailStatus.textContent = "Tidak dapat diperiksa";
+          phoneStatus.textContent = "Tidak dapat diperiksa";
+          throw error;
+        }
 
         emailStatus.textContent = result.emailVerified
           ? "Terverifikasi"

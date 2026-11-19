@@ -127,14 +127,14 @@ async function login(req, res) {
   try {
     connection = await db.getConnection();
     const [usernameRows] = await connection.execute(
-      'SELECT id, username, password_hash, role, email, email_verified FROM users WHERE username = ? LIMIT 1',
+      'SELECT id, username, password_hash, role, email, email_verified, phone_verified FROM users WHERE username = ? LIMIT 1',
       [identifier],
     );
     let user = usernameRows[0];
 
     if (!user) {
       const [emailRows] = await connection.execute(
-        'SELECT id, username, password_hash, role, email, email_verified FROM users WHERE email = ? LIMIT 1',
+        'SELECT id, username, password_hash, role, email, email_verified, phone_verified FROM users WHERE email = ? LIMIT 1',
         [identifier],
       );
       user = emailRows[0];
@@ -174,6 +174,17 @@ async function login(req, res) {
         success: false,
         message:
           'Email belum diverifikasi. Tautan verifikasi baru telah dikirim.',
+      });
+    }
+
+    if (user.role === 'customer' && Number(user.phone_verified) !== 1) {
+      clearAuthCookie(res);
+      return res.status(403).json({
+        success: false,
+        activationRequired: true,
+        userId: user.id,
+        message:
+          'Nomor telepon belum diperiksa. Silakan lanjutkan pemeriksaan melalui halaman aktivasi akun sebelum masuk.',
       });
     }
 

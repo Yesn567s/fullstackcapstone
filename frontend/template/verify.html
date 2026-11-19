@@ -8,11 +8,12 @@
   <body>
     <h1 id="verificationTitle">Memverifikasi email...</h1>
     <p id="verificationMessage"></p>
-    <a hidden href="../auth/login.html" id="loginLink">Masuk ke akun</a>
+    <a hidden href="../auth/registration-success.html" id="activationLink">Lanjutkan aktivasi akun</a>
     <script>
       const title = document.getElementById("verificationTitle");
       const message = document.getElementById("verificationMessage");
-      const loginLink = document.getElementById("loginLink");
+      const activationLink = document.getElementById("activationLink");
+      const userId = new URLSearchParams(window.location.search).get("uid");
       const apiBaseUrl = `${window.location.protocol}//${window.location.hostname}:4000`;
 
       fetch(`${apiBaseUrl}/api/verification/email${window.location.search}`, {
@@ -28,7 +29,8 @@
         .then((result) => {
           title.textContent = "Email berhasil diverifikasi";
           message.textContent = result.message;
-          loginLink.hidden = false;
+          activationLink.href = `../auth/registration-success.html?uid=${encodeURIComponent(userId)}`;
+          activationLink.hidden = false;
         })
         .catch((error) => {
           title.textContent = "Verifikasi email gagal";

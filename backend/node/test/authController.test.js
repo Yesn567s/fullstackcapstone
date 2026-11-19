@@ -124,6 +124,86 @@ describe('Authentication controller email verification', () => {
     expect(connection.release).toHaveBeenCalled();
   });
 
+  test('denies customer login until the phone number is checked', async () => {
+    connection.execute.mockResolvedValueOnce([
+      [
+        {
+          id: 42,
+          username: 'customer-example',
+          password_hash: 'hashed-password',
+          role: 'customer',
+          email: 'customer@gmail.com',
+          email_verified: 1,
+          phone_verified: 0,
+        },
+      ],
+      [],
+    ]);
+    const response = createResponse();
+
+    await login(
+      {
+        body: {
+          username: 'customer-example',
+          password: 'password123',
+          portal: 'customer',
+        },
+      },
+      response,
+    );
+
+    expect(mockClearAuthCookie).toHaveBeenCalledWith(response);
+    expect(mockSetAuthCookie).not.toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(403);
+    expect(response.json).toHaveBeenCalledWith({
+      success: false,
+      activationRequired: true,
+      userId: 42,
+      message:
+        'Nomor telepon belum diperiksa. Silakan lanjutkan pemeriksaan melalui halaman aktivasi akun sebelum masuk.',
+    });
+    expect(connection.release).toHaveBeenCalled();
+  });
+
+  test('allows customer login after email and phone verification', async () => {
+    mockGenerateToken.mockReturnValueOnce('customer-token');
+    connection.execute.mockResolvedValueOnce([
+      [
+        {
+          id: 42,
+          username: 'customer-example',
+          password_hash: 'hashed-password',
+          role: 'customer',
+          email: 'customer@gmail.com',
+          email_verified: 1,
+          phone_verified: 1,
+        },
+      ],
+      [],
+    ]);
+    const response = createResponse();
+
+    await login(
+      {
+        body: {
+          username: 'customer-example',
+          password: 'password123',
+          portal: 'customer',
+        },
+      },
+      response,
+    );
+
+    expect(mockSetAuthCookie).toHaveBeenCalledWith(
+      response,
+      'customer-token',
+    );
+    expect(response.json).toHaveBeenCalledWith({
+      success: true,
+      user: { username: 'customer-example', role: 'customer' },
+    });
+  });
+
   test('allows the hardcoded admin login without querying the database', async () => {
     const response = createResponse();
 
