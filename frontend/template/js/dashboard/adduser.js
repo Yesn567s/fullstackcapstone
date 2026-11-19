@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const spinner = submitButton.querySelector(".btn-spinner");
     const arrow = submitButton.querySelector(".btn-arrow");
     text.textContent = isLoading ? "MENYIMPAN..." : "TAMBAH PENGGUNA";
-    spinner.classList.toggle("hidden", !isLoading);
-    arrow.classList.toggle("hidden", isLoading);
+    if (spinner) spinner.classList.toggle("hidden", !isLoading);
+    if (arrow) arrow.classList.toggle("hidden", isLoading);
   }
 
   emailInput.addEventListener("input", () => {

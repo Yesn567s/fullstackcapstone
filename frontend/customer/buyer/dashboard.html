@@ -18,7 +18,7 @@
     <link href="../../template/css/buyer.css" rel="stylesheet" />
     <link href="../../template/css/components.css" rel="stylesheet" />
   </head>
-  <body class="buyer-layout">
+  <body class="buyer-layout buyer-marketplace-home">
     <!-- Ambient Pattern -->
     <div aria-hidden="true" class="bg-texture"></div>
 
@@ -116,6 +116,70 @@
 
       <!-- Page Content -->
       <div class="buyer-page-content">
+        <section class="marketplace-welcome">
+          <div class="marketplace-welcome-copy">
+            <span class="marketplace-eyebrow">PORTAL MITRA CV. SUMBER ARTHA</span>
+            <h1>Selamat datang, <span id="buyerGreetingName">Mitra Buyer</span></h1>
+            <p>Temukan komponen, pantau pesanan, dan kelola kebutuhan produksi dari satu tempat.</p>
+            <div class="marketplace-search" role="search">
+              <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="20" y1="20" x2="16.65" y2="16.65"></line></svg>
+              <input id="buyerDashboardSearch" type="search" placeholder="Cari nomor PO, produk, atau material..." />
+              <button id="buyerDashboardSearchButton" type="button">Cari</button>
+            </div>
+          </div>
+          <div class="marketplace-promo">
+            <span class="marketplace-promo-tag">LAYANAN MITRA B2B</span>
+            <strong>Produksi sesuai kebutuhan Anda</strong>
+            <p>Spesifikasi khusus, kualitas terkontrol, dan pemantauan pesanan secara transparan.</p>
+            <a href="pengajuan-po.html">Mulai pengajuan <span aria-hidden="true">&rarr;</span></a>
+            <div class="marketplace-promo-mark" aria-hidden="true">SA</div>
+          </div>
+        </section>
+
+        <nav class="marketplace-shortcuts" aria-label="Akses cepat">
+          <a href="pengajuan-po.html">
+            <span class="marketplace-shortcut-icon shortcut-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 18v-6m-3 3h6"></path></svg></span>
+            <strong>Ajukan PO</strong><small>Buat pesanan baru</small>
+          </a>
+          <a href="quotation-kontrak.html">
+            <span class="marketplace-shortcut-icon shortcut-gold"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M8 13h8M8 17h8M8 9h2"></path></svg></span>
+            <strong>Quotation</strong><small>Tinjau penawaran</small>
+          </a>
+          <a href="tracking-tagihan.html">
+            <span class="marketplace-shortcut-icon shortcut-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg></span>
+            <strong>Pesanan Saya</strong><small>Lacak status produksi</small>
+          </a>
+          <a href="tracking-tagihan.html#invoice">
+            <span class="marketplace-shortcut-icon shortcut-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20M7 15h3"></path></svg></span>
+            <strong>Tagihan</strong><small>Kelola pembayaran</small>
+          </a>
+          <a href="tracking-tagihan.html#rma">
+            <span class="marketplace-shortcut-icon shortcut-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l3 2"></path></svg></span>
+            <strong>Bantuan / RMA</strong><small>Ajukan penanganan</small>
+          </a>
+        </nav>
+
+        <section class="marketplace-catalog" aria-labelledby="marketplaceCatalogTitle">
+          <div class="marketplace-section-heading">
+            <div><span class="marketplace-eyebrow">KATALOG MITRA</span><h2 id="marketplaceCatalogTitle">Produk manufaktur pilihan</h2></div>
+            <a href="pengajuan-po.html">Lihat semua kebutuhan <span aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="marketplace-product-grid">
+            <a class="marketplace-product-card" href="pengajuan-po.html">
+              <div class="marketplace-product-art art-poplar"><svg viewBox="0 0 120 90" aria-hidden="true"><rect x="25" y="18" width="70" height="54" rx="4"></rect><path d="M33 27h54v36H33zM42 35h36v20H42z"></path><path d="M52 60v-5h16v5"></path></svg></div>
+              <div class="marketplace-product-info"><span class="marketplace-product-category">KOMPONEN LACI</span><strong>Komponen laci dovetail Poplar</strong><span>Produksi MTO sesuai drawing</span><b>Ajukan spesifikasi <span aria-hidden="true">&rarr;</span></b></div>
+            </a>
+            <a class="marketplace-product-card" href="pengajuan-po.html">
+              <div class="marketplace-product-art art-sengon"><svg viewBox="0 0 120 90" aria-hidden="true"><path d="M22 25h76v44H22zM30 33h60v28H30z"></path><path d="M38 40h44v14H38zM45 62v7m30-7v7"></path><path d="M48 44h24"></path></svg></div>
+              <div class="marketplace-product-info"><span class="marketplace-product-category">KOMPONEN FURNITUR</span><strong>Panel laci meja kerja Sengon</strong><span>Material pilihan dan presisi</span><b>Ajukan spesifikasi <span aria-hidden="true">&rarr;</span></b></div>
+            </a>
+            <a class="marketplace-product-card" href="pengajuan-po.html">
+              <div class="marketplace-product-art art-plywood"><svg viewBox="0 0 120 90" aria-hidden="true"><path d="M25 25h70v44H25zM33 33h54v28H33z"></path><path d="M40 40h40v14H40zM46 63v6m28-6v6"></path><path d="M53 44h14"></path></svg></div>
+              <div class="marketplace-product-info"><span class="marketplace-product-category">MATERIAL KONSINYASI</span><strong>Plywood dan MDF 12 mm</strong><span>Perencanaan stok terintegrasi</span><b>Lihat saldo bahan <span aria-hidden="true">&rarr;</span></b></div>
+            </a>
+          </div>
+        </section>
+
         <!-- 8-Step MTO Stepper Guide -->
         <div class="mto-workflow-stepper">
           <div class="stepper-header">

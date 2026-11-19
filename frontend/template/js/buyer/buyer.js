@@ -171,6 +171,12 @@ function initBuyerUI() {
 
   // Populate Company and Credit Score elements
   const profile = buyerState.state.profile;
+  const greetingName = document.getElementById("buyerGreetingName");
+  if (greetingName) {
+    greetingName.textContent =
+      sessionStorage.getItem("buyerName") || profile.company;
+  }
+
   const compElements = document.querySelectorAll(".live-company-name");
   compElements.forEach(el => el.textContent = profile.company);
 
@@ -179,6 +185,27 @@ function initBuyerUI() {
 
   const scoreElements = document.querySelectorAll(".live-credit-score");
   scoreElements.forEach(el => el.textContent = `${profile.creditScore} / 1000`);
+
+  const dashboardSearch = document.getElementById("buyerDashboardSearch");
+  const orderRows = document.querySelectorAll(".portal-table tbody tr");
+  function filterDashboardOrders() {
+    const query = dashboardSearch.value.trim().toLowerCase();
+    orderRows.forEach((row) => {
+      row.hidden = !row.textContent.toLowerCase().includes(query);
+    });
+    if (query && !Array.from(orderRows).some((row) => !row.hidden)) {
+      showToast("Tidak ada pesanan yang cocok dengan pencarian.");
+    }
+  }
+  if (dashboardSearch) {
+    dashboardSearch.addEventListener("input", filterDashboardOrders);
+    dashboardSearch.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") filterDashboardOrders();
+    });
+  }
+  document
+    .getElementById("buyerDashboardSearchButton")
+    ?.addEventListener("click", filterDashboardOrders);
 
   const topElements = document.querySelectorAll(".live-top-status");
   topElements.forEach(el => {

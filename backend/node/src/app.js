@@ -1,9 +1,7 @@
 // src/app.js
 // Express application setup – pulls in routes, middleware, and config
 // ---------------------------------------------------------------
-const path = require('path');
-
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
@@ -13,7 +11,6 @@ const adminUserRoutes = require('./routes/adminUsers');
 const authRoutes = require('./routes/auth');
 const verificationRoutes = require('./routes/verification');
 const cuttingRoutes = require('./routes/cutting');
-const phoneRoutes = require('./routes/phone');
 const apiRouter = require('./routes/api'); // health & generic routes
 
 const app = express();
@@ -48,7 +45,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin/users', adminUserRoutes);
 app.use('/api/verification', verificationRoutes);
 app.use('/api/cutting', cuttingRoutes);
-app.use('/api/phone', phoneRoutes);
 
 // 404 for unknown /api/* routes
 app.use('/api', notFoundHandler);

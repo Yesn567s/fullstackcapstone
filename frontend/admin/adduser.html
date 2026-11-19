@@ -3,194 +3,76 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Tambah Admin atau Operator - CV. SUMBER ARTHA</title>
+    <title>CV. SUMBER ARTHA - Tambah Pengguna</title>
     <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
     <link href="../template/css/style.css" rel="stylesheet" />
     <link href="../template/css/base.css" rel="stylesheet" />
-    <link href="../template/css/auth.css" rel="stylesheet" />
+    <link href="../template/css/dashboard.css" rel="stylesheet" />
     <link href="../template/css/components.css" rel="stylesheet" />
     <link href="../template/css/responsive.css" rel="stylesheet" />
   </head>
-  <body class="theme-focus-wireframe">
-    <div aria-hidden="true" class="bg-texture"></div>
-    <div aria-hidden="true" class="bg-glow bg-glow-1"></div>
-    <div aria-hidden="true" class="bg-glow bg-glow-2"></div>
-    <main class="page-wrapper">
-      <div class="container auth-stage-layout">
-        <section class="auth-center-column">
-          <div class="wireframe-tag-bar">
-            <span class="wireframe-screen-name">Manajemen Pengguna</span>
-            <span class="wireframe-badge">Admin</span>
+  <body class="view-admin-dashboard">
+    <div style="background:#111827;color:#94a3b8;font-size:.76rem;padding:.4rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="display:flex;align-items:center;gap:.5rem"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10b981"></span><strong style="color:#f8fafc">Admin - Manajemen Pengguna</strong></div>
+      <a href="../auth/login.html" style="color:#f59e0b;text-decoration:none;font-weight:600">&larr; Kembali ke Halaman Login</a>
+    </div>
+    <div class="admin-dashboard-wrapper" id="adminDashboardView">
+      <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-header">
+          <div class="admin-brand-box" title="Admin Control Center">
+            <svg class="admin-brand-icon" fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline></svg>
           </div>
-          <div class="auth-card">
-            <header class="card-header">
-              <div class="header-branding">
-                <div class="brand-logo-box" title="Logo CV. Sumber Artha">
-                  <img
-                    alt="Logo CV. Sumber Artha"
-                    class="brand-logo-img"
-                    src="../../assets/favicon.ico"
-                  />
-                </div>
-                <div class="brand-text-block">
-                  <h1 class="company-name">CV. SUMBER ARTHA</h1>
-                  <p class="company-sub">Tambah akun Admin atau Operator</p>
-                </div>
-              </div>
-              <hr class="card-divider" />
-            </header>
-            <div class="form-title-section">
-              <h2 class="auth-heading">TAMBAH PENGGUNA</h2>
-              <div aria-hidden="true" class="wireframe-sub-bar"></div>
-            </div>
-            <div
-              aria-live="polite"
-              class="alert-box hidden"
-              id="userAlert"
-              role="alert"
-            >
-              <span class="alert-text" id="userAlertMessage"></span>
-            </div>
-            <form class="auth-form hidden" id="addUserForm">
-              <div class="form-group">
-                <label class="form-label" for="username">
-                  <span>USERNAME</span>
-                  <span class="required-star">*</span>
-                </label>
-                <div class="input-wrapper">
-                  <input
-                    autocomplete="username"
-                    class="form-control"
-                    id="username"
-                    maxlength="50"
-                    name="username"
-                    required
-                    type="text"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="password">
-                  <span>PASSWORD (MINIMAL 6 KARAKTER)</span>
-                  <span class="required-star">*</span>
-                </label>
-                <div class="input-wrapper">
-                  <input
-                    autocomplete="new-password"
-                    class="form-control"
-                    id="password"
-                    minlength="6"
-                    name="password"
-                    required
-                    type="password"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="fullName">
-                  <span>NAMA LENGKAP</span>
-                  <span class="required-star">*</span>
-                </label>
-                <div class="input-wrapper">
-                  <input
-                    autocomplete="name"
-                    class="form-control"
-                    id="fullName"
-                    maxlength="100"
-                    name="fullName"
-                    required
-                    type="text"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="email">
-                  <span>EMAIL</span>
-                  <span class="required-star">*</span>
-                </label>
-                <div class="input-wrapper">
-                  <input
-                    autocomplete="email"
-                    class="form-control"
-                    id="email"
-                    maxlength="100"
-                    name="email"
-                    placeholder="nama@provider.com"
-                    required
-                    type="email"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="phone">
-                  <span>NOMOR TELEPON</span>
-                  <span class="required-star">*</span>
-                </label>
-                <div class="input-wrapper">
-                  <input
-                    autocomplete="tel"
-                    class="form-control"
-                    id="phone"
-                    maxlength="30"
-                    name="phone"
-                    required
-                    type="tel"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="role">
-                  <span>ROLE</span>
-                  <span class="required-star">*</span>
-                </label>
-                <div class="input-wrapper">
-                  <select class="form-control" id="role" name="role" required>
-                    <option value="">Pilih role</option>
-                    <option value="admin">Admin</option>
-                    <option value="operator">Operator</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-action-group">
-                <button
-                  class="btn-primary-auth"
-                  id="btnSubmitUser"
-                  type="submit"
-                >
-                  <span class="btn-text">TAMBAH PENGGUNA</span>
-                  <span aria-hidden="true" class="btn-spinner hidden"></span>
-                  <svg
-                    class="btn-arrow"
-                    fill="none"
-                    height="18"
-                    stroke="currentColor"
-                    stroke-width="2.2"
-                    viewBox="0 0 24 24"
-                    width="18"
-                  >
-                    <line x1="5" x2="19" y1="12" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </button>
-              </div>
+          <div class="admin-brand-text"><span class="admin-title">Admin</span><span class="admin-corp-tag">CV. Sumber Artha</span></div>
+        </div>
+        <nav aria-label="Menu Admin" class="admin-nav">
+          <div class="admin-nav-group"><span class="nav-group-title">MAIN</span><ul class="nav-group-list"><li><a class="nav-item" href="dashboard.html"><span class="nav-icon">&#8962;</span><span class="nav-text">Dashboard</span></a></li></ul></div>
+          <div class="admin-nav-group"><span class="nav-group-title">USER MANAGEMENT</span><ul class="nav-group-list"><li><a class="nav-item active" href="adduser.html"><span class="nav-icon">&#128100;</span><span class="nav-text">Tambah Pengguna</span></a></li></ul></div>
+          <div class="admin-nav-group">
+            <span class="nav-group-title">TRANSACTION</span>
+            <ul class="nav-group-list">
+              <li><a class="nav-item" href="transaksi-po.html"><span class="nav-icon">&#9638;</span><span class="nav-text">Transaksi PO</span></a></li>
+              <li><a class="nav-item" href="surat-jalan.html"><span class="nav-icon">&#9651;</span><span class="nav-text">Surat Jalan</span></a></li>
+              <li><a class="nav-item" href="#"><span class="nav-icon">&#9633;</span><span class="nav-text">Invoice</span></a></li>
+            </ul>
+          </div>
+          <div class="admin-nav-group"><span class="nav-group-title">PRODUCTION</span><ul class="nav-group-list"><li><a class="nav-item" href="cutting-optimize.html"><span class="nav-icon">&#9986;</span><span class="nav-text">Cutting Optimize</span></a></li></ul></div>
+          <div class="admin-nav-group"><span class="nav-group-title">INVENTORY</span><ul class="nav-group-list"><li><a class="nav-item" href="#"><span class="nav-icon">&#9638;</span><span class="nav-text">Inventaris Offcut</span></a></li></ul></div>
+        </nav>
+        <div class="admin-sidebar-footer">
+          <div class="admin-user-card"><div class="admin-user-avatar">AD</div><div class="admin-user-info"><span class="admin-user-name">Administrator</span><span class="admin-user-role">Super Admin Pabrik</span></div></div>
+          <a class="btn-sidebar-logout" href="../auth/login.html" style="text-decoration:none"><svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline></svg><span>Keluar / Logout</span></a>
+        </div>
+      </aside>
+      <section class="admin-main-content" id="dashboard">
+        <div class="admin-top-mobile-bar">
+          <button aria-label="Toggle Menu" class="admin-sidebar-toggle" id="btnSidebarToggle" type="button"><svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22"><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg></button>
+          <div class="mobile-brand-title">Admin - CV. Sumber Artha</div>
+          <a class="btn-mobile-logout" href="../auth/login.html" title="Keluar"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline></svg></a>
+        </div>
+        <div class="admin-view-panel po-view">
+          <header class="po-header"><div><h1>Manajemen Pengguna</h1><p>Tambah akun administrator atau operator</p></div></header>
+          <section class="po-panel po-form-panel admin-user-panel">
+            <div aria-live="polite" class="alert-box hidden" id="userAlert" role="alert"><span class="alert-text" id="userAlertMessage"></span></div>
+            <form id="addUserForm" class="admin-user-form hidden">
+              <label class="po-field"><span>Username</span><input autocomplete="username" id="username" maxlength="50" name="username" required type="text" /></label>
+              <label class="po-field"><span>Password (minimal 6 karakter)</span><input autocomplete="new-password" id="password" minlength="6" name="password" required type="password" /></label>
+              <label class="po-field"><span>Nama Lengkap</span><input autocomplete="name" id="fullName" maxlength="100" name="fullName" required type="text" /></label>
+              <label class="po-field"><span>Email</span><input autocomplete="email" id="email" maxlength="100" name="email" placeholder="nama@provider.com" required type="email" /></label>
+              <label class="po-field"><span>Nomor Telepon</span><input autocomplete="tel" id="phone" maxlength="30" name="phone" required type="tel" /></label>
+              <label class="po-field"><span>Role</span><select id="role" name="role" required><option value="">Pilih role</option><option value="admin">Admin</option><option value="operator">Operator</option></select></label>
+              <button class="po-save-button" id="btnSubmitUser" type="submit"><span class="btn-text">Tambah Pengguna</span><span aria-hidden="true" class="btn-spinner hidden"></span></button>
             </form>
-            <footer class="card-footer">
-              <p class="rbac-disclaimer">
-                <a href="dashboard.html">Kembali ke Dashboard Admin</a>
-                <span aria-hidden="true"> &bull; </span>
-                <a href="../auth/adminlogin.html">Login Admin</a>
-              </p>
-            </footer>
-          </div>
-        </section>
-      </div>
-    </main>
+          </section>
+        </div>
+      </section>
+    </div>
+    <div aria-live="polite" class="toast-container" id="toastContainer"></div>
+    <script src="../template/js/common/ui.js"></script>
+    <script src="../template/js/common/staff-sidebar.js"></script>
+    <script src="../template/js/dashboard/dashboard.js"></script>
     <script src="../template/js/dashboard/adduser.js"></script>
   </body>
 </html>

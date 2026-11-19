@@ -7,7 +7,6 @@ const mockClearAuthCookie = jest.fn();
 const mockGenerateToken = jest.fn();
 const mockSetAuthCookie = jest.fn();
 const mockSendVerificationEmailForUser = jest.fn();
-const mockValidatePhoneNumber = jest.fn();
 
 jest.mock('../src/config/db', () => ({
   getConnection: mockGetConnection,
@@ -23,9 +22,6 @@ jest.mock('../src/middleware/auth', () => ({
 }));
 jest.mock('../src/services/emailVerification', () => ({
   sendVerificationEmailForUser: mockSendVerificationEmailForUser,
-}));
-jest.mock('../src/lib/phoneValidator', () => ({
-  validateNumber: mockValidatePhoneNumber,
 }));
 
 const { register, login } = require('../src/controllers/authController');
@@ -45,10 +41,6 @@ describe('Authentication controller email verification', () => {
     mockHashPassword.mockResolvedValue('hashed-password');
     mockVerifyPassword.mockResolvedValue(true);
     mockSendVerificationEmailForUser.mockResolvedValue();
-    mockValidatePhoneNumber.mockReturnValue({
-      valid: true,
-      e164: '+628123456789',
-    });
     connection = {
       beginTransaction: jest.fn().mockResolvedValue(),
       execute: jest.fn(),
@@ -83,14 +75,6 @@ describe('Authentication controller email verification', () => {
 
     expect(connection.commit).toHaveBeenCalled();
     expect(connection.release).toHaveBeenCalled();
-    expect(connection.execute.mock.calls[0][1]).toEqual([
-      'customer-example',
-      'hashed-password',
-      'Customer Example',
-      'customer@gmail.com',
-      '+628123456789',
-      'customer',
-    ]);
     expect(mockSendVerificationEmailForUser).toHaveBeenCalledWith(
       42,
       'customer@gmail.com',
@@ -104,33 +88,6 @@ describe('Authentication controller email verification', () => {
     );
   });
 
-  test('rejects invalid phone formats before creating an account', async () => {
-    mockValidatePhoneNumber.mockReturnValueOnce({
-      valid: false,
-      e164: null,
-    });
-    const response = createResponse();
-
-    await register(
-      {
-        body: {
-          fullname: 'Customer Example',
-          username: 'customer-example',
-          email: 'customer@gmail.com',
-          phone: '08123456789',
-          password: 'password123',
-          companyName: 'Example Company',
-          contactPerson: 'Customer Example',
-          address: 'Example Street',
-        },
-      },
-      response,
-    );
-
-    expect(mockGetConnection).not.toHaveBeenCalled();
-    expect(response.status).toHaveBeenCalledWith(422);
-  });
-
   test('resends verification and denies login for an unverified customer', async () => {
     connection.execute.mockResolvedValueOnce([
       [
@@ -141,7 +98,6 @@ describe('Authentication controller email verification', () => {
           role: 'customer',
           email: 'customer@gmail.com',
           email_verified: 0,
-          phone_verified: 0,
         },
       ],
       [],
@@ -165,81 +121,85 @@ describe('Authentication controller email verification', () => {
     );
     expect(mockSetAuthCookie).not.toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(403);
-    expect(response.json).toHaveBeenCalledWith(
-      expect.objectContaining({
-        success: false,
-        verificationRequired: true,
-        userId: 42,
-      }),
-    );
     expect(connection.release).toHaveBeenCalled();
   });
 
-  test('blocks customers with verified email but unverified phone', async () => {
-    connection.execute.mockResolvedValueOnce([
-      [
-        {
-          id: 42,
-          username: 'customer-example',
-          password_hash: 'hashed-password',
-          role: 'customer',
-          email: 'customer@gmail.com',
-          email_verified: 1,
-          phone_verified: 0,
-        },
-      ],
-      [],
-    ]);
+  test('allows the hardcoded admin login without querying the database', async () => {
     const response = createResponse();
 
     await login(
       {
         body: {
-          username: 'customer-example',
-          password: 'password123',
-          portal: 'customer',
+          username: 'admin',
+          password: 'admin123',
+          portal: 'staff',
         },
       },
       response,
     );
 
-    expect(mockSendVerificationEmailForUser).not.toHaveBeenCalled();
-    expect(mockSetAuthCookie).not.toHaveBeenCalled();
-    expect(response.status).toHaveBeenCalledWith(403);
-    expect(response.json).toHaveBeenCalledWith(
-      expect.objectContaining({ verificationRequired: true, userId: 42 }),
-    );
+    expect(mockGetConnection).not.toHaveBeenCalled();
+    expect(mockGenerateToken).toHaveBeenCalledWith({
+      userId: null,
+      username: 'admin',
+      role: 'admin',
+      hardcodedAdmin: true,
+    });
+    expect(mockSetAuthCookie).toHaveBeenCalled();
+    expect(response.json).toHaveBeenCalledWith({
+      success: true,
+      user: { username: 'admin', role: 'admin' },
+    });
   });
 
-  test('allows customers to log in after both verifications are complete', async () => {
-    connection.execute.mockResolvedValueOnce([
-      [
-        {
-          id: 42,
-          username: 'customer-example',
-          password_hash: 'hashed-password',
-          role: 'customer',
-          email: 'customer@gmail.com',
-          email_verified: 1,
-          phone_verified: 1,
-        },
-      ],
-      [],
-    ]);
-    mockGenerateToken.mockReturnValue('session-token');
+  test('rejects a wrong password for the hardcoded admin before database access', async () => {
     const response = createResponse();
 
     await login(
       {
         body: {
-          username: 'customer-example',
-          password: 'password123',
-          portal: 'customer',
+          username: 'admin',
+          password: 'wrong-password',
+          portal: 'staff',
         },
       },
       response,
     );
 
-    expect(mockSetAuthCookie).toHaveBeenCalledWith(response, 'session-token');
+    expect(mockGetConnection).not.toHaveBeenCalled();
+    expect(mockClearAuthCookie).toHaveBeenCalledWith(response);
+    expect(response.status).toHaveBeenCalledWith(401);
+    expect(mockSetAuthCookie).not.toHaveBeenCalled();
+  });
+
+  test('does not allow a database admin account through the staff portal', async () => {
+    connection.execute.mockResolvedValueOnce([
+      [
+        {
+          id: 7,
+          username: 'demo_admin',
+          password_hash: 'hashed-password',
+          role: 'admin',
+          email: 'admin@example.com',
+          email_verified: 1,
+        },
+      ],
+      [],
+    ]);
+    const response = createResponse();
+
+    await login(
+      {
+        body: {
+          username: 'demo_admin',
+          password: 'password123',
+          portal: 'staff',
+        },
+      },
+      response,
+    );
+
+    expect(mockSetAuthCookie).not.toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(401);
   });
 });

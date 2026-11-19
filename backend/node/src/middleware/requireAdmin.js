@@ -1,6 +1,11 @@
 const db = require('../config/db');
 
 async function requireAdmin(req, res, next) {
+  if (req.user?.hardcodedAdmin && req.user.role === 'admin') {
+    req.admin = { id: null, username: 'admin', role: 'admin' };
+    return next();
+  }
+
   let connection;
 
   try {

@@ -16,13 +16,10 @@ jest.mock('../src/config/db', () => ({
 }));
 
 const db = require('../src/config/db');
-const nodemailer = require('nodemailer');
 const {
   sendVerificationEmailForUser,
 } = require('../src/services/emailVerification');
 const {
-  getVerificationStatus,
-  resendEmailVerification,
   sendEmailVerification,
   verifyEmailLink,
 } = require('../src/controllers/verificationController');
@@ -43,14 +40,6 @@ describe('Email verification', () => {
 
   test('stores a token and sends a link to the frontend verification page', async () => {
     await sendVerificationEmailForUser(42, 'person@gmail.com');
-
-    expect(nodemailer.createTransport).toHaveBeenCalledWith({
-      service: 'gmail',
-      auth: {
-        user: 'verification@example.test',
-        pass: 'test-password',
-      },
-    });
 
     const [query, values] = mockDbExecute.mock.calls[0];
     expect(query).toContain('INSERT INTO email_verification_tokens');
@@ -80,38 +69,6 @@ describe('Email verification', () => {
 
     expect(mockDbExecute.mock.calls[0][1]).toEqual([42]);
     expect(mockSendMail.mock.calls[0][0].to).toBe('person@gmail.com');
-    expect(response.json).toHaveBeenCalledWith({
-      success: true,
-      message: 'Email verifikasi telah dikirim.',
-    });
-  });
-
-  test('returns only the verification flags for the registration status page', async () => {
-    mockDbExecute.mockResolvedValueOnce([
-      [{ email_verified: 1, phone_verified: 0 }],
-      [],
-    ]);
-    const response = createResponse();
-
-    await getVerificationStatus({ query: { userId: '42' } }, response);
-
-    expect(response.json).toHaveBeenCalledWith({
-      success: true,
-      emailVerified: true,
-      phoneVerified: false,
-    });
-  });
-
-  test('allows an unverified customer to resend email from the status page', async () => {
-    mockDbExecute.mockResolvedValueOnce([
-      [{ email: 'person@gmail.com', email_verified: 0 }],
-      [],
-    ]);
-    const response = createResponse();
-
-    await resendEmailVerification({ body: { userId: 42 } }, response);
-
-    expect(mockSendMail).toHaveBeenCalled();
     expect(response.json).toHaveBeenCalledWith({
       success: true,
       message: 'Email verifikasi telah dikirim.',
@@ -150,9 +107,7 @@ describe('Email verification', () => {
     expect(connection.release).toHaveBeenCalled();
     expect(response.json).toHaveBeenCalledWith({
       success: true,
-      userId: 42,
-      message:
-        'Alamat email berhasil diverifikasi. Silakan lanjutkan verifikasi nomor telepon.',
+      message: 'Alamat email berhasil diverifikasi. Silakan masuk.',
     });
   });
 

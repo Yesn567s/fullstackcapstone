@@ -383,7 +383,6 @@ CREATE TABLE email_verification_tokens (
 );
 
 ALTER TABLE users ADD COLUMN email_verified BOOLEAN NOT NULL DEFAULT FALSE;
-ALTER TABLE users ADD COLUMN phone_verified BOOLEAN NOT NULL DEFAULT FALSE;
 
 -- ============================================================================
 -- DATA MASTER DEFAULT
@@ -400,13 +399,12 @@ INSERT INTO users (
     email,
     phone,
     role,
-    email_verified,
-    phone_verified
+    email_verified
 )
 VALUES
-    ('demo_admin', '$2b$12$sn8YSXGibvTp2oLQAzL2Iu1TH.sDuKJhSnEXY1PsufCiiD3WV7TQ.', 'Demo Admin', 'admin@example.com', '080000000001', 'admin', TRUE, TRUE),
-    ('demo_operator', '$2b$12$SNqP73fqA.9QehzWK7fEBeBlV19BFyGZPflMse6qWcKIeOCiDxcoa', 'Demo Operator', 'operator@example.com', '080000000002', 'operator', TRUE, TRUE),
-    ('demo_customer', '$2b$12$fkD43JrnLSXmMYrWIfsCje9uaZUSY/CC5wPfophuXCjYL0FtGZUYW', 'Demo Customer', 'customer@example.com', '080000000003', 'customer', TRUE, TRUE);
+    ('demo_admin', '$2b$12$sn8YSXGibvTp2oLQAzL2Iu1TH.sDuKJhSnEXY1PsufCiiD3WV7TQ.', 'Demo Admin', 'admin@example.com', '080000000001', 'admin', TRUE),
+    ('demo_operator', '$2b$12$SNqP73fqA.9QehzWK7fEBeBlV19BFyGZPflMse6qWcKIeOCiDxcoa', 'Demo Operator', 'operator@example.com', '080000000002', 'operator', TRUE),
+    ('demo_customer', '$2b$12$fkD43JrnLSXmMYrWIfsCje9uaZUSY/CC5wPfophuXCjYL0FtGZUYW', 'Demo Customer', 'customer@example.com', '080000000003', 'customer', TRUE);
 
 INSERT INTO customers (
     user_id,
