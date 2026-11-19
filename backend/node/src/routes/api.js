@@ -14,4 +14,7 @@ router.get('/', (req, res) => {
   res.json({ message: 'Node.js backend is running. Add routes under /api/*' });
 });
 
+// Customer API (RBAC buyer B2B, isolasi per customer_id)
+router.use('/customer', require('./customer'));
+
 module.exports = router;

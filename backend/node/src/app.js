@@ -12,7 +12,11 @@ const authRoutes = require('./routes/auth');
 const verificationRoutes = require('./routes/verification');
 const phoneRoutes = require('./routes/phone');
 const cuttingRoutes = require('./routes/cutting');
+const customerRoutes = require('./routes/customer');
 const apiRouter = require('./routes/api'); // health & generic routes
+const path = require('path');
+
+const UPLOAD_ROOT = path.resolve(__dirname, '../../../uploads');
 
 const app = express();
 
@@ -34,7 +38,7 @@ app.use(
       return callback(new Error('Origin tidak diizinkan.'));
     },
     credentials: true,
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
   }),
 );
@@ -47,6 +51,13 @@ app.use('/api/admin/users', adminUserRoutes);
 app.use('/api/verification', verificationRoutes);
 app.use('/api/phone', phoneRoutes);
 app.use('/api/cutting', cuttingRoutes);
+app.use('/api/customer', customerRoutes);
+
+// Static files: /uploads/... -> backend/uploads/...
+app.use('/uploads', express.static(UPLOAD_ROOT, {
+  fallthrough: true,
+  maxAge: '1d',
+}));
 
 // 404 for unknown /api/* routes
 app.use('/api', notFoundHandler);
