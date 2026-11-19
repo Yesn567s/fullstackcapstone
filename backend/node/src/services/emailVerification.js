@@ -3,9 +3,7 @@ const nodemailer = require('nodemailer');
 const db = require('../config/db');
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: Number(process.env.EMAIL_PORT || 587),
-  secure: process.env.EMAIL_SECURE === 'true',
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -13,11 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendVerificationEmailForUser(userId, email) {
-  if (
-    !process.env.EMAIL_HOST ||
-    !process.env.EMAIL_USER ||
-    !process.env.EMAIL_PASS
-  ) {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     throw new Error('Email verification is not configured.');
   }
 
@@ -36,9 +30,7 @@ async function sendVerificationEmailForUser(userId, email) {
   )}&t=${token}`;
 
   await transporter.sendMail({
-    from:
-      process.env.EMAIL_FROM ||
-      `"No Reply" <no-reply@${process.env.EMAIL_HOST}>`,
+    from: process.env.EMAIL_USER,
     to: email,
     subject: 'Verify your email address',
     html:

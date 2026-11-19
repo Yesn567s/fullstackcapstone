@@ -344,6 +344,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (!response.ok || !result.success) {
+          if (result.verificationRequired && result.userId) {
+            const params = new URLSearchParams({
+              uid: String(result.userId),
+            });
+            window.location.href = `registration-success.html?${params}`;
+            return;
+          }
           throw new Error(result.message || "Login gagal.");
         }
 
@@ -517,10 +524,12 @@ document.addEventListener("DOMContentLoaded", () => {
           return result;
         })
         .then((result) => {
-          const newUsername = payload.username;
           registerForm.reset();
-          const verificationSent = result.verificationEmailSent ? "1" : "0";
-          window.location.href = `login.html?registered=1&verificationEmailSent=${verificationSent}&username=${encodeURIComponent(newUsername)}`;
+          const params = new URLSearchParams({
+            uid: String(result.userId),
+            emailSent: result.verificationEmailSent ? "1" : "0",
+          });
+          window.location.href = `registration-success.html?${params}`;
         })
         .catch((error) => {
           showAlert(
@@ -633,21 +642,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Auto-fill from registration redirect
-  if (loginUserInput) {
-    const searchParams = new URLSearchParams(window.location.search);
-    const registeredUsername = searchParams.get("username");
-    if (registeredUsername) {
-      loginUserInput.value = registeredUsername;
-      if (loginPassInput) loginPassInput.focus();
-      const verificationSent =
-        searchParams.get("verificationEmailSent") === "1";
-      showAlert(
-        verificationSent
-          ? "Pendaftaran berhasil. Periksa email dan verifikasi akun sebelum masuk."
-          : "Pendaftaran berhasil, tetapi email belum terkirim. Masukkan kata sandi untuk mencoba mengirim tautan lagi.",
-        verificationSent ? "success" : "error",
-      );
-    }
-  }
 });

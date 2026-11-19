@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Verifikasi Akun - CV. Sumber Artha</title>
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="../template/css/style.css" rel="stylesheet" />
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/auth.css" rel="stylesheet" />
+    <style>
+      .verification-page {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        padding: 2rem 1rem;
+      }
+
+      .verification-card {
+        width: min(100%, 560px);
+      }
+
+      .verification-card h1 {
+        margin-bottom: 0.75rem;
+      }
+
+      .verification-intro,
+      .verification-note {
+        line-height: 1.6;
+      }
+
+      .verification-status {
+        display: grid;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+        padding: 1rem;
+        border: 1px solid var(--wireframe-border);
+        border-radius: 8px;
+      }
+
+      .verification-status p {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 0;
+      }
+
+      .verification-actions {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.25rem;
+      }
+
+      .verification-notice {
+        min-height: 1.5rem;
+        margin-top: 1rem;
+      }
+
+      .verification-link {
+        display: block;
+        margin-top: 1rem;
+        text-align: center;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body class="theme-focus-wireframe">
+    <div aria-hidden="true" class="bg-texture"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-1"></div>
+    <div aria-hidden="true" class="bg-glow bg-glow-2"></div>
+    <main class="page-wrapper verification-page">
+      <section aria-labelledby="pageTitle" class="auth-card verification-card">
+        <h1 id="pageTitle">Pendaftaran berhasil</h1>
+        <p class="verification-intro">
+          Akun Anda sudah dibuat. Verifikasi alamat email melalui tautan yang
+          kami kirim dan periksa nomor telepon melalui NumVerify untuk
+          mengaktifkan akun. Pemeriksaan NumVerify tidak membuktikan kepemilikan
+          nomor telepon.
+        </p>
+
+        <div aria-live="polite" class="verification-notice" id="verificationNotice" role="status"></div>
+
+        <div aria-live="polite" class="verification-status">
+          <p><span>Email</span><strong id="emailStatus">Memeriksa...</strong></p>
+          <p><span>Nomor telepon</span><strong id="phoneStatus">Memeriksa...</strong></p>
+        </div>
+
+        <div class="verification-actions">
+          <button class="btn-primary-auth" id="resendEmailButton" type="button">
+            Kirim ulang email verifikasi
+          </button>
+
+          <button class="btn-primary-auth" id="verifyPhoneButton" type="button">
+            Periksa nomor telepon via NumVerify
+          </button>
+
+          <a class="btn-primary-auth verification-link hidden" href="login.html" id="loginLink">
+            Email terverifikasi dan nomor dinyatakan valid — masuk
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const apiBaseUrl = `${window.location.protocol}//${window.location.hostname}:4000`;
+      const params = new URLSearchParams(window.location.search);
+      const userId = params.get("uid");
+      const notice = document.getElementById("verificationNotice");
+      const emailStatus = document.getElementById("emailStatus");
+      const phoneStatus = document.getElementById("phoneStatus");
+      const resendEmailButton = document.getElementById("resendEmailButton");
+      const verifyPhoneButton = document.getElementById("verifyPhoneButton");
+      const loginLink = document.getElementById("loginLink");
+
+      function showNotice(message, isError = false) {
+        notice.textContent = message;
+        notice.setAttribute("aria-live", isError ? "assertive" : "polite");
+      }
+
+      async function requestJson(path, options) {
+        const response = await fetch(`${apiBaseUrl}${path}`, {
+          headers: { Accept: "application/json", "Content-Type": "application/json" },
+          ...options,
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Permintaan tidak dapat diproses.");
+        }
+        return result;
+      }
+
+      async function refreshStatus() {
+        const result = await requestJson(
+          `/api/verification/status?userId=${encodeURIComponent(userId)}`,
+          { headers: { Accept: "application/json" } },
+        );
+
+        emailStatus.textContent = result.emailVerified
+          ? "Terverifikasi"
+          : "Belum diverifikasi";
+        phoneStatus.textContent = result.phoneVerified
+          ? "Valid menurut NumVerify"
+          : "Belum diperiksa";
+        resendEmailButton.hidden = result.emailVerified;
+        verifyPhoneButton.hidden = result.phoneVerified;
+        loginLink.classList.toggle(
+          "hidden",
+          !result.emailVerified || !result.phoneVerified,
+        );
+
+        if (result.emailVerified && result.phoneVerified) {
+          showNotice("Email terverifikasi dan nomor telepon dinyatakan valid oleh NumVerify. Akun Anda siap digunakan.");
+        }
+      }
+
+      resendEmailButton.addEventListener("click", async () => {
+        resendEmailButton.disabled = true;
+        try {
+          const result = await requestJson("/api/verification/email/resend", {
+            method: "POST",
+            body: JSON.stringify({ userId: Number(userId) }),
+          });
+          showNotice(result.message);
+        } catch (error) {
+          showNotice(error.message, true);
+        } finally {
+          resendEmailButton.disabled = false;
+        }
+      });
+
+      verifyPhoneButton.addEventListener("click", async () => {
+        verifyPhoneButton.disabled = true;
+        try {
+          const result = await requestJson("/api/phone/validate", {
+            method: "POST",
+            body: JSON.stringify({ userId: Number(userId) }),
+          });
+          showNotice(result.message);
+          await refreshStatus();
+        } catch (error) {
+          showNotice(error.message, true);
+        } finally {
+          verifyPhoneButton.disabled = false;
+        }
+      });
+
+      if (!userId || !/^[1-9]\d*$/.test(userId)) {
+        showNotice("ID akun tidak ditemukan. Silakan daftar kembali.", true);
+        resendEmailButton.hidden = true;
+        verifyPhoneButton.hidden = true;
+      } else {
+        if (params.get("emailSent") === "0") {
+          showNotice("Email belum berhasil dikirim. Anda dapat meminta tautan baru di sini.", true);
+        }
+
+        refreshStatus().catch((error) => showNotice(error.message, true));
+      }
+    </script>
+  </body>
+</html>

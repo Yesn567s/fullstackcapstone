@@ -1,6 +1,8 @@
 
 # Node.js dependencies
 node_modules/
+.env
+/backend/.env
 
 # Build output
 dist/

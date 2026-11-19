@@ -6,6 +6,7 @@ const {
   setAuthCookie,
 } = require('../middleware/auth');
 const { sendVerificationEmailForUser } = require('../services/emailVerification');
+const { validateNumber } = require('../lib/phoneValidator');
 
 async function register(req, res) {
   const {
@@ -18,6 +19,18 @@ async function register(req, res) {
     contactPerson,
     address,
   } = req.body;
+
+  const phoneNumber = validateNumber(
+    phone,
+    process.env.PHONE_DEFAULT_REGION || 'ID',
+  );
+  if (!phoneNumber.valid) {
+    return res.status(422).json({
+      success: false,
+      message: 'Masukkan nomor telepon yang valid.',
+    });
+  }
+  const normalizedPhone = phoneNumber.e164;
   let connection;
   let transactionStarted = false;
 
@@ -28,13 +41,20 @@ async function register(req, res) {
     transactionStarted = true;
 
     const [userResult] = await connection.execute(
-      'INSERT INTO users (username, password_hash, full_name, email, phone, role) VALUES (?, ?, ?, ?, ?, ?)',
-      [username, passwordHash, fullname, email, phone, 'customer'],
+      'INSERT INTO users (username, password_hash, full_name, email, phone, role, email_verified, phone_verified) VALUES (?, ?, ?, ?, ?, ?, 0, 0)',
+      [username, passwordHash, fullname, email, normalizedPhone, 'customer'],
     );
 
     await connection.execute(
       'INSERT INTO customers (user_id, company_name, contact_person, phone, email, address) VALUES (?, ?, ?, ?, ?, ?)',
-      [userResult.insertId, companyName, contactPerson, phone, email, address || null],
+      [
+        userResult.insertId,
+        companyName,
+        contactPerson,
+        normalizedPhone,
+        email,
+        address || null,
+      ],
     );
 
     await connection.commit();
@@ -52,9 +72,8 @@ async function register(req, res) {
 
     return res.status(201).json({
       success: true,
-      message: verificationEmailSent
-        ? 'Pendaftaran berhasil. Silakan periksa email untuk memverifikasi akun.'
-        : 'Pendaftaran berhasil, tetapi email verifikasi belum dapat dikirim. Masuk kembali untuk mencoba lagi.',
+      message:
+        'Pendaftaran berhasil. Verifikasi alamat email dan periksa nomor telepon melalui NumVerify untuk mengaktifkan akun.',
       verificationEmailSent,
       userId: userResult.insertId,
     });
@@ -92,14 +111,14 @@ async function login(req, res) {
   try {
     connection = await db.getConnection();
     const [usernameRows] = await connection.execute(
-      'SELECT id, username, password_hash, role, email, email_verified FROM users WHERE username = ? LIMIT 1',
+      'SELECT id, username, password_hash, role, email, email_verified, phone_verified FROM users WHERE username = ? LIMIT 1',
       [identifier],
     );
     let user = usernameRows[0];
 
     if (!user) {
       const [emailRows] = await connection.execute(
-        'SELECT id, username, password_hash, role, email, email_verified FROM users WHERE email = ? LIMIT 1',
+        'SELECT id, username, password_hash, role, email, email_verified, phone_verified FROM users WHERE email = ? LIMIT 1',
         [identifier],
       );
       user = emailRows[0];
@@ -120,25 +139,37 @@ async function login(req, res) {
       });
     }
 
-    if (user.role === 'customer' && Number(user.email_verified) !== 1) {
-      clearAuthCookie(res);
+    let emailVerificationSent = false;
+    const emailVerified =
+      user.role !== 'customer' || Number(user.email_verified) === 1;
+    const phoneVerified =
+      user.role !== 'customer' || Number(user.phone_verified) === 1;
+
+    if (user.role === 'customer' && !emailVerified) {
       connection.release();
       connection = null;
       try {
         await sendVerificationEmailForUser(user.id, user.email);
+        emailVerificationSent = true;
       } catch (error) {
         console.error('Login verification email error:', error);
-        return res.status(503).json({
-          success: false,
-          message:
-            'Email belum diverifikasi dan tautan verifikasi belum dapat dikirim. Silakan coba lagi.',
-        });
       }
+    }
 
+    if (user.role === 'customer' && (!emailVerified || !phoneVerified)) {
+      clearAuthCookie(res);
       return res.status(403).json({
         success: false,
-        message:
-          'Email belum diverifikasi. Tautan verifikasi baru telah dikirim.',
+        verificationRequired: true,
+        userId: user.id,
+        emailVerificationSent,
+        message: [
+          !emailVerified && 'email',
+          !phoneVerified && 'pemeriksaan nomor telepon via NumVerify',
+        ]
+          .filter(Boolean)
+          .join(' dan ')
+          .concat(' belum selesai.'),
       });
     }
 

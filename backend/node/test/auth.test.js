@@ -86,6 +86,33 @@ describe('Authentication API', () => {
     expect(response.body.success).toBe(false);
   });
 
+  test('rejects the legacy phone OTP field during registration', async () => {
+    const response = await request(app).post('/api/auth/register').send({
+      fullname: 'Customer Example',
+      username: 'customer-example',
+      email: 'customer@gmail.com',
+      phone: '08123456789',
+      phoneVerificationCode: '123456',
+      role: 'customer',
+      password: 'password123',
+      companyName: 'Example Company',
+      contactPerson: 'Customer Example',
+      address: 'Example Street',
+    });
+
+    expect(response.status).toBe(422);
+    expect(response.body.success).toBe(false);
+  });
+
+  test('validates verification status account IDs', async () => {
+    const response = await request(app).get(
+      '/api/verification/status?userId=invalid',
+    );
+
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+  });
+
   test('requires a valid portal on login', async () => {
     const response = await request(app).post('/api/auth/login').send({
       username: 'customer',
