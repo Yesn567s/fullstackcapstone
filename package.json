@@ -1,0 +1,21 @@
+{
+  "name": "fullstackcapstone",
+  "version": "1.0.0",
+  "description": "```text\r assets/\r   images/\r   videos/\r   gif/\r backend/\r   php/\r   webservice/\r   db/\r frontend/\r   template/\r     header/\r     footer/\r   admin/\r   operator/\r   customer/\r   auth/\r index.html\r README.md\r ```",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yesn567s/fullstackcapstone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Yesn567s/fullstackcapstone/issues"
+  },
+  "homepage": "https://github.com/Yesn567s/fullstackcapstone#readme"
+}
