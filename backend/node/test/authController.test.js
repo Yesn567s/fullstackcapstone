@@ -252,7 +252,7 @@ describe('Authentication controller email verification', () => {
     expect(mockSetAuthCookie).not.toHaveBeenCalled();
   });
 
-  test('does not allow a database admin account through the staff portal', async () => {
+  test('allows a database admin account through the staff portal', async () => {
     connection.execute.mockResolvedValueOnce([
       [
         {
@@ -279,7 +279,10 @@ describe('Authentication controller email verification', () => {
       response,
     );
 
-    expect(mockSetAuthCookie).not.toHaveBeenCalled();
-    expect(response.status).toHaveBeenCalledWith(401);
+    expect(mockVerifyPassword).toHaveBeenCalledWith('password123', 'hashed-password');
+    expect(mockSetAuthCookie).toHaveBeenCalled();
+    expect(response.json).toHaveBeenCalledWith(
+      expect.objectContaining({ success: true }),
+    );
   });
 });

@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CV. SUMBER ARTHA - Portal Operator</title>
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="../template/css/style.css" rel="stylesheet" />
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/dashboard.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+    <link href="../template/css/responsive.css" rel="stylesheet" />
+  </head>
+  <body class="view-admin-dashboard">
+    <div style="background:#111827;color:#94a3b8;font-size:.76rem;padding:.4rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="display:flex;align-items:center;gap:.5rem"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10b981"></span><strong style="color:#f8fafc">Operator - Dashboard Produksi</strong></div>
+      <a href="../auth/adminlogin.html" style="color:#f59e0b;text-decoration:none;font-weight:600">&larr; Kembali ke Halaman Login</a>
+    </div>
+    <div class="admin-dashboard-wrapper">
+      <aside data-staff-sidebar data-role="operator" data-active="dashboard" data-base="."></aside>
+      <section class="admin-main-content">
+        <div class="admin-top-mobile-bar">
+          <button aria-label="Toggle Menu" class="admin-sidebar-toggle" id="btnSidebarToggle" type="button">
+            <svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22"><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
+          </button>
+          <div class="mobile-brand-title">Operator - CV. Sumber Artha</div>
+          <a class="btn-mobile-logout" href="../auth/adminlogin.html" title="Keluar">
+            <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline></svg>
+          </a>
+        </div>
+        <div class="admin-view-panel po-view">
+          <header class="po-header">
+            <div><h1>Dashboard Operator</h1><p>Monitoring pekerjaan produksi dan pengiriman</p></div>
+          </header>
+          <div class="po-summary-grid">
+            <div class="po-summary-card"><span>Produksi Aktif</span><strong id="statActive">–</strong></div>
+            <div class="po-summary-card"><span>Surat Jalan Hari Ini</span><strong id="statDeliveries">–</strong></div>
+            <div class="po-summary-card"><span>Tugas Selesai Hari Ini</span><strong id="statCompleted">–</strong></div>
+          </div>
+
+          <div class="po-section" style="margin-top:1.5rem">
+            <h2 style="font-size:1.05rem;margin-bottom:.75rem">Pekerjaan Cutting Saya</h2>
+            <div style="overflow-x:auto">
+              <table class="po-table" style="width:100%;border-collapse:collapse;font-size:.85rem">
+                <thead>
+                  <tr style="text-align:left;color:#64748b;border-bottom:2px solid #e2e8f0">
+                    <th style="padding:.5rem">No. Job</th>
+                    <th style="padding:.5rem">Order</th>
+                    <th style="padding:.5rem">Material</th>
+                    <th style="padding:.5rem">Status</th>
+                    <th style="padding:.5rem">Pola</th>
+                    <th style="padding:.5rem">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="jobsBody">
+                  <tr><td colspan="5" style="padding:1rem;color:#94a3b8">Memuat…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="po-section" style="margin-top:1.5rem">
+            <h2 style="font-size:1.05rem;margin-bottom:.75rem">Surat Jalan Hari Ini</h2>
+            <div style="overflow-x:auto">
+              <table class="po-table" style="width:100%;border-collapse:collapse;font-size:.85rem">
+                <thead>
+                  <tr style="text-align:left;color:#64748b;border-bottom:2px solid #e2e8f0">
+                    <th style="padding:.5rem">No. Surat Jalan</th>
+                    <th style="padding:.5rem">Order</th>
+                    <th style="padding:.5rem">Truk</th>
+                    <th style="padding:.5rem">Qty</th>
+                  </tr>
+                </thead>
+                <tbody id="deliveryBody">
+                  <tr><td colspan="4" style="padding:1rem;color:#94a3b8">Memuat…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="po-section" style="margin-top:1.5rem">
+            <h2 style="font-size:1.05rem;margin-bottom:.75rem">Aksi Operator</h2>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap">
+              <input type="number" id="stageOrderId" placeholder="ID PO" style="padding:.4rem;width:100px">
+              <select id="stageSelect" style="padding:.4rem;width:160px">
+                <option value="Cutting">Cutting</option>
+                <option value="Assembly">Assembly</option>
+                <option value="QC_Inspection">QC_Inspection</option>
+              </select>
+              <input type="text" id="stageDesc" placeholder="Deskripsi (opsional)" style="padding:.4rem;width:220px">
+              <button class="po-detail-button" onclick="recordProductionStage()">Catat Tahapan</button>
+            </div>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.75rem">
+              <input type="number" id="offcutMaterialId" placeholder="ID Material" style="padding:.4rem;width:110px">
+              <input type="number" id="offcutCustomerId" placeholder="ID Customer" style="padding:.4rem;width:110px">
+              <input type="number" id="offcutLength" placeholder="Panjang (mm)" style="padding:.4rem;width:120px">
+              <input type="number" id="offcutWidth" placeholder="Lebar (mm)" style="padding:.4rem;width:120px">
+              <select id="offcutGrain" style="padding:.4rem;width:130px">
+                <option value="lengthwise">lengthwise</option>
+                <option value="widthwise">widthwise</option>
+                <option value="any">any</option>
+              </select>
+              <input type="text" id="offcutLocation" placeholder="Lokasi tag" style="padding:.4rem;width:150px">
+              <button class="po-detail-button" onclick="saveOffcut()">Simpan Offcut</button>
+            </div>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.75rem">
+              <input type="number" id="qcOrderId" placeholder="ID PO" style="padding:.4rem;width:100px">
+              <input type="number" id="qcQty" placeholder="Qty Diperiksa" style="padding:.4rem;width:120px">
+              <select id="qcSquareness" style="padding:.4rem;width:170px">
+                <option value="true">Squareness Lulus</option>
+                <option value="false">Squareness Gagal</option>
+              </select>
+              <select id="qcDimension" style="padding:.4rem;width:160px">
+                <option value="true">Dimension Lulus</option>
+                <option value="false">Dimension Gagal</option>
+              </select>
+              <input type="text" id="qcNotes" placeholder="Catatan (opsional)" style="padding:.4rem;width:220px">
+              <button class="po-detail-button" onclick="submitQCOperator()">Submit QC</button>
+            </div>
+          </div>
+
+          <div id="patternModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center">
+            <div style="background:#111827;padding:1.5rem;border-radius:.5rem;max-width:920px;max-height:85vh;overflow:auto;color:#f8fafc">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h3 style="margin:0" id="patternTitle">Layout Pola Potong</h3>
+                <button class="po-detail-button" onclick="closePatternModal()">Tutup</button>
+              </div>
+              <canvas id="patternCanvas" width="860" height="560" style="background:#1f2937;border-radius:.5rem;display:block;margin:0 auto;max-width:100%"></canvas>
+              <div id="patternSteps" style="max-height:260px;overflow:auto;padding:.75rem;background:#1f2937;border-radius:.5rem;margin-top:1rem;font-size:.8rem"></div>
+            </div>
+          </div>
+    <script src="../template/js/common/staff-sidebar.js"></script>
+    <script src="../template/js/common/staff-guard.js"></script>
+    <script>
+      const API_BASE = `${window.location.protocol}//${window.location.hostname}:4000`;
+
+      async function api(path, options = {}) {
+        const res = await fetch(`${API_BASE}${path}`, {
+          credentials: "include",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          ...options,
+        });
+        if (res.status === 401 || res.status === 403) {
+          window.location.href = "../auth/adminlogin.html";
+          throw new Error("unauthorized");
+        }
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message || "Terjadi kesalahan.");
+        return json.data;
+      }
+
+      const STATUS_BADGE = {
+        pending: ["#fef3c7", "#92400e", "Pending"],
+        in_progress: ["#dbeafe", "#1e40af", "Dikerjakan"],
+        completed: ["#d1fae5", "#065f46", "Selesai"],
+      };
+
+      function badge(status) {
+        const [bg, fg, label] = STATUS_BADGE[status] || ["#f1f5f9", "#475569", status];
+        return `<span style="background:${bg};color:${fg};padding:.15rem .6rem;border-radius:999px;font-size:.72rem;font-weight:600">${label}</span>`;
+      }
+
+      function renderJobs(jobs) {
+        const body = document.getElementById("jobsBody");
+        if (!jobs.length) {
+          body.innerHTML = `<tr><td colspan="5" style="padding:1rem;color:#94a3b8">Belum ada pekerjaan aktif.</td></tr>`;
+          return;
+        }
+        body.innerHTML = jobs.map((j) => `
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:.6rem;font-weight:600">${j.job_number}</td>
+            <td style="padding:.6rem">${j.order_number}</td>
+            <td style="padding:.6rem">${j.material_name} (${j.thickness_mm}mm)</td>
+            <td style="padding:.6rem">${badge(j.status)}</td>
+            <td style="padding:.6rem"><button class="po-detail-button" data-patterns="${j.id}">Lihat Pola Potong</button></td>
+            <td style="padding:.6rem">
+              ${j.status === "pending" ? `<button class="po-detail-button" data-job="${j.id}" data-status="in_progress">Mulai</button>` : ""}
+              ${j.status === "in_progress" ? `<button class="po-detail-button" data-job="${j.id}" data-status="completed">Selesaikan</button>` : ""}
+            </td>
+          </tr>`).join("");
+      }
+
+      function renderDeliveries(deliveries) {
+        const body = document.getElementById("deliveryBody");
+        if (!deliveries.length) {
+          body.innerHTML = `<tr><td colspan="4" style="padding:1rem;color:#94a3b8">Tidak ada pengiriman hari ini.</td></tr>`;
+          return;
+        }
+        body.innerHTML = deliveries.map((d) => `
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:.6rem;font-weight:600">${d.delivery_note_number}</td>
+            <td style="padding:.6rem">${d.order_number}</td>
+            <td style="padding:.6rem">${d.truck_plate_number}${d.driver_name ? ` — ${d.driver_name}` : ""}</td>
+            <td style="padding:.6rem">${d.quantity_shipped} unit</td>
+          </tr>`).join("");
+      }
+
+      async function load() {
+        try {
+          const summary = await api("/api/operator/summary");
+          document.getElementById("statActive").textContent = `${summary.stats.activeCount} Pekerjaan`;
+          document.getElementById("statDeliveries").textContent = `${summary.stats.deliveryCount} Dokumen`;
+          document.getElementById("statCompleted").textContent = `${summary.stats.completedToday} Unit`;
+          renderJobs(summary.activeJobs);
+          renderDeliveries(summary.todaysDeliveries);
+        } catch (e) {
+          if (e.message !== "unauthorized") {
+            document.getElementById("jobsBody").innerHTML =
+              `<tr><td colspan="5" style="padding:1rem;color:#ef4444">Gagal memuat: ${e.message}</td></tr>`;
+          }
+        }
+      }
+
+      document.getElementById("jobsBody").addEventListener("click", async (ev) => {
+        const btn = ev.target.closest("button[data-job]");
+        if (btn) {
+          btn.disabled = true;
+          try {
+            await api(`/api/operator/jobs/${btn.dataset.job}/status`, {
+              method: "PATCH",
+              body: JSON.stringify({ status: btn.dataset.status }),
+            });
+            load();
+          } catch (e) {
+            btn.disabled = false;
+            if (e.message !== "unauthorized") alert(e.message);
+          }
+          return;
+        }
+
+        const patBtn = ev.target.closest("button[data-patterns]");
+        if (patBtn) openPatternModal(Number(patBtn.dataset.patterns));
+      });
+
+      // ---------- Pola potong 2D ----------
+      const PIECE_COLORS = ["#f59e0b", "#10b981", "#3b82f6", "#8b5cf6", "#ef4444", "#14b8a6"];
+
+      async function openPatternModal(jobId) {
+        try {
+          const job = await api(`/api/operator/jobs/${jobId}/patterns`);
+          document.getElementById("patternTitle").textContent =
+            `Pola Potong — ${job.job_number} (${job.material_name})`;
+          drawPattern(job);
+          renderPatternSteps(job.patterns);
+          document.getElementById("patternModal").style.display = "flex";
+        } catch (e) {
+          if (e.message !== "unauthorized") alert(e.message);
+        }
+      }
+
+      function closePatternModal() {
+        document.getElementById("patternModal").style.display = "none";
+      }
+
+      function drawPattern(job) {
+        const canvas = document.getElementById("patternCanvas");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const sheetW = Number(job.source_sheet_length) || 2440;
+        const sheetH = Number(job.source_sheet_width) || 1220;
+        const margin = 24;
+        const scale = Math.min((canvas.width - margin * 2) / sheetW, (canvas.height - margin * 2) / sheetH);
+        const ox = (canvas.width - sheetW * scale) / 2;
+        const oy = (canvas.height - sheetH * scale) / 2;
+
+        // Lembar mentah
+        ctx.fillStyle = "#374151";
+        ctx.fillRect(ox, oy, sheetW * scale, sheetH * scale);
+        ctx.strokeStyle = "#9ca3af";
+        ctx.strokeRect(ox, oy, sheetW * scale, sheetH * scale);
+
+        const colors = {};
+        let colorIdx = 0;
+        for (const p of job.patterns) {
+          const key = p.label || p.drawer_type_code || `#${p.id}`;
+          if (!colors[key]) colors[key] = PIECE_COLORS[colorIdx++ % PIECE_COLORS.length];
+
+          const x = ox + Number(p.pos_x) * scale;
+          const y = oy + Number(p.pos_y) * scale;
+          const w = Number(p.width_mm) * scale;
+          const h = Number(p.height_mm) * scale;
+
+          ctx.fillStyle = colors[key];
+          ctx.globalAlpha = p.is_offcut_usable ? 0.45 : 0.9;
+          ctx.fillRect(x, y, w, h);
+          ctx.globalAlpha = 1;
+          ctx.strokeStyle = "#111827";
+          ctx.strokeRect(x, y, w, h);
+
+          if (w > 34 && h > 18) {
+            ctx.fillStyle = "#0b1220";
+            ctx.font = "bold 11px sans-serif";
+            ctx.fillText(String(p.cut_step_order), x + 4, y + 14);
+          }
+        }
+
+        // Legenda
+        let ly = oy + sheetH * scale + 16;
+        ctx.font = "11px sans-serif";
+        for (const [key, color] of Object.entries(colors)) {
+          ctx.fillStyle = color;
+          ctx.fillRect(ox, ly, 12, 12);
+          ctx.fillStyle = "#e5e7eb";
+          ctx.fillText(key, ox + 18, ly + 10);
+          ly += 18;
+        }
+      }
+
+      function renderPatternSteps(patterns) {
+        const el = document.getElementById("patternSteps");
+        if (!patterns.length) {
+          el.innerHTML = `<em style="color:#94a3b8">Belum ada pola tersimpan untuk job ini.</em>`;
+          return;
+        }
+        el.innerHTML = `<strong style="color:#f8fafc">Urutan langkah potong:</strong><ol style="margin:.5rem 0 0 1.25rem;line-height:1.7">` +
+          patterns.map((p) => {
+            const name = p.label || p.drawer_type_code || "Potongan";
+            const offcut = p.is_offcut_usable ? ' <span style="color:#10b981">[offcut layak pakai]</span>' : "";
+            return `<li>Langkah ${p.cut_step_order}: <strong>${name}</strong> — ${Number(p.width_mm)}×${Number(p.height_mm)} mm @ (${Number(p.pos_x)}, ${Number(p.pos_y)})${offcut}</li>`;
+          }).join("") + `</ol>`;
+      }
+
+      // ---------- Aksi: tahapan, offcut, QC ----------
+      async function recordProductionStage() {
+        const orderId = Number(document.getElementById("stageOrderId").value);
+        const stage = document.getElementById("stageSelect").value;
+        const description = document.getElementById("stageDesc").value.trim();
+        if (!orderId) return alert("Isi ID PO terlebih dahulu.");
+        try {
+          const r = await api(`/api/operator/orders/${orderId}/stage`, {
+            method: "PATCH",
+            body: JSON.stringify({ stage, description: description || null }),
+          });
+          alert(r && r.message ? r.message : "Tahapan dicatat.");
+        } catch (e) {
+          if (e.message !== "unauthorized") alert(e.message);
+        }
+      }
+
+      async function saveOffcut() {
+        const body = {
+          material_id: Number(document.getElementById("offcutMaterialId").value),
+          customer_id: Number(document.getElementById("offcutCustomerId").value) || null,
+          length_mm: Number(document.getElementById("offcutLength").value),
+          width_mm: Number(document.getElementById("offcutWidth").value),
+          grain_orientation: document.getElementById("offcutGrain").value,
+          location_tag: document.getElementById("offcutLocation").value.trim() || null,
+        };
+        if (!body.material_id || !body.length_mm || !body.width_mm) {
+          return alert("Material, panjang, dan lebar wajib diisi.");
+        }
+        try {
+          await api("/api/operator/offcuts", { method: "POST", body: JSON.stringify(body) });
+          alert("Offcut tersimpan.");
+        } catch (e) {
+          if (e.message !== "unauthorized") alert(e.message);
+        }
+      }
+
+      async function submitQCOperator() {
+        const body = {
+          order_id: Number(document.getElementById("qcOrderId").value),
+          quantity_inspected: Number(document.getElementById("qcQty").value),
+          squareness_passed: document.getElementById("qcSquareness").value === "true",
+          dimension_passed: document.getElementById("qcDimension").value === "true",
+          notes: document.getElementById("qcNotes").value.trim() || null,
+        };
+        if (!body.order_id || !body.quantity_inspected) {
+          return alert("ID PO dan jumlah inspeksi wajib diisi.");
+        }
+        try {
+          const r = await api("/api/operator/qc", { method: "POST", body: JSON.stringify(body) });
+          alert(r && r.message ? r.message : "QC tersimpan.");
+        } catch (e) {
+          if (e.message !== "unauthorized") alert(e.message);
+        }
+      }
+
+      load();
+    </script>
+  </body>
+</html>
