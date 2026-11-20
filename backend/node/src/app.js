@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+const adminDeliveryRoutes = require('./routes/adminDeliveries');
 const adminUserRoutes = require('./routes/adminUsers');
 const authRoutes = require('./routes/auth');
 const verificationRoutes = require('./routes/verification');
@@ -47,6 +48,7 @@ app.use(express.json());
 // Mount API routers under /api
 app.use('/api', apiRouter);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin/deliveries', adminDeliveryRoutes);
 app.use('/api/admin/users', adminUserRoutes);
 app.use('/api/verification', verificationRoutes);
 app.use('/api/phone', phoneRoutes);

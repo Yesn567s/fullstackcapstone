@@ -1127,7 +1127,8 @@ body.view-admin-dashboard .page-wrapper {
   color: #a16207;
 }
 
-.sj-status.sent {
+.sj-status.sent,
+.sj-status.received {
   background: #dcfce7;
   color: #15803d;
 }
@@ -1223,6 +1224,31 @@ body.view-admin-dashboard .page-wrapper {
   gap: 0.75rem;
   align-items: end;
   margin-bottom: 0.75rem;
+}
+
+.sj-modal-item-list select {
+  height: 32px;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 3px;
+  padding: 0 0.55rem;
+  color: #334155;
+  background: #fff;
+  font-size: 0.66rem;
+}
+
+.sj-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem 1rem;
+  margin-bottom: 1rem;
+  color: #334155;
+  font-size: 0.68rem;
+}
+
+.sj-detail-grid p {
+  margin: 0;
+  padding: 0.4rem 0;
 }
 
 .sj-modal-footer {

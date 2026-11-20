@@ -38,9 +38,9 @@
           </header>
 
           <div class="po-summary-grid">
-            <div class="po-summary-card"><span>Total Surat Jalan</span><strong id="sjTotal">4 Dokumen</strong></div>
-            <div class="po-summary-card"><span>Dalam Pengiriman</span><strong>2 Kiriman</strong><small>Aktif hari ini</small></div>
-            <div class="po-summary-card"><span>Selesai Diterima</span><strong>1 Dokumen</strong></div>
+            <div class="po-summary-card"><span>Total Surat Jalan</span><strong id="sjTotal">Memuat...</strong></div>
+            <div class="po-summary-card"><span>Dalam Pengiriman</span><strong id="sjInTransit">Memuat...</strong><small>Belum dikonfirmasi customer</small></div>
+            <div class="po-summary-card"><span>Selesai Diterima</span><strong id="sjReceived">Memuat...</strong></div>
           </div>
 
           <section class="po-panel po-list-panel">
@@ -51,12 +51,7 @@
             <div class="po-table-wrap">
               <table class="po-table">
                 <thead><tr><th>No. Surat Jalan</th><th>No. PO</th><th>Customer</th><th>Tanggal Kirim</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr></thead>
-                <tbody id="sjTableBody">
-                  <tr data-status="draft" data-search="SJ-26-001 PO-26-001 PT Artha"><td>SJ-26-001</td><td>PO-26-001</td><td>PT Artha</td><td>19/11/26</td><td>250 pcs</td><td><span class="sj-status draft">Draft</span></td><td><button class="po-detail-button sj-detail" type="button">Detail</button></td></tr>
-                  <tr data-status="sent" data-search="SJ-26-002 PO-26-002 CV Mebel"><td>SJ-26-002</td><td>PO-26-002</td><td>CV Mebel</td><td>18/11/26</td><td>300 pcs</td><td><span class="sj-status sent">Dikirim</span></td><td><button class="po-detail-button sj-detail" type="button">Detail</button></td></tr>
-                  <tr data-status="sent" data-search="SJ-26-003 PO-26-003 PT Jaya Furnitur"><td>SJ-26-003</td><td>PO-26-003</td><td>PT Jaya Furnitur</td><td>17/11/26</td><td>180 pcs</td><td><span class="sj-status">Dalam Kirim</span></td><td><button class="po-detail-button sj-detail" type="button">Detail</button></td></tr>
-                  <tr data-status="draft" data-search="SJ-26-004 PO-26-004 PT Mega Wood"><td>SJ-26-004</td><td>PO-26-004</td><td>PT Mega Wood</td><td>16/11/26</td><td>120 pcs</td><td><span class="sj-status draft">Draft</span></td><td><button class="po-detail-button sj-detail" type="button">Detail</button></td></tr>
-                </tbody>
+                <tbody id="sjTableBody"><tr><td colspan="7">Memuat surat jalan...</td></tr></tbody>
               </table>
             </div>
           </section>
@@ -67,64 +62,36 @@
     <div class="sj-modal hidden" id="sjModal" role="dialog" aria-modal="true" aria-labelledby="sjModalTitle">
       <div class="sj-modal-card">
         <div class="sj-modal-header"><h2 id="sjModalTitle">Buat Surat Jalan</h2><button class="sj-modal-close" id="sjModalClose" type="button" aria-label="Tutup">&times;</button></div>
-        <div class="sj-modal-body">
-          <div class="sj-modal-grid">
-            <label>No. Surat Jalan<input id="sjNumber" value="SJ-26-005" /></label>
-            <label>No. PO<select id="sjPO"><option>PO-26-001</option><option>PO-26-002</option><option>PO-26-003</option></select></label>
-            <label>Tanggal Kirim<input id="sjDate" type="date" value="2026-11-19" /></label>
-            <label>Customer<input id="sjCustomer" value="PT Artha Furnitur" /></label>
-            <label>Pengemudi<input id="sjDriver" value="Budi Santoso" /></label>
-            <label>Nomor Kendaraan<input id="sjVehicle" value="B 1234 SA" /></label>
+        <form id="sjForm">
+          <div class="sj-modal-body">
+            <div class="sj-modal-grid">
+              <label>No. Surat Jalan<input id="sjNumber" maxlength="50" placeholder="SJ-2026-001" required /></label>
+              <label>No. PO<select id="sjPO" required><option value="">Pilih PO</option></select></label>
+              <label>Tanggal Kirim<input id="sjDate" type="date" required /></label>
+              <label>Customer<input id="sjCustomer" placeholder="Terisi dari PO" readonly /></label>
+              <label>Pengemudi<input id="sjDriver" maxlength="100" placeholder="Nama pengemudi" /></label>
+              <label>Nomor Kendaraan<input id="sjVehicle" maxlength="20" placeholder="Contoh: D 1234 SA" required /></label>
+            </div>
+            <div class="sj-modal-item-list">
+              <label>Nama Barang<select id="sjItem" required><option value="">Pilih item PO</option></select></label>
+              <label>Jumlah<input id="sjQty" type="number" min="1" value="1" required /></label>
+              <label>Satuan<input id="sjUnit" value="pcs" readonly /></label>
+            </div>
           </div>
-          <div class="sj-modal-item-list">
-            <label>Nama Barang<input id="sjItem" value="Komponen Laci Kayu" /></label>
-            <label>Jumlah<input id="sjQty" type="number" value="250" /></label>
-            <label>Satuan<input id="sjUnit" value="pcs" /></label>
-          </div>
-        </div>
-        <div class="sj-modal-footer"><button id="sjCancel" type="button">Batal</button><button class="sj-save" id="sjSave" type="button">Simpan &amp; Cetak</button></div>
+          <div class="sj-modal-footer"><button id="sjCancel" type="button">Batal</button><button class="sj-save" id="sjSave" type="submit">Simpan Surat Jalan</button></div>
+        </form>
+      </div>
+    </div>
+    <div class="sj-modal hidden" id="sjDetailModal" role="dialog" aria-modal="true" aria-labelledby="sjDetailTitle">
+      <div class="sj-modal-card">
+        <div class="sj-modal-header"><h2 id="sjDetailTitle">Detail Surat Jalan</h2><button class="sj-modal-close" id="sjDetailClose" type="button" aria-label="Tutup">&times;</button></div>
+        <div class="sj-modal-body" id="sjDetailBody"></div>
       </div>
     </div>
     <div aria-live="polite" class="toast-container" id="toastContainer"></div>
     <script src="../template/js/common/ui.js"></script>
     <script src="../template/js/common/staff-sidebar.js"></script>
     <script src="../template/js/dashboard/dashboard.js"></script>
-    <script>
-      const modal = document.getElementById("sjModal");
-      const openModal = () => modal.classList.remove("hidden");
-      const closeModal = () => modal.classList.add("hidden");
-      document.getElementById("btnCreateSJ").addEventListener("click", openModal);
-      document.querySelectorAll(".sj-detail").forEach((button) => button.addEventListener("click", openModal));
-      document.getElementById("sjModalClose").addEventListener("click", closeModal);
-      document.getElementById("sjCancel").addEventListener("click", closeModal);
-      modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(); });
-      document.getElementById("sjSave").addEventListener("click", () => {
-        closeModal();
-        if (window.showToast) showToast("Surat jalan berhasil disimpan.");
-      });
-      const statusFilter = document.getElementById("sjStatusFilter");
-      const statusLabels = ["Semua Status", "Draft", "Dikirim"];
-      let statusIndex = 0;
-      statusFilter.addEventListener("click", () => {
-        statusIndex = (statusIndex + 1) % statusLabels.length;
-        statusFilter.textContent = statusLabels[statusIndex];
-        const selected = statusLabels[statusIndex];
-        document.querySelectorAll("#sjTableBody tr").forEach((row) => {
-          const status = row.querySelector(".sj-status").textContent.trim();
-          row.style.display =
-            selected === "Semua Status" ||
-            (selected === "Draft" && row.dataset.status === "draft") ||
-            (selected === "Dikirim" && row.dataset.status === "sent")
-              ? ""
-              : "none";
-        });
-      });
-      document.getElementById("sjSearch").addEventListener("input", (event) => {
-        const query = event.target.value.trim().toLowerCase();
-        document.querySelectorAll("#sjTableBody tr").forEach((row) => {
-          row.style.display = row.dataset.search.toLowerCase().includes(query) ? "" : "none";
-        });
-      });
-    </script>
+    <script src="../template/js/admin/surat-jalan.js"></script>
   </body>
 </html>
