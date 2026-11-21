@@ -7,7 +7,10 @@
     <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../template/css/style.css" rel="stylesheet" />
     <link href="../template/css/base.css" rel="stylesheet" />
     <link href="../template/css/dashboard.css" rel="stylesheet" />
@@ -15,43 +18,142 @@
     <link href="../template/css/responsive.css" rel="stylesheet" />
   </head>
   <body class="view-admin-dashboard">
-    <div style="background:#111827;color:#94a3b8;font-size:.76rem;padding:.4rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)">
-      <div style="display:flex;align-items:center;gap:.5rem"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10b981"></span><strong style="color:#f8fafc">Admin - Surat Jalan</strong></div>
-      <a href="../auth/login.html" style="color:#f59e0b;text-decoration:none;font-weight:600">&larr; Kembali ke Halaman Login</a>
+    <div
+      style="
+        background: #111827;
+        color: #94a3b8;
+        font-size: 0.76rem;
+        padding: 0.4rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 0.5rem">
+        <span
+          style="
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+          "
+        ></span
+        ><strong style="color: #f8fafc">Admin - Surat Jalan</strong>
+      </div>
+      <a
+        href="../auth/adminlogin.html"
+        style="color: #f59e0b; text-decoration: none; font-weight: 600"
+        >&larr; Kembali ke Halaman Login</a
+      >
     </div>
     <div class="admin-dashboard-wrapper" id="adminDashboardView">
-      <aside data-staff-sidebar data-role="admin" data-active="surat-jalan" data-base="."></aside>
+      <aside
+        data-staff-sidebar
+        data-role="admin"
+        data-active="surat-jalan"
+        data-base="."
+      ></aside>
 
       <section class="admin-main-content">
         <div class="admin-top-mobile-bar">
-          <button aria-label="Toggle Menu" class="admin-sidebar-toggle" id="btnSidebarToggle" type="button"><svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22"><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg></button>
+          <button
+            aria-label="Toggle Menu"
+            class="admin-sidebar-toggle"
+            id="btnSidebarToggle"
+            type="button"
+          >
+            <svg
+              fill="none"
+              height="22"
+              stroke="currentColor"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="22"
+            >
+              <line x1="3" x2="21" y1="12" y2="12"></line>
+              <line x1="3" x2="21" y1="6" y2="6"></line>
+              <line x1="3" x2="21" y1="18" y2="18"></line>
+            </svg>
+          </button>
           <div class="mobile-brand-title">Admin - CV. Sumber Artha</div>
-          <a class="btn-mobile-logout" href="../auth/login.html" title="Keluar"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline></svg></a>
+          <a class="btn-mobile-logout" href="../auth/login.html" title="Keluar"
+            ><svg
+              fill="none"
+              height="18"
+              stroke="currentColor"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="18"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline></svg
+          ></a>
         </div>
         <div class="admin-view-panel po-view">
           <header class="po-header">
-            <div><h1>Surat Jalan / Delivery Note</h1><p>Kelola pengiriman pesanan kepada customer</p></div>
+            <div>
+              <h1>Surat Jalan / Delivery Note</h1>
+              <p>Kelola pengiriman pesanan kepada customer</p>
+            </div>
             <div class="sj-header-actions">
-              <input class="sj-search" id="sjSearch" type="search" placeholder="Cari nomor SJ / customer..." />
-              <button class="po-add-button" id="btnCreateSJ" type="button"><span>+</span> Buat Surat Jalan</button>
+              <input
+                class="sj-search"
+                id="sjSearch"
+                type="search"
+                placeholder="Cari nomor SJ / customer..."
+              />
+              <button class="po-add-button" id="btnCreateSJ" type="button">
+                <span>+</span> Buat Surat Jalan
+              </button>
             </div>
           </header>
 
           <div class="po-summary-grid">
-            <div class="po-summary-card"><span>Total Surat Jalan</span><strong id="sjTotal">Memuat...</strong></div>
-            <div class="po-summary-card"><span>Dalam Pengiriman</span><strong id="sjInTransit">Memuat...</strong><small>Belum dikonfirmasi customer</small></div>
-            <div class="po-summary-card"><span>Selesai Diterima</span><strong id="sjReceived">Memuat...</strong></div>
+            <div class="po-summary-card">
+              <span>Total Surat Jalan</span
+              ><strong id="sjTotal">Memuat...</strong>
+            </div>
+            <div class="po-summary-card">
+              <span>Dalam Pengiriman</span
+              ><strong id="sjInTransit">Memuat...</strong
+              ><small>Belum dikonfirmasi customer</small>
+            </div>
+            <div class="po-summary-card">
+              <span>Selesai Diterima</span
+              ><strong id="sjReceived">Memuat...</strong>
+            </div>
           </div>
 
           <section class="po-panel po-list-panel">
             <div class="po-list-heading">
-              <div><h2>Daftar Surat Jalan</h2><p><span class="po-sync-dot"></span> Data pengiriman terakhir</p></div>
+              <div>
+                <h2>Daftar Surat Jalan</h2>
+                <p>
+                  <span class="po-sync-dot"></span> Data pengiriman terakhir
+                </p>
+              </div>
               <button id="sjStatusFilter" type="button">Semua Status</button>
             </div>
             <div class="po-table-wrap">
               <table class="po-table">
-                <thead><tr><th>No. Surat Jalan</th><th>No. PO</th><th>Customer</th><th>Tanggal Kirim</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr></thead>
-                <tbody id="sjTableBody"><tr><td colspan="7">Memuat surat jalan...</td></tr></tbody>
+                <thead>
+                  <tr>
+                    <th>No. Surat Jalan</th>
+                    <th>No. PO</th>
+                    <th>Customer</th>
+                    <th>Tanggal Kirim</th>
+                    <th>Jumlah</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="sjTableBody">
+                  <tr>
+                    <td colspan="7">Memuat surat jalan...</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </section>
@@ -59,32 +161,108 @@
       </section>
     </div>
 
-    <div class="sj-modal hidden" id="sjModal" role="dialog" aria-modal="true" aria-labelledby="sjModalTitle">
+    <div
+      class="sj-modal hidden"
+      id="sjModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sjModalTitle"
+    >
       <div class="sj-modal-card">
-        <div class="sj-modal-header"><h2 id="sjModalTitle">Buat Surat Jalan</h2><button class="sj-modal-close" id="sjModalClose" type="button" aria-label="Tutup">&times;</button></div>
+        <div class="sj-modal-header">
+          <h2 id="sjModalTitle">Buat Surat Jalan</h2>
+          <button
+            class="sj-modal-close"
+            id="sjModalClose"
+            type="button"
+            aria-label="Tutup"
+          >
+            &times;
+          </button>
+        </div>
         <form id="sjForm">
           <div class="sj-modal-body">
             <div class="sj-modal-grid">
-              <label>No. Surat Jalan<input id="sjNumber" maxlength="50" placeholder="SJ-2026-001" required /></label>
-              <label>No. PO<select id="sjPO" required><option value="">Pilih PO</option></select></label>
-              <label>Tanggal Kirim<input id="sjDate" type="date" required /></label>
-              <label>Customer<input id="sjCustomer" placeholder="Terisi dari PO" readonly /></label>
-              <label>Pengemudi<input id="sjDriver" maxlength="100" placeholder="Nama pengemudi" /></label>
-              <label>Nomor Kendaraan<input id="sjVehicle" maxlength="20" placeholder="Contoh: D 1234 SA" required /></label>
+              <label
+                >No. Surat Jalan<input
+                  id="sjNumber"
+                  maxlength="50"
+                  placeholder="SJ-2026-001"
+                  required
+              /></label>
+              <label
+                >No. PO<select id="sjPO" required>
+                  <option value="">Pilih PO</option>
+                </select></label
+              >
+              <label
+                >Tanggal Kirim<input id="sjDate" type="date" required
+              /></label>
+              <label
+                >Customer<input
+                  id="sjCustomer"
+                  placeholder="Terisi dari PO"
+                  readonly
+              /></label>
+              <label
+                >Pengemudi<input
+                  id="sjDriver"
+                  maxlength="100"
+                  placeholder="Nama pengemudi"
+              /></label>
+              <label
+                >Nomor Kendaraan<input
+                  id="sjVehicle"
+                  maxlength="20"
+                  placeholder="Contoh: D 1234 SA"
+                  required
+              /></label>
             </div>
             <div class="sj-modal-item-list">
-              <label>Nama Barang<select id="sjItem" required><option value="">Pilih item PO</option></select></label>
-              <label>Jumlah<input id="sjQty" type="number" min="1" value="1" required /></label>
+              <label
+                >Nama Barang<select id="sjItem" required>
+                  <option value="">Pilih item PO</option>
+                </select></label
+              >
+              <label
+                >Jumlah<input
+                  id="sjQty"
+                  type="number"
+                  min="1"
+                  value="1"
+                  required
+              /></label>
               <label>Satuan<input id="sjUnit" value="pcs" readonly /></label>
             </div>
           </div>
-          <div class="sj-modal-footer"><button id="sjCancel" type="button">Batal</button><button class="sj-save" id="sjSave" type="submit">Simpan Surat Jalan</button></div>
+          <div class="sj-modal-footer">
+            <button id="sjCancel" type="button">Batal</button
+            ><button class="sj-save" id="sjSave" type="submit">
+              Simpan Surat Jalan
+            </button>
+          </div>
         </form>
       </div>
     </div>
-    <div class="sj-modal hidden" id="sjDetailModal" role="dialog" aria-modal="true" aria-labelledby="sjDetailTitle">
+    <div
+      class="sj-modal hidden"
+      id="sjDetailModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sjDetailTitle"
+    >
       <div class="sj-modal-card">
-        <div class="sj-modal-header"><h2 id="sjDetailTitle">Detail Surat Jalan</h2><button class="sj-modal-close" id="sjDetailClose" type="button" aria-label="Tutup">&times;</button></div>
+        <div class="sj-modal-header">
+          <h2 id="sjDetailTitle">Detail Surat Jalan</h2>
+          <button
+            class="sj-modal-close"
+            id="sjDetailClose"
+            type="button"
+            aria-label="Tutup"
+          >
+            &times;
+          </button>
+        </div>
         <div class="sj-modal-body" id="sjDetailBody"></div>
       </div>
     </div>

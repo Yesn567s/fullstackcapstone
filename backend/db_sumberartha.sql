@@ -18,6 +18,20 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- 1a. Data Pegawai untuk akun Admin dan Operator
+CREATE TABLE pegawai (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,
+    nik CHAR(16) NOT NULL UNIQUE,
+    jenis_kelamin ENUM('laki-laki', 'perempuan') NOT NULL,
+    alamat TEXT NOT NULL,
+    tanggal_lahir DATE NOT NULL,
+    ktp_image_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- 2. Master Loyalty Tiers
 CREATE TABLE loyalty_tiers (
     id INT AUTO_INCREMENT PRIMARY KEY,

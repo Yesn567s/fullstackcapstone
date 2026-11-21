@@ -1818,6 +1818,26 @@ body.view-admin-dashboard .page-wrapper {
   font-size: 0.68rem;
 }
 
+.admin-user-form .po-field textarea {
+  width: 100%;
+  min-height: 72px;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 3px;
+  padding: 0.45rem 0.55rem;
+  color: #334155;
+  background: #fff;
+  font: inherit;
+  font-size: 0.68rem;
+  resize: vertical;
+}
+
+.admin-user-form .po-field input[type="file"] {
+  height: auto;
+  min-height: 34px;
+  padding: 0.35rem;
+}
+
 .admin-user-form .po-save-button {
   grid-column: 1 / -1;
   margin-top: 1rem;

@@ -77,8 +77,15 @@ document.addEventListener("DOMContentLoaded", () => {
       fullName: form.elements.fullName.value.trim(),
       email: form.elements.email.value.trim(),
       phone: form.elements.phone.value.trim(),
+      nik: form.elements.nik.value.trim(),
+      gender: form.elements.gender.value,
+      address: form.elements.address.value.trim(),
+      birthDate: form.elements.birthDate.value,
       role: form.elements.role.value,
     };
+    const formData = new FormData();
+    Object.entries(payload).forEach(([key, value]) => formData.append(key, value));
+    formData.append("ktpImage", form.elements.ktpImage.files[0]);
 
     setLoading(true);
     try {
@@ -86,19 +93,20 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(payload),
+        body: formData,
       });
-      const result = await readResult(response);
+      await readResult(response);
       form.reset();
-      showMessage(result.message, "success");
+      showMessage(`Pegawai dengan role '${payload.role}' berhasil ditambahkan.`, "success");
     } catch (error) {
-      showMessage(
+      const reason =
         error instanceof TypeError
           ? "Node.js backend tidak dapat dijangkau. Jalankan npm start dari folder backend."
-          : error.message || "Pengguna tidak dapat ditambahkan.",
+          : error.message || "Terjadi kesalahan saat menyimpan data.";
+      showMessage(
+        `Pegawai dengan role '${payload.role}' gagal ditambahkan. ${reason}`,
       );
     } finally {
       setLoading(false);

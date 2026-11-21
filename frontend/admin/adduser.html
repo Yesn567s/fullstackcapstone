@@ -17,7 +17,7 @@
   <body class="view-admin-dashboard">
     <div style="background:#111827;color:#94a3b8;font-size:.76rem;padding:.4rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)">
       <div style="display:flex;align-items:center;gap:.5rem"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10b981"></span><strong style="color:#f8fafc">Admin - Manajemen Pengguna</strong></div>
-      <a href="../auth/login.html" style="color:#f59e0b;text-decoration:none;font-weight:600">&larr; Kembali ke Halaman Login</a>
+      <a href="../auth/adminlogin.html" style="color:#f59e0b;text-decoration:none;font-weight:600">&larr; Kembali ke Halaman Login</a>
     </div>
     <div class="admin-dashboard-wrapper" id="adminDashboardView">
       <aside class="admin-sidebar" id="adminSidebar">
@@ -56,13 +56,18 @@
           <header class="po-header"><div><h1>Manajemen Pengguna</h1><p>Tambah akun administrator atau operator</p></div></header>
           <section class="po-panel po-form-panel admin-user-panel">
             <div aria-live="polite" class="alert-box hidden" id="userAlert" role="alert"><span class="alert-text" id="userAlertMessage"></span></div>
-            <form id="addUserForm" class="admin-user-form hidden">
+            <form id="addUserForm" class="admin-user-form hidden" enctype="multipart/form-data">
               <label class="po-field"><span>Username</span><input autocomplete="username" id="username" maxlength="50" name="username" required type="text" /></label>
               <label class="po-field"><span>Password (minimal 6 karakter)</span><input autocomplete="new-password" id="password" minlength="6" name="password" required type="password" /></label>
               <label class="po-field"><span>Nama Lengkap</span><input autocomplete="name" id="fullName" maxlength="100" name="fullName" required type="text" /></label>
               <label class="po-field"><span>Email</span><input autocomplete="email" id="email" maxlength="100" name="email" placeholder="nama@provider.com" required type="email" /></label>
               <label class="po-field"><span>Nomor Telepon</span><input autocomplete="tel" id="phone" maxlength="30" name="phone" required type="tel" /></label>
+              <label class="po-field"><span>NIK (16 digit)</span><input id="nik" inputmode="numeric" maxlength="16" minlength="16" name="nik" pattern="[0-9]{16}" required type="text" /></label>
+              <label class="po-field"><span>Jenis Kelamin</span><select id="gender" name="gender" required><option value="">Pilih jenis kelamin</option><option value="laki-laki">Laki-laki</option><option value="perempuan">Perempuan</option></select></label>
+              <label class="po-field"><span>Alamat</span><textarea autocomplete="street-address" id="address" maxlength="2000" name="address" required rows="3"></textarea></label>
+              <label class="po-field"><span>Tanggal Lahir</span><input autocomplete="bday" id="birthDate" name="birthDate" required type="date" /></label>
               <label class="po-field"><span>Role</span><select id="role" name="role" required><option value="">Pilih role</option><option value="admin">Admin</option><option value="operator">Operator</option></select></label>
+              <label class="po-field"><span>Masukan Gambar KTP (JPG, PNG, JIFF/GIF, JPEG; maks. 10 MB)</span><input accept=".jpg,.jpeg,.png,.jiff,.gif,image/jpeg,image/png,image/gif" id="ktpImage" name="ktpImage" required type="file" /></label>
               <button class="po-save-button" id="btnSubmitUser" type="submit"><span class="btn-text">Tambah Pengguna</span><span aria-hidden="true" class="btn-spinner hidden"></span></button>
             </form>
           </section>

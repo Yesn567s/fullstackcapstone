@@ -25,6 +25,31 @@ const storage = multer.diskStorage({
   },
 });
 
+const KTP_EXTENSIONS = new Map([
+  ['.jpg', 'image/jpeg'],
+  ['.jpeg', 'image/jpeg'],
+  ['.png', 'image/png'],
+  ['.gif', 'image/gif'],
+  ['.jiff', 'image/gif'],
+]);
+
+const ktpUpload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter(req, file, cb) {
+    const extension = path.extname(file.originalname).toLowerCase();
+    if (
+      KTP_EXTENSIONS.get(extension) === file.mimetype ||
+      (extension === '.jiff' && file.mimetype === 'application/octet-stream')
+    ) {
+      return cb(null, true);
+    }
+    const error = new Error('Gunakan gambar KTP berformat JPG, PNG, JIFF/GIF, atau JPEG.');
+    error.status = 422;
+    cb(error);
+  },
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
+
 const fileFilter = (req, file, cb) => {
   if (ALLOWED_EXT.has(path.extname(file.originalname).toLowerCase())) {
     return cb(null, true);
@@ -38,4 +63,4 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
 });
 
-module.exports = { upload, UPLOAD_ROOT };
+module.exports = { ktpUpload, upload, UPLOAD_ROOT };
