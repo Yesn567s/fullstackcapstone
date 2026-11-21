@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <nav aria-label="Menu ${title}" class="admin-nav">
       <div class="admin-nav-group">
         <span class="nav-group-title">MAIN</span>
-        <ul class="nav-group-list">${link("dashboard", isAdmin ? (base + "/dashboard.html") : (base + "/test.html"))}</ul>
+        <ul class="nav-group-list">${link("dashboard", isAdmin ? (base + "/dashboard.html") : (base + "/dashboard.html"))}</ul>
       </div>
       ${isAdmin ? `
         <div class="admin-nav-group">
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <span class="nav-group-title">TRANSACTION</span>
         <ul class="nav-group-list">${isAdmin
           ? `${link("transaksi-po", base + "/transaksi-po.html")}${link("surat-jalan", base + "/surat-jalan.html")}${link("invoice", base + "/invoice.html")}`
-          : `${link("surat-jalan", base + "/../admin/surat-jalan.html")}`}</ul>
+          : `${link("surat-jalan", base + "/../admin/surat-jalan.html")}${link("monitoring-produksi", base + "/../admin/monitoring-produksi.html")}`}</ul>
       </div>
       ${isAdmin ? `
         <div class="admin-nav-group">
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ` : `
         <div class="admin-nav-group">
           <span class="nav-group-title">PRODUCTION</span>
-          <ul class="nav-group-list">${link("cutting-optimize", base + "/../admin/cutting-optimize.html")}${link("monitoring-produksi", "#")}</ul>
+          <ul class="nav-group-list">${link("cutting-optimize", base + "/../admin/cutting-optimize.html")}</ul>
         </div>
       `}
     </nav>
@@ -115,12 +115,27 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="admin-user-role">${roleLabel}</span>
         </div>
       </div>
-      <a class="btn-sidebar-logout" href="${base}/../auth/adminlogin.html" style="text-decoration:none">
+      <a class="btn-sidebar-logout" href="${base}/../auth/adminlogin.html" id="btnStaffLogout" style="text-decoration:none">
         <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline></svg>
         <span>Keluar / Logout</span>
       </a>
     </div>
   `;
+
+  const logoutBtn = document.getElementById("btnStaffLogout");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      try {
+        await fetch(`${window.location.protocol}//${window.location.hostname}:4000/api/auth/logout`, {
+          method: "POST",
+          credentials: "include",
+        });
+      } catch (_) { /* tetap logout lokal */ }
+      sessionStorage.clear();
+      window.location.href = "../auth/adminlogin.html";
+    });
+  }
 
   const toggle = document.getElementById("btnSidebarToggle");
   if (toggle) {

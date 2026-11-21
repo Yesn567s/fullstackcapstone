@@ -4,6 +4,7 @@ const Joi = require("joi");
 const ctrl = require("../controllers/adminDeliveryController");
 const { authMiddleware } = require("../middleware/auth");
 const requireAdmin = require("../middleware/requireAdmin");
+const requireStaff = require("../middleware/requireStaff");
 const validateBody = require("../middleware/validateBody");
 
 const router = express.Router();
@@ -27,14 +28,16 @@ const createDeliverySchema = Joi.object({
     .required(),
 }).unknown(false);
 
-router.use(authMiddleware, requireAdmin);
+// Read + create: staff (admin/operator). Lainnya tetap admin-only.
+router.use(authMiddleware);
 
-router.get("/", ctrl.listDeliveries);
-router.get("/orders", ctrl.listShippableOrders);
-router.get("/orders/:orderId", ctrl.getOrderForDelivery);
-router.get("/:id", ctrl.getDeliveryDetails);
+router.get("/", requireStaff, ctrl.listDeliveries);
+router.get("/orders", requireAdmin, ctrl.listShippableOrders);
+router.get("/orders/:orderId", requireAdmin, ctrl.getOrderForDelivery);
+router.get("/:id", requireStaff, ctrl.getDeliveryDetails);
 router.post(
   "/",
+  requireAdmin,
   validateBody(createDeliverySchema, "Data surat jalan tidak valid."),
   ctrl.createDelivery,
 );

@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
           navigateToAdminDashboard(user.username);
         } else if (user.role === "operator") {
           sessionStorage.setItem("operatorName", user.username);
-          window.location.href = "../operator/test.html";
+          window.location.href = "../operator/dashboard.html";
         } else {
           sessionStorage.setItem("buyerName", user.username);
           sessionStorage.setItem("buyerRole", user.role);

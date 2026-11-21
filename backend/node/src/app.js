@@ -14,6 +14,7 @@ const verificationRoutes = require('./routes/verification');
 const phoneRoutes = require('./routes/phone');
 const cuttingRoutes = require('./routes/cutting');
 const customerRoutes = require('./routes/customer');
+const operatorRoutes = require('./routes/operator');
 const apiRouter = require('./routes/api'); // health & generic routes
 const path = require('path');
 
@@ -54,6 +55,7 @@ app.use('/api/verification', verificationRoutes);
 app.use('/api/phone', phoneRoutes);
 app.use('/api/cutting', cuttingRoutes);
 app.use('/api/customer', customerRoutes);
+app.use('/api/operator', operatorRoutes);
 
 // Static files: /uploads/... -> backend/uploads/...
 app.use('/uploads', express.static(UPLOAD_ROOT, {

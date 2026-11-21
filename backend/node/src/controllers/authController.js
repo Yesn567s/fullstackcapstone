@@ -141,7 +141,7 @@ async function login(req, res) {
     }
 
     const allowedRoles =
-      portal === 'staff' ? ['operator'] : ['customer'];
+      portal === 'staff' ? ['admin', 'operator'] : ['customer'];
     if (
       !user ||
       !(await verifyPassword(password, user.password_hash)) ||
