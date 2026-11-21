@@ -91,7 +91,7 @@ async function getJobs(req, res) {
     for (const job of jobs) {
       const [patterns] = await db.execute(
         `SELECT cp.id, cp.label, cp.pos_x, cp.pos_y, cp.width_mm, cp.height_mm,
-                cp.cut_step_order, cp.is_offcut_usable, ci.drawer_type_code
+                cp.cut_step_order, cp.is_offcut_usable, ci.component_type
          FROM cutting_patterns cp
          LEFT JOIN component_items ci ON cp.component_item_id = ci.id
          WHERE cp.cutting_job_id = ?
@@ -269,9 +269,11 @@ async function getJobPatterns(req, res) {
 
     const [patterns] = await db.execute(
       `SELECT cp.id, cp.label, cp.pos_x, cp.pos_y, cp.width_mm, cp.height_mm,
-              cp.cut_step_order, cp.is_offcut_usable, ci.drawer_type_code
+              cp.cut_step_order, cp.is_offcut_usable, ci.component_type,
+              oi.drawer_type_code
        FROM cutting_patterns cp
        LEFT JOIN component_items ci ON cp.component_item_id = ci.id
+       LEFT JOIN order_items oi ON ci.order_item_id = oi.id
        WHERE cp.cutting_job_id = ?
        ORDER BY cp.cut_step_order ASC`,
       [jobId],
