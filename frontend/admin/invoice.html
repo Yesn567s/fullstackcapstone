@@ -39,9 +39,9 @@
           </header>
 
           <div class="po-summary-grid">
-            <div class="po-summary-card"><span>Total Piutang Aktif</span><strong>Rp 1.250.000.000</strong><small>12 invoice berjalan</small></div>
-            <div class="po-summary-card"><span>Jatuh Tempo 30 Hari</span><strong>Rp 420.000.000</strong><small>3 invoice perlu tindak lanjut</small></div>
-            <div class="po-summary-card"><span>Sudah Dibayar</span><strong>Rp 780.000.000</strong><small>Periode tahun berjalan</small></div>
+            <div class="po-summary-card"><span>Total Piutang Aktif</span><strong id="activeReceivables">-</strong><small id="activeInvoiceCount">Memuat invoice...</small></div>
+            <div class="po-summary-card"><span>Jatuh Tempo 30 Hari</span><strong id="dueIn30Days">-</strong><small id="dueInvoiceCount">Memuat invoice...</small></div>
+            <div class="po-summary-card"><span>Sudah Dibayar</span><strong id="paidThisYear">-</strong><small>Periode tahun berjalan</small></div>
           </div>
 
           <section class="po-panel po-list-panel">
@@ -64,21 +64,7 @@
                   </tr>
                 </thead>
                 <tbody id="invoiceTableBody">
-                  <tr data-status="pending" data-search="INV-26-001 PO-26-001 PT Artha">
-                    <td>INV-26-001</td><td>PO-26-001</td><td>PT Artha Furnitur</td><td>01/08/26</td><td>30/10/26</td><td>Rp 185.000.000</td><td><span class="invoice-status pending">Belum Bayar</span></td><td><button class="invoice-action-button invoice-detail" type="button">Detail</button> <button class="invoice-action-button primary" type="button">Bayar</button></td>
-                  </tr>
-                  <tr data-status="partial" data-search="INV-26-002 PO-26-002 CV Mebel">
-                    <td>INV-26-002</td><td>PO-26-002</td><td>CV Mebelindo</td><td>04/08/26</td><td>02/11/26</td><td>Rp 240.000.000</td><td><span class="invoice-status partial">Sebagian</span></td><td><button class="invoice-action-button invoice-detail" type="button">Detail</button> <button class="invoice-action-button primary" type="button">Bayar</button></td>
-                  </tr>
-                  <tr data-status="paid" data-search="INV-26-003 PO-26-003 PT Jaya Furnitur">
-                    <td>INV-26-003</td><td>PO-26-003</td><td>PT Jaya Furnitur</td><td>10/08/26</td><td>08/11/26</td><td>Rp 125.000.000</td><td><span class="invoice-status">Lunas</span></td><td><button class="invoice-action-button invoice-detail" type="button">Detail</button></td>
-                  </tr>
-                  <tr data-status="overdue" data-search="INV-26-004 PO-26-004 PT Mega Wood">
-                    <td>INV-26-004</td><td>PO-26-004</td><td>PT Mega Wood</td><td>15/07/26</td><td>13/10/26</td><td>Rp 320.000.000</td><td><span class="invoice-status overdue">Jatuh Tempo</span></td><td><button class="invoice-action-button invoice-detail" type="button">Detail</button> <button class="invoice-action-button primary" type="button">Bayar</button></td>
-                  </tr>
-                  <tr data-status="pending" data-search="INV-26-005 PO-26-005 PT Borneo">
-                    <td>INV-26-005</td><td>PO-26-005</td><td>PT Borneo Interior</td><td>19/11/26</td><td>17/02/27</td><td>Rp 380.000.000</td><td><span class="invoice-status pending">Belum Bayar</span></td><td><button class="invoice-action-button invoice-detail" type="button">Detail</button> <button class="invoice-action-button primary" type="button">Bayar</button></td>
-                  </tr>
+                  <tr><td colspan="8">Memuat data invoice...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -91,14 +77,16 @@
       <div class="invoice-detail-card">
         <div class="invoice-detail-header"><h2 id="invoiceModalTitle">Detail Invoice</h2><button class="invoice-detail-close" id="invoiceModalClose" type="button" aria-label="Tutup">&times;</button></div>
         <div class="invoice-detail-body">
-          <div class="invoice-detail-item"><span>No. Invoice</span><strong id="detailNumber">INV-26-001</strong></div>
-          <div class="invoice-detail-item"><span>No. Purchase Order</span><strong id="detailPO">PO-26-001</strong></div>
-          <div class="invoice-detail-item"><span>Customer</span><strong id="detailCustomer">PT Artha Furnitur</strong></div>
-          <div class="invoice-detail-item"><span>Termin Pembayaran</span><strong>TOP 90 Hari</strong></div>
-          <div class="invoice-detail-item"><span>Tanggal Invoice</span><strong id="detailDate">01/08/2026</strong></div>
-          <div class="invoice-detail-item"><span>Jatuh Tempo</span><strong id="detailDue">30/10/2026</strong></div>
-          <div class="invoice-detail-item"><span>Total Tagihan</span><strong id="detailTotal">Rp 185.000.000</strong></div>
-          <div class="invoice-detail-item"><span>Status Pembayaran</span><strong id="detailStatus">Belum Bayar</strong></div>
+          <div class="invoice-detail-item"><span>No. Invoice</span><strong id="detailNumber"></strong></div>
+          <div class="invoice-detail-item"><span>No. Purchase Order</span><strong id="detailPO"></strong></div>
+          <div class="invoice-detail-item"><span>Customer</span><strong id="detailCustomer"></strong></div>
+          <div class="invoice-detail-item"><span>Termin Pembayaran</span><strong id="detailTerm"></strong></div>
+          <div class="invoice-detail-item"><span>Tanggal Invoice</span><strong id="detailDate"></strong></div>
+          <div class="invoice-detail-item"><span>Jatuh Tempo</span><strong id="detailDue"></strong></div>
+          <div class="invoice-detail-item"><span>Total Tagihan</span><strong id="detailTotal"></strong></div>
+          <div class="invoice-detail-item"><span>Sudah Dibayar</span><strong id="detailPaid"></strong></div>
+          <div class="invoice-detail-item"><span>Sisa Tagihan</span><strong id="detailRemaining"></strong></div>
+          <div class="invoice-detail-item"><span>Status Pembayaran</span><strong id="detailStatus"></strong></div>
         </div>
       </div>
     </div>
@@ -107,23 +95,21 @@
       <div class="invoice-form-card">
         <div class="invoice-form-header"><h2 id="createInvoiceTitle">Buat Invoice Baru</h2><button class="invoice-form-close" id="createInvoiceClose" type="button" aria-label="Tutup">&times;</button></div>
         <form class="invoice-form" id="createInvoiceForm">
-          <label>No. Invoice<input id="createNumber" name="number" required value="INV-26-006" /></label>
-          <label>No. Purchase Order<input id="createPO" name="po" required value="PO-26-006" /></label>
-          <label>Nama Customer<input id="createCustomer" name="customer" required value="PT Nusantara Furniture" /></label>
-          <label>Total Tagihan (Rp)<input id="createAmount" name="amount" type="number" min="1" required value="150000000" /></label>
-          <label>Tanggal Invoice<input id="createDate" name="date" type="date" required value="2026-11-19" /></label>
-          <label>Jatuh Tempo<input id="createDue" name="due" type="date" required value="2027-02-17" /></label>
-          <label>Termin Pembayaran
-            <select id="createTerm" name="term">
-              <option>TOP 30 Hari</option>
-              <option selected>TOP 90 Hari</option>
-              <option>TOP 60 Hari</option>
+          <label>No. Invoice<input id="createNumber" name="invoice_number" maxlength="50" required /></label>
+          <label>No. Purchase Order
+            <select id="createPO" name="order_id" required>
+              <option value="">Pilih PO</option>
             </select>
           </label>
-          <label>Status
-            <select id="createStatus" name="status">
-              <option value="pending">Belum Bayar</option>
-              <option value="partial">Sebagian</option>
+          <label>Nama Customer<input id="createCustomer" name="customer" readonly required /></label>
+          <label>Total Tagihan (Rp)<input id="createAmount" name="total_amount" type="number" min="0.01" step="0.01" required /></label>
+          <label>Tanggal Invoice<input id="createDate" name="invoice_date" type="date" required /></label>
+          <label>Jatuh Tempo<input id="createDue" name="due_date" type="date" required /></label>
+          <label>Termin Pembayaran
+            <select id="createTerm" name="term">
+              <option value="30">TOP 30 Hari</option>
+              <option value="90" selected>TOP 90 Hari</option>
+              <option value="60">TOP 60 Hari</option>
             </select>
           </label>
         </form>
@@ -139,13 +125,13 @@
           <label>Customer<input id="paymentCustomer" readonly /></label>
           <label>Sisa Tagihan (Rp)<input id="paymentRemaining" readonly /></label>
           <label>Jumlah Dibayar (Rp)<input id="paymentAmount" type="number" min="1" required /></label>
-          <label>Tanggal Pembayaran<input id="paymentDate" type="date" required value="2026-11-19" /></label>
+          <label>Tanggal Pembayaran<input id="paymentDate" type="date" required /></label>
           <label>Metode Pembayaran
             <select id="paymentMethod" required>
               <option value="">Pilih metode</option>
-              <option>Transfer Bank</option>
-              <option>Giro</option>
-              <option>Tunai</option>
+              <option value="bank_transfer">Transfer Bank</option>
+              <option value="giro">Giro</option>
+              <option value="cash">Tunai</option>
             </select>
           </label>
           <label style="grid-column:1/-1">Catatan<input id="paymentNote" placeholder="Nomor referensi atau keterangan pembayaran" /></label>
@@ -159,230 +145,6 @@
     <script src="../template/js/common/staff-sidebar.js"></script>
     <script src="../template/js/common/staff-guard.js"></script>
     <script src="../template/js/dashboard/dashboard.js"></script>
-    <script>
-      const modal = document.getElementById("invoiceModal");
-      const closeModal = () => modal.classList.add("hidden");
-
-      document.getElementById("invoiceModalClose").addEventListener("click", closeModal);
-      modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(); });
-
-      const createInvoiceModal = document.getElementById("createInvoiceModal");
-      const paymentModal = document.getElementById("paymentModal");
-      let activePaymentRow = null;
-
-      function parseRupiah(value) {
-        return Number(String(value).replace(/[^0-9]/g, "")) || 0;
-      }
-
-      function formatRupiah(value) {
-        return `Rp ${Number(value).toLocaleString("id-ID")}`;
-      }
-
-      function formatDate(value) {
-        if (!value) return "-";
-        const [year, month, day] = value.split("-");
-        return `${day}/${month}/${year.slice(2)}`;
-      }
-
-      function closeCreateInvoice() {
-        createInvoiceModal.classList.add("hidden");
-      }
-
-      function closePayment() {
-        paymentModal.classList.add("hidden");
-        activePaymentRow = null;
-      }
-
-      function bindRowActions(root = document) {
-        root.querySelectorAll(".invoice-detail").forEach((button) => {
-          button.onclick = () => {
-            const row = button.closest("tr");
-            const cells = row.querySelectorAll("td");
-            document.getElementById("detailNumber").textContent = cells[0].textContent;
-            document.getElementById("detailPO").textContent = cells[1].textContent;
-            document.getElementById("detailCustomer").textContent = cells[2].textContent;
-            document.getElementById("detailDate").textContent = cells[3].textContent;
-            document.getElementById("detailDue").textContent = cells[4].textContent;
-            document.getElementById("detailTotal").textContent = cells[5].textContent;
-            document.getElementById("detailStatus").textContent = cells[6].textContent;
-            modal.classList.remove("hidden");
-          };
-        });
-
-        root.querySelectorAll(".invoice-action-button.primary").forEach((button) => {
-          button.onclick = () => {
-            const row = button.closest("tr");
-            const cells = row.querySelectorAll("td");
-            activePaymentRow = row;
-            document.getElementById("paymentNumber").value = cells[0].textContent;
-            document.getElementById("paymentCustomer").value = cells[2].textContent;
-            const stateKey = `invoice-payment-${cells[0].textContent}`;
-            const paymentState = JSON.parse(localStorage.getItem(stateKey) || "null");
-            const total = parseRupiah(cells[5].textContent);
-            const paid = paymentState?.paid || 0;
-            document.getElementById("paymentRemaining").value = formatRupiah(total - paid);
-            document.getElementById("paymentRemaining").dataset.remaining = String(total - paid);
-            document.getElementById("paymentAmount").value = "";
-            document.getElementById("paymentMethod").value = "";
-            document.getElementById("paymentNote").value = "";
-            paymentModal.classList.remove("hidden");
-          };
-        });
-      }
-
-      bindRowActions(document);
-
-      const createdInvoices = JSON.parse(localStorage.getItem("created-invoices") || "[]");
-      createdInvoices.forEach((invoice) => {
-        if (document.querySelector(`#invoiceTableBody tr[data-search*="${invoice.number}"]`)) return;
-        const row = document.createElement("tr");
-        row.dataset.status = invoice.statusValue;
-        row.dataset.search = `${invoice.number} ${invoice.po} ${invoice.customer}`;
-        row.innerHTML = `
-          <td>${invoice.number}</td>
-          <td>${invoice.po}</td>
-          <td>${invoice.customer}</td>
-          <td>${invoice.date}</td>
-          <td>${invoice.due}</td>
-          <td>${formatRupiah(invoice.amount)}</td>
-          <td><span class="invoice-status ${invoice.statusValue === "partial" ? "partial" : "pending"}">${invoice.statusText}</span></td>
-          <td><button class="invoice-action-button invoice-detail" type="button">Detail</button> <button class="invoice-action-button primary" type="button">Bayar</button></td>
-        `;
-        document.getElementById("invoiceTableBody").prepend(row);
-        bindRowActions(row);
-      });
-
-      document.querySelectorAll("#invoiceTableBody tr").forEach((row) => {
-        const cells = row.querySelectorAll("td");
-        const number = cells[0]?.textContent;
-        if (!number) return;
-        const paymentState = JSON.parse(localStorage.getItem(`invoice-payment-${number}`) || "null");
-        if (!paymentState) return;
-        const total = parseRupiah(cells[5].textContent);
-        const status = row.querySelector(".invoice-status");
-        if (paymentState.paid >= total) {
-          status.textContent = "Lunas";
-          status.className = "invoice-status";
-          row.dataset.status = "paid";
-          row.querySelector(".invoice-action-button.primary")?.remove();
-        } else if (paymentState.paid > 0) {
-          status.textContent = "Sebagian";
-          status.className = "invoice-status partial";
-          row.dataset.status = "partial";
-        }
-      });
-
-      document.getElementById("btnCreateInvoice").addEventListener("click", () => {
-        createInvoiceModal.classList.remove("hidden");
-      });
-      document.getElementById("createInvoiceClose").addEventListener("click", closeCreateInvoice);
-      document.getElementById("createInvoiceCancel").addEventListener("click", closeCreateInvoice);
-      createInvoiceModal.addEventListener("click", (event) => {
-        if (event.target === createInvoiceModal) closeCreateInvoice();
-      });
-
-      document.getElementById("createInvoiceSave").addEventListener("click", () => {
-        const form = document.getElementById("createInvoiceForm");
-        if (!form.reportValidity()) return;
-
-        const number = document.getElementById("createNumber").value.trim();
-        const po = document.getElementById("createPO").value.trim();
-        const customer = document.getElementById("createCustomer").value.trim();
-        const amount = Number(document.getElementById("createAmount").value);
-        const date = formatDate(document.getElementById("createDate").value);
-        const due = formatDate(document.getElementById("createDue").value);
-        const statusValue = document.getElementById("createStatus").value;
-        const statusText = statusValue === "partial" ? "Sebagian" : "Belum Bayar";
-        const statusClass = statusValue === "partial" ? "partial" : "pending";
-
-        const row = document.createElement("tr");
-        row.dataset.status = statusValue;
-        row.dataset.search = `${number} ${po} ${customer}`;
-        row.innerHTML = `
-          <td>${number}</td>
-          <td>${po}</td>
-          <td>${customer}</td>
-          <td>${date}</td>
-          <td>${due}</td>
-          <td>${formatRupiah(amount)}</td>
-          <td><span class="invoice-status ${statusClass}">${statusText}</span></td>
-          <td><button class="invoice-action-button invoice-detail" type="button">Detail</button> <button class="invoice-action-button primary" type="button">Bayar</button></td>
-        `;
-        document.getElementById("invoiceTableBody").prepend(row);
-
-        const savedInvoices = JSON.parse(localStorage.getItem("created-invoices") || "[]");
-        savedInvoices.unshift({ number, po, customer, date, due, amount, statusValue, statusText });
-        localStorage.setItem("created-invoices", JSON.stringify(savedInvoices));
-
-        bindRowActions(row);
-        closeCreateInvoice();
-        if (window.showToast) showToast(`Invoice ${number} berhasil dibuat.`);
-      });
-
-      document.getElementById("paymentClose").addEventListener("click", closePayment);
-      document.getElementById("paymentCancel").addEventListener("click", closePayment);
-      paymentModal.addEventListener("click", (event) => {
-        if (event.target === paymentModal) closePayment();
-      });
-
-      document.getElementById("paymentSave").addEventListener("click", () => {
-        const form = document.getElementById("paymentForm");
-        if (!form.reportValidity()) return;
-
-        const amount = Number(document.getElementById("paymentAmount").value);
-        const remaining = Number(document.getElementById("paymentRemaining").dataset.remaining);
-        if (amount > remaining) {
-          if (window.showToast) showToast("Jumlah pembayaran tidak boleh melebihi sisa tagihan.");
-          return;
-        }
-
-        const number = document.getElementById("paymentNumber").value;
-        const stateKey = `invoice-payment-${number}`;
-        const oldState = JSON.parse(localStorage.getItem(stateKey) || "null");
-        const paid = (oldState?.paid || 0) + amount;
-        const total = parseRupiah(activePaymentRow.querySelectorAll("td")[5].textContent);
-        localStorage.setItem(stateKey, JSON.stringify({
-          paid,
-          date: document.getElementById("paymentDate").value,
-          method: document.getElementById("paymentMethod").value,
-          note: document.getElementById("paymentNote").value.trim(),
-        }));
-
-        const status = activePaymentRow.querySelector(".invoice-status");
-        if (paid >= total) {
-          status.textContent = "Lunas";
-          status.className = "invoice-status";
-          activePaymentRow.dataset.status = "paid";
-          activePaymentRow.querySelector(".invoice-action-button.primary")?.remove();
-        } else {
-          status.textContent = "Sebagian";
-          status.className = "invoice-status partial";
-          activePaymentRow.dataset.status = "partial";
-        }
-
-        closePayment();
-        if (window.showToast) showToast(`Pembayaran invoice ${number} berhasil dikonfirmasi.`);
-      });
-
-      document.getElementById("invoiceSearch").addEventListener("input", (event) => {
-        const query = event.target.value.trim().toLowerCase();
-        document.querySelectorAll("#invoiceTableBody tr").forEach((row) => {
-          row.style.display = row.dataset.search.toLowerCase().includes(query) ? "" : "none";
-        });
-      });
-
-      const statusFilter = document.getElementById("invoiceStatusFilter");
-      const statusLabels = ["Semua Status", "Belum Bayar", "Sebagian", "Lunas", "Jatuh Tempo"];
-      let statusIndex = 0;
-      statusFilter.addEventListener("click", () => {
-        statusIndex = (statusIndex + 1) % statusLabels.length;
-        statusFilter.textContent = statusLabels[statusIndex];
-        const selected = statusLabels[statusIndex];
-        document.querySelectorAll("#invoiceTableBody tr").forEach((row) => {
-          const status = row.querySelector(".invoice-status").textContent.trim();
-          row.style.display = selected === "Semua Status" || status === selected ? "" : "none";
-        });
-      });
-    </script>
+    <script src="../template/js/admin/invoice.js"></script>
   </body>
 </html>

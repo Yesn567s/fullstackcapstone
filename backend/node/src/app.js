@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const adminDeliveryRoutes = require('./routes/adminDeliveries');
+const adminInvoiceRoutes = require('./routes/adminInvoices');
 const adminUserRoutes = require('./routes/adminUsers');
 const authRoutes = require('./routes/auth');
 const verificationRoutes = require('./routes/verification');
@@ -31,13 +32,35 @@ const allowedOrigins = (
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+function isLocalDevelopmentOrigin(origin) {
+  if (process.env.NODE_ENV !== 'development') {
+    return false;
+  }
+
+  try {
+    const url = new URL(origin);
+    return (
+      url.protocol === 'http:' &&
+      ['localhost', '127.0.0.1'].includes(url.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        isLocalDevelopmentOrigin(origin)
+      ) {
         return callback(null, true);
       }
-      return callback(new Error('Origin tidak diizinkan.'));
+      const error = new Error('Origin tidak diizinkan.');
+      error.status = 403;
+      return callback(error);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
@@ -50,6 +73,7 @@ app.use(express.json());
 app.use('/api', apiRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin/deliveries', adminDeliveryRoutes);
+app.use('/api/admin/invoices', adminInvoiceRoutes);
 app.use('/api/admin/users', adminUserRoutes);
 app.use('/api/verification', verificationRoutes);
 app.use('/api/phone', phoneRoutes);

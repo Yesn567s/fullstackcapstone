@@ -43,6 +43,8 @@ EMAIL_PASS=your-google-app-password
 FRONTEND_BASE_URL=http://127.0.0.1:5500/frontend
 ```
 
+In development, HTTP frontends served from `localhost` or `127.0.0.1` may use any port. For LAN or production frontends, add the exact origin to `FRONTEND_ORIGINS`.
+
 Copy `backend/.env.example` to `backend/.env` and replace the placeholders.
 Registration creates a pending account and sends an email verification link.
 On the registration confirmation page, the user can check their stored phone
