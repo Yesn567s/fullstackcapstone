@@ -278,13 +278,13 @@ body.view-admin-dashboard .page-wrapper {
    ========================================================================== */
 .admin-main-content {
   flex: 1;
+  min-width: 0;
   padding: 1.5rem 1.85rem 2.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   overflow-y: auto;
   background-color: #F8FAFC;
-  max-width: 1400px;
 }
 
 /* Mobile Top Bar (Hidden on Desktop) */
@@ -1795,7 +1795,7 @@ body.view-admin-dashboard .page-wrapper {
 }
 
 .admin-user-panel {
-  max-width: 780px;
+  width: 100%;
   min-height: 420px;
 }
 
