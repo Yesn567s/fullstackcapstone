@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const link = (name, href) =>
-    `<li><a class="nav-item${active === name ? " active" : ""}" data-nav="${name}" href="${href}"><span class="nav-icon">${icons[name]}</span><span class="nav-text">${labels[name]}</span></a></li>`;
+    `<li><a class="nav-item${active === name ? " active" : ""}" data-nav="${name}" href="${href}"><span class="nav-icon">${icons[name]}</span><span class="nav-text">${labels[name]}</span>${name === "transaksi-po" ? '<span class="nav-counter-badge" id="poNavCount">0</span>' : ""}</a></li>`;
 
   placeholder.className = "admin-sidebar";
   placeholder.id = "adminSidebar";

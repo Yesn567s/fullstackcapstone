@@ -19,8 +19,10 @@
 
   const roleOk = user && (user.role === "admin" || user.role === "operator");
   // Halaman admin yang boleh dibuka operator (view-only): surat-jalan,
-  // monitoring-produksi, cutting-optimize. adduser & dashboard khusus admin.
-  const operatorAllowedPage = !window.location.pathname.includes("adduser");
+  // monitoring-produksi, cutting-optimize. Transaksi PO juga khusus admin.
+  const operatorAllowedPage =
+    !window.location.pathname.includes("adduser") &&
+    !window.location.pathname.includes("transaksi-po");
   const pageRoleOk = isOperatorPage
     ? roleOk
     : isAdminPage

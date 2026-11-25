@@ -39,14 +39,14 @@
           </header>
 
           <div class="po-summary-grid">
-            <div class="po-summary-card"><span>Total Offcut Lembaran Aktif</span><strong id="offcutTotal">128 pcs</strong></div>
-            <div class="po-summary-card"><span>Material ERP (Output / Tersimpan)</span><strong>64 Bar</strong></div>
-            <div class="po-summary-card"><span>Estimasi Pengembalian Nilai</span><strong>18.5%</strong></div>
+            <div class="po-summary-card"><span>Total Offcut Tersimpan</span><strong id="offcutTotal">-</strong></div>
+            <div class="po-summary-card"><span>Offcut Tersedia</span><strong id="offcutAvailable">-</strong></div>
+            <div class="po-summary-card"><span>Offcut Dipesan</span><strong id="offcutReserved">-</strong></div>
           </div>
 
           <section class="po-panel po-list-panel">
             <div class="po-list-heading">
-              <div><h2>Daftar Stok Offcut Tersedia di Workshop</h2><p><span class="po-sync-dot"></span> Stok dapat digunakan pada proses pemotongan berikutnya</p></div>
+              <div><h2>Daftar Inventaris Offcut di Workshop</h2><p><span class="po-sync-dot"></span> Gunakan filter untuk melihat status dan stok yang tersedia</p></div>
               <button id="offcutStatusFilter" type="button">Semua Status</button>
             </div>
             <div class="po-table-wrap">
@@ -55,11 +55,7 @@
                   <tr><th>ID Offcut</th><th>Tipe Material</th><th>Lebar (mm)</th><th>Panjang (mm)</th><th>Lokasi Rak</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr>
                 </thead>
                 <tbody id="offcutTableBody">
-                  <tr data-status="available" data-search="OP-001 LVB Poplar Rak A-10"><td>OP-001</td><td>Triplek Poplar</td><td>650</td><td>420</td><td>Rak A-10</td><td>30</td><td><span class="offcut-status">Tersedia</span></td><td><button class="po-detail-button offcut-detail" type="button">Detail</button></td></tr>
-                  <tr data-status="reserved" data-search="OP-002 LVB Melamine Rak B-12"><td>OP-002</td><td>LVB Melamine</td><td>480</td><td>220</td><td>Rak B-12</td><td>20</td><td><span class="offcut-status reserved">Dipesan</span></td><td><button class="po-detail-button offcut-detail" type="button">Detail</button></td></tr>
-                  <tr data-status="available" data-search="OP-003 LVB Poplar Rak C-08"><td>OP-003</td><td>Triplek Poplar</td><td>550</td><td>300</td><td>Rak C-08</td><td>48</td><td><span class="offcut-status">Tersedia</span></td><td><button class="po-detail-button offcut-detail" type="button">Detail</button></td></tr>
-                  <tr data-status="used" data-search="OP-004 MDF Melamine Rak D-04"><td>OP-004</td><td>MDF Melamine</td><td>620</td><td>350</td><td>Rak D-04</td><td>12</td><td><span class="offcut-status used">Digunakan</span></td><td><button class="po-detail-button offcut-detail" type="button">Detail</button></td></tr>
-                  <tr data-status="available" data-search="OP-005 Plywood Pinus Rak E-06"><td>OP-005</td><td>Plywood Pinus</td><td>700</td><td>400</td><td>Rak E-06</td><td>18</td><td><span class="offcut-status">Tersedia</span></td><td><button class="po-detail-button offcut-detail" type="button">Detail</button></td></tr>
+                  <tr><td colspan="8">Memuat inventaris offcut...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -78,7 +74,8 @@
           <div class="admin-detail-item"><span>Lokasi Rak</span><strong id="detailOffcutLocation">-</strong></div>
           <div class="admin-detail-item"><span>Jumlah</span><strong id="detailOffcutQuantity">-</strong></div>
           <div class="admin-detail-item"><span>Status</span><strong id="detailOffcutStatus">-</strong></div>
-          <div class="admin-detail-item"><span>Kondisi Bahan</span><strong id="detailOffcutCondition">Layak digunakan untuk pemotongan berikutnya.</strong></div>
+          <div class="admin-detail-item"><span>Pemilik Material</span><strong id="detailOffcutOwner">-</strong></div>
+          <div class="admin-detail-item"><span>Orientasi Serat</span><strong id="detailOffcutGrain">-</strong></div>
         </div>
       </div>
     </div>
@@ -86,28 +83,25 @@
       <div class="offcut-form-card">
         <div class="offcut-form-header"><h2 id="offcutFormTitle">Input Offcut Baru</h2><button class="offcut-form-close" id="offcutFormClose" type="button" aria-label="Tutup">&times;</button></div>
         <form class="offcut-form" id="offcutForm">
-          <label>ID Offcut<input id="offcutId" name="id" required value="OP-006" /></label>
           <label>Tipe Material
             <select id="offcutMaterial" name="material" required>
-              <option value="Triplek Poplar">Triplek Poplar</option>
-              <option value="LVB Melamine">LVB Melamine</option>
-              <option value="MDF Melamine">MDF Melamine</option>
-              <option value="Plywood Pinus">Plywood Pinus</option>
+              <option value="">Memuat material...</option>
             </select>
           </label>
-          <label>Lebar (mm)<input id="offcutWidth" name="width" type="number" min="1" required value="600" /></label>
-          <label>Panjang (mm)<input id="offcutLength" name="length" type="number" min="1" required value="400" /></label>
+          <label>Lebar (mm)<input id="offcutWidth" name="width" type="number" min="1" step="0.01" required value="600" /></label>
+          <label>Panjang (mm)<input id="offcutLength" name="length" type="number" min="1" step="0.01" required value="400" /></label>
           <label>Lokasi Rak<input id="offcutLocation" name="location" required value="Rak F-01" /></label>
-          <label>Jumlah<input id="offcutQuantity" name="quantity" type="number" min="1" required value="20" /></label>
-          <label style="grid-column:1/-1">Status
-            <select id="offcutStatus" name="status">
-              <option value="available">Tersedia</option>
-              <option value="reserved">Dipesan</option>
-              <option value="used">Digunakan</option>
+          <label>Orientasi Serat
+            <select id="offcutGrain" name="grain_orientation" required>
+              <option value="lengthwise">Sejajar panjang</option>
+              <option value="widthwise">Sejajar lebar</option>
+              <option value="any">Bebas</option>
             </select>
           </label>
+          <label>Jumlah Potongan<input id="offcutQuantity" name="quantity" type="number" min="1" max="500" step="1" required value="1" /></label>
+          <p class="offcut-form-note">Setiap potongan disimpan sebagai satu record inventaris dan berstatus Tersedia.</p>
         </form>
-        <div class="offcut-form-footer"><button id="offcutFormCancel" type="button">Batal</button><button class="offcut-form-primary" id="offcutFormSave" type="button">Simpan Offcut</button></div>
+        <div class="offcut-form-footer"><button id="offcutFormCancel" type="button">Batal</button><button class="offcut-form-primary" id="offcutFormSave" type="submit" form="offcutForm">Simpan Offcut</button></div>
       </div>
     </div>
 
@@ -116,145 +110,6 @@
     <script src="../template/js/common/staff-sidebar.js"></script>
     <script src="../template/js/common/staff-guard.js"></script>
     <script src="../template/js/dashboard/dashboard.js"></script>
-    <script>
-      const offcutFormModal = document.getElementById("offcutFormModal");
-      const offcutForm = document.getElementById("offcutForm");
-      let offcutDetailHandlerBound = false;
-
-      function closeOffcutForm() {
-        offcutFormModal.classList.add("hidden");
-      }
-
-      function bindOffcutDetailButtons(root = document) {
-        root.querySelectorAll(".offcut-detail").forEach((button) => {
-          button.onclick = () => {
-            const row = button.closest("tr");
-            const cells = row.querySelectorAll("td");
-            document.getElementById("detailOffcutId").textContent = cells[0].textContent;
-            document.getElementById("detailOffcutMaterial").textContent = cells[1].textContent;
-            document.getElementById("detailOffcutWidth").textContent = cells[2].textContent;
-            document.getElementById("detailOffcutLength").textContent = cells[3].textContent;
-            document.getElementById("detailOffcutLocation").textContent = cells[4].textContent;
-            document.getElementById("detailOffcutQuantity").textContent = cells[5].textContent;
-            document.getElementById("detailOffcutStatus").textContent = cells[6].textContent;
-            document.getElementById("detailOffcutCondition").textContent =
-              cells[6].textContent.trim() === "Digunakan"
-                ? "Stok sedang tidak tersedia karena telah digunakan."
-                : cells[6].textContent.trim() === "Dipesan"
-                  ? "Stok telah dipesan untuk job produksi tertentu."
-                  : "Layak digunakan untuk pemotongan berikutnya.";
-            document.getElementById("offcutDetailModal").classList.remove("hidden");
-          };
-        });
-        offcutDetailHandlerBound = true;
-      }
-
-      document.getElementById("btnAddOffcut").addEventListener("click", () => {
-        const saved = JSON.parse(localStorage.getItem("inventaris-offcut") || "[]");
-        document.getElementById("offcutId").value = `OP-${String(saved.length + 6).padStart(3, "0")}`;
-        offcutFormModal.classList.remove("hidden");
-      });
-      document.getElementById("offcutFormClose").addEventListener("click", closeOffcutForm);
-      document.getElementById("offcutFormCancel").addEventListener("click", closeOffcutForm);
-      offcutFormModal.addEventListener("click", (event) => {
-        if (event.target === offcutFormModal) closeOffcutForm();
-      });
-
-      document.getElementById("offcutFormSave").addEventListener("click", () => {
-        if (!offcutForm.reportValidity()) return;
-
-        const data = {
-          id: document.getElementById("offcutId").value.trim(),
-          material: document.getElementById("offcutMaterial").value,
-          width: document.getElementById("offcutWidth").value,
-          length: document.getElementById("offcutLength").value,
-          location: document.getElementById("offcutLocation").value.trim(),
-          quantity: document.getElementById("offcutQuantity").value,
-          status: document.getElementById("offcutStatus").value,
-        };
-
-        const statusLabels = {
-          available: "Tersedia",
-          reserved: "Dipesan",
-          used: "Digunakan",
-        };
-        const statusClass = data.status === "available" ? "" : data.status === "reserved" ? "reserved" : "used";
-
-        const row = document.createElement("tr");
-        row.dataset.status = data.status;
-        row.dataset.search = `${data.id} ${data.material} ${data.location}`;
-        row.innerHTML = `
-          <td>${data.id}</td>
-          <td>${data.material}</td>
-          <td>${data.width}</td>
-          <td>${data.length}</td>
-          <td>${data.location}</td>
-          <td>${data.quantity}</td>
-          <td><span class="offcut-status ${statusClass}">${statusLabels[data.status]}</span></td>
-          <td><button class="po-detail-button offcut-detail" type="button">Detail</button></td>
-        `;
-        document.getElementById("offcutTableBody").prepend(row);
-        bindOffcutDetailButtons(row);
-
-        const saved = JSON.parse(localStorage.getItem("inventaris-offcut") || "[]");
-        saved.unshift(data);
-        localStorage.setItem("inventaris-offcut", JSON.stringify(saved));
-
-        document.getElementById("offcutTotal").textContent =
-          `${128 + saved.reduce((sum, item) => sum + Number(item.quantity || 0), 0)} pcs`;
-        offcutForm.reset();
-        closeOffcutForm();
-        if (window.showToast) showToast(`Offcut ${data.id} berhasil ditambahkan.`);
-      });
-
-      document.getElementById("offcutSearch").addEventListener("input", (event) => {
-        const query = event.target.value.trim().toLowerCase();
-        document.querySelectorAll("#offcutTableBody tr").forEach((row) => {
-          row.style.display = row.dataset.search.toLowerCase().includes(query) ? "" : "none";
-        });
-      });
-
-      const statusFilter = document.getElementById("offcutStatusFilter");
-      const statusLabels = ["Semua Status", "Tersedia", "Dipesan", "Digunakan"];
-      let statusIndex = 0;
-      statusFilter.addEventListener("click", () => {
-        statusIndex = (statusIndex + 1) % statusLabels.length;
-        statusFilter.textContent = statusLabels[statusIndex];
-        const selected = statusLabels[statusIndex];
-        document.querySelectorAll("#offcutTableBody tr").forEach((row) => {
-          const status = row.querySelector(".offcut-status").textContent.trim();
-          row.style.display = selected === "Semua Status" || status === selected ? "" : "none";
-        });
-      });
-
-      bindOffcutDetailButtons(document);
-
-      const savedOffcuts = JSON.parse(localStorage.getItem("inventaris-offcut") || "[]");
-      savedOffcuts.forEach((data) => {
-        if (document.querySelector(`#offcutTableBody tr[data-search*="${data.id}"]`)) return;
-        const statusLabels = { available: "Tersedia", reserved: "Dipesan", used: "Digunakan" };
-        const statusClass = data.status === "available" ? "" : data.status === "reserved" ? "reserved" : "used";
-        const row = document.createElement("tr");
-        row.dataset.status = data.status;
-        row.dataset.search = `${data.id} ${data.material} ${data.location}`;
-        row.innerHTML = `
-          <td>${data.id}</td><td>${data.material}</td><td>${data.width}</td><td>${data.length}</td>
-          <td>${data.location}</td><td>${data.quantity}</td>
-          <td><span class="offcut-status ${statusClass}">${statusLabels[data.status]}</span></td>
-          <td><button class="po-detail-button offcut-detail" type="button">Detail</button></td>
-        `;
-        document.getElementById("offcutTableBody").prepend(row);
-      });
-      bindOffcutDetailButtons(document);
-      if (savedOffcuts.length) {
-        document.getElementById("offcutTotal").textContent =
-          `${128 + savedOffcuts.reduce((sum, item) => sum + Number(item.quantity || 0), 0)} pcs`;
-      }
-      const offcutDetailModal = document.getElementById("offcutDetailModal");
-      document.getElementById("offcutDetailClose").addEventListener("click", () => offcutDetailModal.classList.add("hidden"));
-      offcutDetailModal.addEventListener("click", (event) => {
-        if (event.target === offcutDetailModal) offcutDetailModal.classList.add("hidden");
-      });
-    </script>
+    <script src="../template/js/admin/inventaris-offcut.js"></script>
   </body>
 </html>

@@ -165,7 +165,7 @@
                     </svg>
                   </span>
                   <span class="nav-text">Transaksi PO</span>
-                  <span class="nav-counter-badge">12</span>
+                  <span class="nav-counter-badge" id="poNavCount">0</span>
                 </a>
               </li>
               <li>
@@ -361,9 +361,9 @@
           <header class="po-header">
             <div>
               <h1>Manajemen Transaksi Purchase Order (PO)</h1>
-              <p>Lolah pesanan PO dan jadwal produksi</p>
+              <p>Kelola pesanan PO dan jadwal produksi</p>
             </div>
-            <button class="po-add-button" type="button">
+            <button class="po-add-button" id="poNewButton" type="button">
               <span>+</span> Buat PO Baru
             </button>
           </header>
@@ -371,70 +371,86 @@
           <div class="po-summary-grid">
             <div class="po-summary-card">
               <span>Total PO Aktif</span>
-              <strong>12 PO</strong>
+              <strong id="poActiveCount">-</strong>
             </div>
             <div class="po-summary-card">
               <span>Status Produksi</span>
-              <strong>5 Aktif</strong>
-              <small>830 unit</small>
+              <strong id="poProductionCount">-</strong>
+              <small id="poProductionUnits">- unit</small>
             </div>
             <div class="po-summary-card">
               <span>Skema Pembayaran</span>
-              <strong>TOP 90 Hari</strong>
+              <strong id="poAverageTop">-</strong>
             </div>
           </div>
 
           <div class="po-workspace">
             <section class="po-panel po-form-panel">
-              <h2>Detail Pesanan Buyer (MTO)</h2>
+              <h2>Detail Pesanan (MTO)</h2>
 
-              <label class="po-field">
-                <span>Nama Customer</span>
-                <input type="text" value="PT. Artha Furnitur">
-                <button aria-label="Cari customer" type="button">
-                  <svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <line x1="20" x2="16.65" y1="20" y2="16.65"></line>
-                  </svg>
-                </button>
-              </label>
+              <form id="poCreateForm">
+                <label class="po-field">
+                  <span>Nama Customer</span>
+                  <select id="poCustomer" required>
+                    <option value="">Memuat customer...</option>
+                  </select>
+                </label>
 
-              <label class="po-field">
-                <span>Material Pesanan</span>
-                <input type="text" value="Triplek 17mm">
-              </label>
+                <label class="po-field">
+                  <span>Nomor PO Buyer (opsional)</span>
+                  <input id="poNumber" maxlength="50" type="text" placeholder="Otomatis jika kosong">
+                </label>
 
-              <label class="po-field">
-                <span>Top dan / Termin</span>
-                <input type="text" value="Top 90 Hari">
-              </label>
+                <label class="po-field">
+                  <span>Tipe Laci / Produk</span>
+                  <input id="poDrawerType" maxlength="50" required type="text" value="MTO">
+                </label>
 
-              <label class="po-field">
-                <span>Tanggal Order</span>
-                <input type="text" value="07 Agustus 2026">
-              </label>
+                <label class="po-field">
+                  <span>TOP (hari)</span>
+                  <input id="poTopDays" max="3650" min="1" required type="number" value="90">
+                </label>
 
-              <div class="po-dimension">
-                <h3>Detail Input Ukuran Laci (Net Dimensions)</h3>
-                <div class="po-dimension-grid">
-                  <div><span>Tipe Laci</span><strong>Panel Kecil (mm)</strong></div>
-                  <div><span>Panjang (mm)</span><strong>400</strong></div>
-                  <div><span>Lebar (mm)</span><strong>150</strong></div>
-                  <div><span>Tinggi (mm)</span><strong>350</strong></div>
+                <label class="po-field">
+                  <span>Tanggal Order</span>
+                  <input id="poOrderDate" required type="date">
+                </label>
+
+                <div class="po-dimension">
+                  <h3>Spesifikasi Item Pesanan (mm)</h3>
+                  <div class="po-dimension-grid">
+                    <label><span>Panjang</span><input id="poLength" min="0.01" required step="0.01" type="number" value="400"></label>
+                    <label><span>Lebar</span><input id="poWidth" min="0.01" required step="0.01" type="number" value="150"></label>
+                    <label><span>Tinggi</span><input id="poHeight" min="0.01" required step="0.01" type="number" value="350"></label>
+                    <label><span>Jumlah (unit)</span><input id="poQuantity" min="1" required step="1" type="number" value="1"></label>
+                  </div>
                 </div>
-              </div>
 
-              <p class="po-note">Tolerance setelah +/- 1mm = satuan milimeter</p>
-              <button class="po-save-button" type="button">Simpan Pesanan</button>
+                <p class="po-note">Ukuran menggunakan milimeter. Status awal PO adalah Draft.</p>
+                <button class="po-save-button" id="poSaveButton" type="submit">Simpan Pesanan</button>
+              </form>
             </section>
 
             <section class="po-panel po-list-panel">
               <div class="po-list-heading">
                 <div>
                   <h2>Daftar Transaksi PO Berjalan</h2>
-                  <p><span class="po-sync-dot"></span> Cari PO / masuk customer...</p>
+                  <p><span class="po-sync-dot"></span> Cari PO / nama customer</p>
                 </div>
-                <button type="button">Semua Status</button>
+                <div class="po-list-filters">
+                  <input aria-label="Cari PO atau customer" id="poSearch" type="search" placeholder="Cari PO/customer">
+                  <select aria-label="Filter status PO" id="poStatusFilter">
+                    <option value="all">Semua Status</option>
+                    <option value="draft">Draft</option>
+                    <option value="contract_signed">Kontrak Ditandatangani</option>
+                    <option value="dp_pending">Menunggu DP</option>
+                    <option value="ready_for_production">Siap Produksi</option>
+                    <option value="in_production">Diproses</option>
+                    <option value="partially_shipped">Dikirim Sebagian</option>
+                    <option value="completed">Selesai</option>
+                    <option value="cancelled">Dibatalkan</option>
+                  </select>
+                </div>
               </div>
 
               <div class="po-table-wrap">
@@ -449,23 +465,8 @@
                       <th>Aksi</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>PO-26-001</td>
-                      <td>PT Artha</td>
-                      <td>01/08/26</td>
-                      <td>250 pcs</td>
-                      <td><span class="po-status approved">Diproses</span></td>
-                      <td><button class="po-detail-button">Detail Pesan</button></td>
-                    </tr>
-                    <tr>
-                      <td>PO-26-002</td>
-                      <td>CV Mebel</td>
-                      <td>04/08/26</td>
-                      <td>300 pcs</td>
-                      <td><span class="po-status success">Selesai</span></td>
-                      <td><button class="po-detail-button">Detail Pesan</button></td>
-                    </tr>
+                  <tbody id="poTableBody">
+                    <tr><td colspan="6">Memuat transaksi PO...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -481,5 +482,6 @@
     <script src="../template/js/common/staff-sidebar.js"></script>
     <script src="../template/js/common/staff-guard.js"></script>
     <script src="../template/js/dashboard/dashboard.js"></script>
+    <script src="../template/js/admin/transaksi-po.js"></script>
   </body>
 </html>

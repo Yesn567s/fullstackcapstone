@@ -296,6 +296,76 @@ describe("Operator API", () => {
   });
 
   describe("POST /api/operator/offcuts", () => {
+    test("lists aggregated offcut stock and inventory totals", async () => {
+      mockDbExecute.mockImplementation((query) => {
+        if (query.includes("FROM users WHERE id = ?")) {
+          return Promise.resolve([
+            [{ id: 5, username: "operator_user", role: "operator" }],
+            [],
+          ]);
+        }
+        if (query.includes("FROM offcuts o")) {
+          return Promise.resolve([
+            [
+              {
+                id: 12,
+                quantity: 3,
+                material_id: 2,
+                material_name: "LVB Sengon",
+                width_mm: "400.00",
+                length_mm: "600.00",
+                status: "available",
+              },
+            ],
+            [],
+          ]);
+        }
+        return Promise.resolve([
+          [
+            {
+              total_pieces: 8,
+              available_pieces: 5,
+              reserved_pieces: 2,
+            },
+          ],
+          [],
+        ]);
+      });
+
+      const response = await request(app)
+        .get("/api/operator/offcuts")
+        .set("Cookie", operatorCookie);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data[0]).toMatchObject({
+        id: 12,
+        quantity: 3,
+        material_name: "LVB Sengon",
+      });
+      expect(response.body.summary).toMatchObject({
+        total_pieces: 8,
+        available_pieces: 5,
+      });
+    });
+
+    test("lists material choices from the materials table", async () => {
+      mockDbExecute.mockImplementation((query) =>
+        Promise.resolve([
+          query.includes("FROM users WHERE id = ?")
+            ? [{ id: 5, username: "operator_user", role: "operator" }]
+            : [{ id: 2, material_name: "LVB Sengon", thickness_mm: "12.00" }],
+          [],
+        ]),
+      );
+
+      const response = await request(app)
+        .get("/api/operator/offcuts/materials")
+        .set("Cookie", operatorCookie);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data[0].material_name).toBe("LVB Sengon");
+    });
+
     test("stores an available offcut and logs activity", async () => {
       mockConnectionExecute
         .mockResolvedValueOnce([[{ id: 2, material_name: "LVB Sengon" }], []])
@@ -326,6 +396,51 @@ describe("Operator API", () => {
       expect(mockCommit).toHaveBeenCalledTimes(1);
     });
 
+    test("stores requested quantities as individual offcut rows in one transaction", async () => {
+      mockConnectionExecute
+        .mockResolvedValueOnce([[{ id: 2, material_name: "LVB Sengon" }], []])
+        .mockResolvedValueOnce([{ insertId: 60 }, []])
+        .mockResolvedValueOnce([{ insertId: 61 }, []])
+        .mockResolvedValueOnce([{ insertId: 62 }, []])
+        .mockResolvedValueOnce([{ insertId: 1 }, []]);
+
+      const response = await request(app)
+        .post("/api/operator/offcuts")
+        .set("Cookie", operatorCookie)
+        .send({
+          material_id: 2,
+          length_mm: 600,
+          width_mm: 400,
+          quantity: 3,
+        });
+
+      expect(response.status).toBe(201);
+      expect(response.body.data).toMatchObject({
+        id: 60,
+        quantity: 3,
+        audit_logged: true,
+      });
+      expect(mockConnectionExecute).toHaveBeenCalledTimes(5);
+      expect(mockCommit).toHaveBeenCalledTimes(1);
+    });
+
+    test("allows the demo admin to add stock and reports that it cannot be audit logged", async () => {
+      mockConnectionExecute
+        .mockResolvedValueOnce([[{ id: 2, material_name: "LVB Sengon" }], []])
+        .mockResolvedValueOnce([{ insertId: 63 }, []]);
+
+      const response = await request(app)
+        .post("/api/operator/offcuts")
+        .set("Cookie", adminCookie)
+        .send({ material_id: 2, length_mm: 600, width_mm: 400 });
+
+      expect(response.status).toBe(201);
+      expect(response.body.data.audit_logged).toBe(false);
+      expect(response.body.message).toMatch(/tidak tercatat/i);
+      expect(mockConnectionExecute).toHaveBeenCalledTimes(2);
+      expect(mockCommit).toHaveBeenCalledTimes(1);
+    });
+
     test("rejects unknown material", async () => {
       mockConnectionExecute.mockResolvedValueOnce([[], []]);
       const response = await request(app)
@@ -342,6 +457,16 @@ describe("Operator API", () => {
         .set("Cookie", operatorCookie)
         .send({ material_id: 2, length_mm: -5, width_mm: 400 });
       expect(response.status).toBe(422);
+    });
+
+    test("rejects offcut quantities above the bulk limit", async () => {
+      const response = await request(app)
+        .post("/api/operator/offcuts")
+        .set("Cookie", operatorCookie)
+        .send({ material_id: 2, length_mm: 600, width_mm: 400, quantity: 501 });
+
+      expect(response.status).toBe(422);
+      expect(mockGetConnection).not.toHaveBeenCalled();
     });
   });
 

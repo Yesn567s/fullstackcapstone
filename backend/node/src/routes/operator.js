@@ -24,10 +24,11 @@ const stageSchema = Joi.object({
 const offcutSchema = Joi.object({
   material_id: Joi.number().integer().positive().required(),
   customer_id: Joi.number().integer().positive().allow(null),
-  length_mm: Joi.number().positive().max(9999).required(),
-  width_mm: Joi.number().positive().max(9999).required(),
+  length_mm: Joi.number().positive().max(9999).precision(2).required(),
+  width_mm: Joi.number().positive().max(9999).precision(2).required(),
   grain_orientation: Joi.string().valid('lengthwise', 'widthwise', 'any').default('lengthwise'),
   location_tag: Joi.string().trim().max(50).allow('', null),
+  quantity: Joi.number().integer().positive().max(500).default(1),
 }).unknown(false);
 
 const qcSchema = Joi.object({
@@ -46,6 +47,10 @@ router.get('/jobs', ctrl.getJobs);
 
 // GET /api/operator/deliveries
 router.get('/deliveries', ctrl.getDeliveries);
+
+// GET /api/operator/offcuts -> inventory and counts from offcuts table
+router.get('/offcuts/materials', ctrl.listOffcutMaterials);
+router.get('/offcuts', ctrl.listOffcuts);
 
 // PATCH /api/operator/jobs/:id/status  body: { status: in_progress|completed }
 router.patch(

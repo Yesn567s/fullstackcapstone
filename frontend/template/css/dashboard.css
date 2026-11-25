@@ -929,7 +929,8 @@ body.view-admin-dashboard .page-wrapper {
   color: #334155;
 }
 
-.po-field input {
+.po-field input,
+.po-field select {
   height: 31px;
   box-sizing: border-box;
   border: 1px solid #edf0f4;
@@ -969,7 +970,8 @@ body.view-admin-dashboard .page-wrapper {
   border-radius: 3px;
 }
 
-.po-dimension-grid div {
+.po-dimension-grid div,
+.po-dimension-grid label {
   min-height: 48px;
   padding: 0.45rem;
   box-sizing: border-box;
@@ -978,7 +980,8 @@ body.view-admin-dashboard .page-wrapper {
   gap: 0.4rem;
 }
 
-.po-dimension-grid div + div {
+.po-dimension-grid div + div,
+.po-dimension-grid label + label {
   border-left: 1px solid #edf0f4;
 }
 
@@ -987,9 +990,34 @@ body.view-admin-dashboard .page-wrapper {
   color: #64748b;
 }
 
-.po-dimension-grid strong {
+.po-dimension-grid strong,
+.po-dimension-grid input {
   font-size: 0.56rem;
   color: #334155;
+}
+
+.po-dimension-grid input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.2rem;
+  border: 1px solid #edf0f4;
+  border-radius: 3px;
+}
+
+.po-list-filters {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.po-list-filters input,
+.po-list-filters select {
+  min-width: 0;
+  border: 1px solid #dfe3e8;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.58rem;
+  color: #475569;
 }
 
 .po-note {
@@ -1603,6 +1631,19 @@ body.view-admin-dashboard .page-wrapper {
 .offcut-status.used {
   background: #e5e7eb;
   color: #475569;
+}
+
+.offcut-status.scrapped {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.offcut-form-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #64748b;
+  font-size: 0.62rem;
+  font-weight: 400;
 }
 
 .offcut-form-modal {

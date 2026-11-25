@@ -349,17 +349,78 @@ async function updateOrderStage(req, res) {
   }
 }
 
+async function listOffcuts(req, res) {
+  try {
+    const [rows] = await db.execute(
+      `SELECT MIN(o.id) AS id, COUNT(*) AS quantity, o.material_id,
+              o.customer_id, o.length_mm, o.width_mm, o.grain_orientation,
+              o.status, o.location_tag, MAX(o.updated_at) AS updated_at,
+              m.material_name, m.thickness_mm, c.company_name
+       FROM offcuts o
+       JOIN materials m ON m.id = o.material_id
+       LEFT JOIN customers c ON c.id = o.customer_id
+       GROUP BY o.material_id, o.customer_id, o.length_mm, o.width_mm,
+                o.grain_orientation, o.status, o.location_tag,
+                m.material_name, m.thickness_mm
+       ORDER BY FIELD(o.status, 'available', 'reserved', 'used', 'scrapped'),
+                MAX(o.updated_at) DESC, MIN(o.id) DESC`,
+    );
+    const [[summary]] = await db.execute(
+      `SELECT COUNT(*) AS total_pieces,
+              COALESCE(SUM(status = 'available'), 0) AS available_pieces,
+              COALESCE(SUM(status = 'reserved'), 0) AS reserved_pieces
+       FROM offcuts`,
+    );
+    return res.json({ success: true, data: rows, summary });
+  } catch (error) {
+    console.error('List offcuts error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Daftar inventaris offcut tidak dapat dimuat saat ini.',
+    });
+  }
+}
+
+async function listOffcutMaterials(req, res) {
+  try {
+    const [rows] = await db.execute(
+      `SELECT m.id, m.material_name, m.thickness_mm, m.customer_id,
+              c.company_name
+       FROM materials m
+       LEFT JOIN customers c ON c.id = m.customer_id
+       ORDER BY m.material_name ASC, m.thickness_mm ASC, m.id ASC`,
+    );
+    return res.json({ success: true, data: rows });
+  } catch (error) {
+    console.error('List offcut materials error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Daftar material tidak dapat dimuat saat ini.',
+    });
+  }
+}
+
 async function createOffcut(req, res) {
   const staffId = req.staff.id;
+  const canCreateWithoutDatabaseUser =
+    !staffId && req.staff.role === 'admin';
 
-  if (!staffId) {
+  if (!staffId && !canCreateWithoutDatabaseUser) {
     return res.status(403).json({
       success: false,
       message: 'Gunakan akun staff terdaftar di database untuk mencatat aktivitas produksi.',
     });
   }
 
-  const { material_id, customer_id, length_mm, width_mm, grain_orientation, location_tag } = req.body;
+  const {
+    material_id,
+    customer_id,
+    length_mm,
+    width_mm,
+    grain_orientation,
+    location_tag,
+    quantity,
+  } = req.body;
   let connection;
 
   try {
@@ -367,7 +428,7 @@ async function createOffcut(req, res) {
     await connection.beginTransaction();
 
     const [[material]] = await connection.execute(
-      'SELECT id, material_name FROM materials WHERE id = ? LIMIT 1',
+      'SELECT id, material_name, customer_id FROM materials WHERE id = ? LIMIT 1',
       [material_id],
     );
     if (!material) {
@@ -375,21 +436,43 @@ async function createOffcut(req, res) {
       return res.status(422).json({ success: false, message: 'Material tidak ditemukan.' });
     }
 
-    const [result] = await connection.execute(
-      `INSERT INTO offcuts (material_id, customer_id, length_mm, width_mm, grain_orientation, status, location_tag)
-       VALUES (?, ?, ?, ?, ?, 'available', ?)`,
-      [material_id, customer_id || null, length_mm, width_mm, grain_orientation || 'lengthwise', location_tag || null],
-    );
-    const offcutId = result.insertId;
+    let offcutId;
+    for (let index = 0; index < quantity; index += 1) {
+      const [result] = await connection.execute(
+        `INSERT INTO offcuts (material_id, customer_id, length_mm, width_mm, grain_orientation, status, location_tag)
+         VALUES (?, ?, ?, ?, ?, 'available', ?)`,
+        [
+          material_id,
+          customer_id || material.customer_id || null,
+          length_mm,
+          width_mm,
+          grain_orientation || 'lengthwise',
+          location_tag || null,
+        ],
+      );
+      if (offcutId === undefined) offcutId = result.insertId;
+    }
 
-    await connection.execute(
-      `INSERT INTO activity_logs (user_id, order_id, action_type, module_name, reference_id, description)
-       VALUES (?, NULL, 'INPUT_OFFCUT', 'offcuts', ?, ?)`,
-      [staffId, offcutId, `Offcut ${length_mm}x${width_mm}mm (${material.material_name}) dicatat layak pakai.`],
-    );
+    if (staffId) {
+      await connection.execute(
+        `INSERT INTO activity_logs (user_id, order_id, action_type, module_name, reference_id, description)
+         VALUES (?, NULL, 'INPUT_OFFCUT', 'offcuts', ?, ?)`,
+        [
+          staffId,
+          offcutId,
+          `${quantity} offcut ${length_mm}x${width_mm}mm (${material.material_name}) dicatat layak pakai.`,
+        ],
+      );
+    }
 
     await connection.commit();
-    return res.status(201).json({ success: true, message: 'Offcut tersimpan.', data: { id: offcutId } });
+    return res.status(201).json({
+      success: true,
+      message: staffId
+        ? `${quantity} offcut berhasil disimpan.`
+        : `${quantity} offcut berhasil disimpan. Aktivitas tidak tercatat karena akun admin demo tidak memiliki ID pengguna database.`,
+      data: { id: offcutId, quantity, audit_logged: Boolean(staffId) },
+    });
   } catch (error) {
     if (connection) {
       try { await connection.rollback(); } catch (rollbackError) { console.error('Offcut rollback error:', rollbackError); }
@@ -474,6 +557,8 @@ module.exports = {
   updateJobStatus,
   getJobPatterns,
   updateOrderStage,
+  listOffcuts,
+  listOffcutMaterials,
   createOffcut,
   submitQC,
 };
