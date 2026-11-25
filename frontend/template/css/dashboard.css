@@ -353,6 +353,17 @@ body.view-admin-dashboard .page-wrapper {
   margin: 0;
 }
 
+.banner-action-col {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.period-control-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
 /* Period Dropdown Filter */
 .period-select-wrapper {
   position: relative;
@@ -377,6 +388,33 @@ body.view-admin-dashboard .page-wrapper {
 .btn-period-select:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-print-report {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid #d68a00;
+  border-radius: 6px;
+  padding: 0.48rem 0.85rem;
+  background: #d68a00;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-print-report:hover {
+  background: #b87500;
+  border-color: #b87500;
+}
+
+.btn-print-report:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .period-dropdown-menu {
