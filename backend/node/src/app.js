@@ -19,9 +19,7 @@ const cuttingRoutes = require('./routes/cutting');
 const customerRoutes = require('./routes/customer');
 const operatorRoutes = require('./routes/operator');
 const apiRouter = require('./routes/api'); // health & generic routes
-const path = require('path');
-
-const UPLOAD_ROOT = path.resolve(__dirname, '../../../uploads');
+const { UPLOAD_ROOT } = require('./middleware/upload');
 
 const app = express();
 

@@ -552,6 +552,158 @@ function initConsignmentTracking() {
       );
     });
   });
+
+  const orderSelect = document.getElementById("trackingOrderSelect");
+  const deliveriesBody = document.getElementById("buyerDeliveriesTableBody");
+  if (!orderSelect || !deliveriesBody) return;
+
+  const API_BASE = `${window.location.protocol}//${window.location.hostname}:4000`;
+  const summaryEl = document.getElementById("trackingPoSummary");
+  const badgeEl = document.getElementById("trackingProgressBadge");
+  const timelineEl = document.getElementById("trackingTimelineList");
+
+  const escHtml = (val) =>
+    String(val ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  async function loadOrderTracking(orderId) {
+    try {
+      const res = await fetch(`${API_BASE}/api/customer/orders/${orderId}/tracking`, {
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) return;
+
+      const { order, timeline = [], deliveries = [] } = json.data || {};
+      if (summaryEl && order) {
+        summaryEl.innerHTML = `No. PO: <strong>${escHtml(order.order_number)}</strong> &bull; Status: <strong>${escHtml(order.status)}</strong>`;
+      }
+      if (badgeEl && order) {
+        badgeEl.textContent =
+          order.status === "completed" ? "Selesai (ACC Customer)" : `Status: ${order.status}`;
+      }
+      if (timelineEl) {
+        timelineEl.innerHTML = timeline.length
+          ? timeline
+              .map(
+                (t) => `
+              <div class="timeline-node completed">
+                <div class="node-marker">✓</div>
+                <div class="node-content">
+                  <div style="display:flex;justify-content:space-between;gap:.5rem;">
+                    <strong>${escHtml(t.stage)}</strong>
+                    <small style="color:var(--text-muted)">${new Date(t.updated_at).toLocaleString("id-ID")}</small>
+                  </div>
+                  <span style="font-size:0.75rem;color:var(--text-light);">${escHtml(t.status_description)}</span>
+                </div>
+              </div>`,
+              )
+              .join("")
+          : '<p style="color:var(--text-muted);font-size:0.85rem;">Belum ada log tracking untuk PO ini.</p>';
+      }
+
+      if (!deliveries.length) {
+        deliveriesBody.innerHTML =
+          '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:1rem;">Belum ada surat jalan untuk PO ini.</td></tr>';
+        return;
+      }
+
+      deliveriesBody.innerHTML = deliveries
+        .map((d) => {
+          const isReceived = Boolean(d.received_status);
+          const dateStr = d.delivery_date
+            ? new Date(d.delivery_date).toLocaleDateString("id-ID")
+            : "-";
+          return `
+            <tr>
+              <td><span style="font-family:monospace;font-size:0.75rem;">${escHtml(d.delivery_note_number)}</span></td>
+              <td>
+                <div>${escHtml(d.truck_plate_number || "-")}</div>
+                <small style="color:var(--text-muted);">Sopir: ${escHtml(d.driver_name || "-")}</small>
+              </td>
+              <td>${Number(d.quantity_shipped || 0)} pcs</td>
+              <td>${dateStr}</td>
+              <td>
+                <span class="status-pill ${isReceived ? "status-completed" : "status-ready"}">
+                  ${isReceived ? "Diterima" : "Dalam Pengiriman"}
+                </span>
+              </td>
+              <td><small style="color:var(--text-light);">${isReceived && d.received_date ? `Diterima ${new Date(d.received_date).toLocaleDateString("id-ID")}` : "Menunggu ACC Customer"}</small></td>
+              <td>
+                ${
+                  isReceived
+                    ? "✓ Terkonfirmasi"
+                    : `<button type="button" class="btn-chip" data-confirm-delivery="${d.id}" style="background:#2E6B4F;color:#fff;">Konfirmasi Terima</button>`
+                }
+              </td>
+            </tr>`;
+        })
+        .join("");
+    } catch {
+      // Biarkan fallback statis jika belum login ke backend
+    }
+  }
+
+  deliveriesBody.addEventListener("click", async (ev) => {
+    const btn = ev.target.closest("button[data-confirm-delivery]");
+    if (!btn) return;
+    const deliveryId = btn.dataset.confirmDelivery;
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${API_BASE}/api/customer/deliveries/${deliveryId}/confirm`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.message || "Gagal konfirmasi penerimaan.");
+      }
+      showToast(json.message || "Penerimaan barang dikonfirmasi!");
+      if (orderSelect.value) {
+        await loadOrderTracking(orderSelect.value);
+      }
+    } catch (err) {
+      btn.disabled = false;
+      showToast(err.message || "Gagal konfirmasi penerimaan.");
+    }
+  });
+
+  (async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/customer/orders`, {
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success || !Array.isArray(json.data) || !json.data.length) return;
+
+      orderSelect.innerHTML = json.data
+        .map(
+          (o) =>
+            `<option value="${o.id}">${escHtml(o.order_number)} (${escHtml(o.status)})</option>`,
+        )
+        .join("");
+
+      const requestedPo = new URLSearchParams(window.location.search).get("po");
+      const matched = requestedPo
+        ? json.data.find((o) => o.order_number === requestedPo)
+        : null;
+      if (matched) orderSelect.value = String(matched.id);
+
+      orderSelect.addEventListener("change", () => {
+        if (orderSelect.value) loadOrderTracking(orderSelect.value);
+      });
+
+      await loadOrderTracking(orderSelect.value);
+    } catch {
+      // Abaikan jika API tidak aktif
+    }
+  })();
 }
 
 // ----------------------------------------------------------------------------

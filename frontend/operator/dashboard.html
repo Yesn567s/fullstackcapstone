@@ -162,13 +162,13 @@
       function renderJobs(jobs) {
         const body = document.getElementById("jobsBody");
         if (!jobs.length) {
-          body.innerHTML = `<tr><td colspan="5" style="padding:1rem;color:#94a3b8">Belum ada pekerjaan aktif.</td></tr>`;
+          body.innerHTML = `<tr><td colspan="6" style="padding:1rem;color:#94a3b8">Belum ada pekerjaan aktif.</td></tr>`;
           return;
         }
         body.innerHTML = jobs.map((j) => `
           <tr style="border-bottom:1px solid #f1f5f9">
             <td style="padding:.6rem;font-weight:600">${j.job_number}</td>
-            <td style="padding:.6rem">${j.order_number}</td>
+            <td style="padding:.6rem">${j.order_number} <small style="color:#64748b">(ID: ${j.order_id})</small></td>
             <td style="padding:.6rem">${j.material_name} (${j.thickness_mm}mm)</td>
             <td style="padding:.6rem">${badge(j.status)}</td>
             <td style="padding:.6rem"><button class="po-detail-button" data-patterns="${j.id}">Lihat Pola Potong</button></td>

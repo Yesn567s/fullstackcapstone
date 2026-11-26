@@ -267,6 +267,17 @@ async function optimizeOrder(pool, orderId, operatorId) {
       throw Object.assign(new Error('Order tidak ditemukan.'), { statusCode: 404 });
     }
 
+    const [[existingJob]] = await connection.execute(
+      'SELECT COUNT(*) AS cnt FROM cutting_jobs WHERE order_id = ?',
+      [orderId],
+    );
+    if (Number(existingJob.cnt) > 0) {
+      throw Object.assign(
+        new Error('Order ini sudah memiliki cutting job yang digenerate.'),
+        { statusCode: 409 },
+      );
+    }
+
     const sheetsByMaterial = [];
     for (const group of groupByMaterial(components)) {
       const materialId = group[0].material_id;

@@ -18,7 +18,8 @@ async function optimizeCutting(req, res) {
   }
 
   try {
-    const result = await optimizeOrder(db, orderId, req.user.userId);
+    // Biarkan operator_id NULL agar semua operator di lantai produksi dapat melihat & mengambil job.
+    const result = await optimizeOrder(db, orderId, null);
     return res.json({ success: true, data: result });
   } catch (error) {
     if (error.statusCode) {

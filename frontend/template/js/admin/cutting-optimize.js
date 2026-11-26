@@ -142,11 +142,67 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputOrderId = document.getElementById("inputOrderId");
   const statusEl = document.getElementById("cuttingStatus");
 
+  const ORDER_STATUS_LABELS = {
+    draft: "Draft",
+    negotiating_admin_review: "Perlu Review Admin",
+    negotiating_customer_review: "Menunggu Buyer",
+    quote_agreed: "Harga Sepakat",
+    contract_signed: "Kontrak Terkunci",
+    dp_pending: "Verifikasi DP",
+    ready_for_production: "Siap Produksi",
+    in_production: "Diproses",
+    partially_shipped: "Dikirim Sebagian",
+    completed: "Selesai",
+    cancelled: "Dibatalkan",
+  };
+
+  async function loadOrderOptions() {
+    if (!inputOrderId || inputOrderId.tagName !== "SELECT") return;
+    try {
+      const response = await fetch(`${API_BASE}/api/admin/orders`, {
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Gagal memuat daftar order.");
+      }
+
+      const orders = Array.isArray(result.data) ? result.data : [];
+      if (orders.length === 0) {
+        inputOrderId.innerHTML = '<option value="">Belum ada order tersedia</option>';
+        return;
+      }
+
+      const priority = { ready_for_production: 0, in_production: 1 };
+      const sorted = [...orders].sort((a, b) => {
+        const pa = priority[a.status] ?? 2;
+        const pb = priority[b.status] ?? 2;
+        if (pa !== pb) return pa - pb;
+        return Number(b.id) - Number(a.id);
+      });
+
+      inputOrderId.innerHTML = [
+        '<option value="">-- Pilih Order --</option>',
+        ...sorted.map((o) => {
+          const statusLabel = ORDER_STATUS_LABELS[o.status] || o.status;
+          const label = `#${o.id} — ${o.order_number} (${o.company_name || "Customer"}) [${statusLabel}]`;
+          return `<option value="${o.id}">${escapeHtml(label)}</option>`;
+        }),
+      ].join("");
+    } catch (error) {
+      inputOrderId.innerHTML = '<option value="">Gagal memuat daftar order</option>';
+      showToast(error.message || "Gagal memuat daftar order.");
+    }
+  }
+
+  loadOrderOptions();
+
   if (btnRun) {
     btnRun.addEventListener("click", async () => {
       const orderId = Number.parseInt(inputOrderId.value, 10);
       if (!Number.isInteger(orderId) || orderId < 1) {
-        showToast("Masukkan Order ID yang valid.");
+        showToast("Pilih Order terlebih dahulu.");
         return;
       }
 
