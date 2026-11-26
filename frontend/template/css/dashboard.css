@@ -1951,6 +1951,16 @@ body.view-admin-dashboard .page-wrapper {
     width: 100%;
   }
 
+  .offcut-actions,
+  .invoice-actions {
+    flex-wrap: wrap;
+  }
+
+  .offcut-actions .offcut-search,
+  .invoice-actions .invoice-search {
+    flex: 1 0 100%;
+  }
+
   .po-summary-grid {
     grid-template-columns: 1fr;
   }

@@ -16,6 +16,73 @@
     <link href="../template/css/dashboard.css" rel="stylesheet" />
     <link href="../template/css/components.css" rel="stylesheet" />
     <link href="../template/css/responsive.css" rel="stylesheet" />
+    <style>
+      #sjPrintReport {
+        display: none;
+      }
+
+      @media print {
+        @page {
+          margin: 16mm;
+        }
+
+        body > *:not(#sjPrintReport) {
+          display: none !important;
+        }
+
+        #sjPrintReport,
+        #sjPrintReport[hidden] {
+          display: block !important;
+          color: #111827;
+          font-family: Arial, sans-serif;
+        }
+
+        #sjPrintReport h1 {
+          margin-bottom: 4px;
+        }
+
+        #sjPrintReport .sj-report-date {
+          color: #4b5563;
+          margin-top: 0;
+        }
+
+        #sjPrintReport .sj-report-summary {
+          display: flex;
+          gap: 24px;
+          margin: 24px 0;
+        }
+
+        #sjPrintReport .sj-report-summary p {
+          border: 1px solid #d1d5db;
+          flex: 1;
+          margin: 0;
+          padding: 12px;
+        }
+
+        #sjPrintReport .sj-report-summary strong {
+          display: block;
+          font-size: 1.25rem;
+          margin-top: 6px;
+        }
+
+        #sjPrintReport table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        #sjPrintReport th,
+        #sjPrintReport td {
+          border: 1px solid #d1d5db;
+          padding: 8px;
+          text-align: left;
+        }
+
+        #sjPrintReport th {
+          background: #f3f4f6 !important;
+          print-color-adjust: exact;
+        }
+      }
+    </style>
   </head>
   <body class="view-admin-dashboard">
     <div
@@ -104,6 +171,9 @@
                 type="search"
                 placeholder="Cari nomor SJ / customer..."
               />
+              <button class="po-add-button" id="btnPrintSJ" type="button">
+                Cetak Laporan
+              </button>
               <button class="po-add-button" id="btnCreateSJ" type="button">
                 <span>+</span> Buat Surat Jalan
               </button>
@@ -266,6 +336,7 @@
         <div class="sj-modal-body" id="sjDetailBody"></div>
       </div>
     </div>
+    <section aria-label="Laporan surat jalan" hidden id="sjPrintReport"></section>
     <div aria-live="polite" class="toast-container" id="toastContainer"></div>
     <script src="../template/js/common/ui.js"></script>
     <script src="../template/js/common/staff-sidebar.js"></script>
