@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   let invoices = [];
+  let invoicesLoaded = false;
   let availableOrders = [];
   let selectedFilter = "all";
   let activeInvoice = null;
@@ -249,8 +250,98 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadInvoices() {
     const result = await request("/api/admin/invoices");
     invoices = result.data;
+    invoicesLoaded = true;
     updateSummary(result.summary);
     renderInvoices();
+  }
+
+  function printInvoiceReport() {
+    if (!invoicesLoaded) {
+      notify("Data invoice belum tersedia untuk dicetak.");
+      return;
+    }
+
+    const totalAmount = invoices.reduce(
+      (sum, invoice) => sum + (Number(invoice.total_amount) || 0),
+      0,
+    );
+    const remainingAmount = invoices.reduce(
+      (sum, invoice) => sum + (Number(invoice.remaining_amount) || 0),
+      0,
+    );
+    const report = document.getElementById("invoicePrintReport");
+    report.replaceChildren();
+
+    const title = document.createElement("h1");
+    title.textContent = "Laporan Invoice";
+    report.appendChild(title);
+    const date = document.createElement("p");
+    date.className = "report-date";
+    date.textContent = `Dicetak ${new Date().toLocaleDateString("id-ID")}`;
+    report.appendChild(date);
+
+    const summary = document.createElement("div");
+    summary.className = "report-summary";
+    [
+      ["Total Invoice", String(invoices.length)],
+      ["Total Tagihan", formatRupiah(totalAmount)],
+      ["Sisa Tagihan", formatRupiah(remainingAmount)],
+    ].forEach(([label, value]) => {
+      const item = document.createElement("p");
+      item.append(label);
+      const amount = document.createElement("strong");
+      amount.textContent = value;
+      item.appendChild(amount);
+      summary.appendChild(item);
+    });
+    report.appendChild(summary);
+
+    const heading = document.createElement("h2");
+    heading.textContent = "Daftar Invoice";
+    report.appendChild(heading);
+    const table = document.createElement("table");
+    const headers = [
+      "No. Invoice",
+      "No. PO",
+      "Customer",
+      "Tanggal Invoice",
+      "Jatuh Tempo",
+      "Total Tagihan",
+      "Sudah Dibayar",
+      "Sisa Tagihan",
+      "Status",
+    ];
+    const thead = table.createTHead();
+    const headerRow = thead.insertRow();
+    headers.forEach((label) => {
+      const cell = document.createElement("th");
+      cell.textContent = label;
+      headerRow.appendChild(cell);
+    });
+    const tbody = table.createTBody();
+    if (!invoices.length) {
+      const row = tbody.insertRow();
+      const cell = row.insertCell();
+      cell.colSpan = headers.length;
+      cell.textContent = "Belum ada data invoice.";
+    } else {
+      invoices.forEach((invoice) => {
+        const row = tbody.insertRow();
+        [
+          invoice.invoice_number,
+          invoice.po_number,
+          invoice.company_name,
+          formatDate(invoice.invoice_date),
+          formatDate(invoice.due_date),
+          formatRupiah(invoice.total_amount),
+          formatRupiah(invoice.paid_amount),
+          formatRupiah(invoice.remaining_amount),
+          statusLabel(invoice.status),
+        ].forEach((value) => addCell(row, String(value ?? "-")));
+      });
+    }
+    report.appendChild(table);
+    window.print();
   }
 
   async function loadAvailableOrders() {
@@ -415,6 +506,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("invoiceSearch")
     .addEventListener("input", renderInvoices);
+  document
+    .getElementById("btnPrintInvoice")
+    .addEventListener("click", printInvoiceReport);
   statusFilter.addEventListener("click", () => {
     const currentIndex = statusOptions.findIndex(
       (option) => option.value === selectedFilter,

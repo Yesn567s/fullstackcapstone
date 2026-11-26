@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("offcutSearch");
   const statusFilter = document.getElementById("offcutStatusFilter");
   let offcuts = [];
+  let offcutsLoaded = false;
   let selectedStatus = "all";
 
   const statuses = {
@@ -188,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadOffcuts() {
     const result = await request("/api/operator/offcuts");
     offcuts = result.data;
+    offcutsLoaded = true;
     const summary = result.summary || {};
     document.getElementById("offcutTotal").textContent =
       `${Number(summary.total_pieces || 0).toLocaleString("id-ID")} pcs`;
@@ -196,6 +198,108 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("offcutReserved").textContent =
       `${Number(summary.reserved_pieces || 0).toLocaleString("id-ID")} pcs`;
     renderOffcuts();
+  }
+
+  function printOffcutReport() {
+    if (!offcutsLoaded) {
+      notify("Data inventaris offcut belum tersedia untuk dicetak.");
+      return;
+    }
+
+    const totalPieces = offcuts.reduce(
+      (sum, offcut) => sum + (Number(offcut.quantity) || 0),
+      0,
+    );
+    const piecesByStatus = (status) =>
+      offcuts.reduce(
+        (sum, offcut) =>
+          sum +
+          (offcut.status === status ? Number(offcut.quantity) || 0 : 0),
+        0,
+      );
+    const report = document.getElementById("offcutPrintReport");
+    report.replaceChildren();
+
+    const title = document.createElement("h1");
+    title.textContent = "Laporan Inventaris Offcut";
+    report.appendChild(title);
+    const date = document.createElement("p");
+    date.className = "report-date";
+    date.textContent = `Dicetak ${new Date().toLocaleDateString("id-ID")}`;
+    report.appendChild(date);
+
+    const summary = document.createElement("div");
+    summary.className = "report-summary";
+    [
+      ["Total Offcut Tersimpan", `${totalPieces.toLocaleString("id-ID")} pcs`],
+      [
+        "Offcut Tersedia",
+        `${piecesByStatus("available").toLocaleString("id-ID")} pcs`,
+      ],
+      [
+        "Offcut Dipesan",
+        `${piecesByStatus("reserved").toLocaleString("id-ID")} pcs`,
+      ],
+    ].forEach(([label, value]) => {
+      const item = document.createElement("p");
+      item.append(label);
+      const amount = document.createElement("strong");
+      amount.textContent = value;
+      item.appendChild(amount);
+      summary.appendChild(item);
+    });
+    report.appendChild(summary);
+
+    const heading = document.createElement("h2");
+    heading.textContent = "Daftar Inventaris Offcut";
+    report.appendChild(heading);
+    const table = document.createElement("table");
+    const headers = [
+      "ID Offcut",
+      "Tipe Material",
+      "Lebar (mm)",
+      "Panjang (mm)",
+      "Lokasi Rak",
+      "Jumlah",
+      "Status",
+    ];
+    const thead = table.createTHead();
+    const headerRow = thead.insertRow();
+    headers.forEach((label) => {
+      const cell = document.createElement("th");
+      cell.textContent = label;
+      headerRow.appendChild(cell);
+    });
+    const tbody = table.createTBody();
+    if (!offcuts.length) {
+      const row = tbody.insertRow();
+      const cell = row.insertCell();
+      cell.colSpan = headers.length;
+      cell.textContent = "Belum ada data offcut.";
+    } else {
+      offcuts.forEach((offcut) => {
+        const material = `${offcut.material_name}${
+          offcut.thickness_mm ? ` ${Number(offcut.thickness_mm)} mm` : ""
+        }`;
+        const row = tbody.insertRow();
+        [
+          offcutLabel(offcut.id),
+          material,
+          Number(offcut.width_mm).toLocaleString("id-ID"),
+          Number(offcut.length_mm).toLocaleString("id-ID"),
+          offcut.location_tag || "-",
+          `${Number(offcut.quantity || 0).toLocaleString("id-ID")} pcs`,
+          statuses[offcut.status]?.label || offcut.status,
+        ].forEach((value) => addReportCell(row, String(value ?? "-")));
+      });
+    }
+    report.appendChild(table);
+    window.print();
+  }
+
+  function addReportCell(row, value) {
+    const cell = row.insertCell();
+    cell.textContent = value;
   }
 
   function closeForm() {
@@ -244,6 +348,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   searchInput.addEventListener("input", renderOffcuts);
+  document
+    .getElementById("btnPrintOffcut")
+    .addEventListener("click", printOffcutReport);
   statusFilter.addEventListener("click", () => {
     const currentIndex = statusFilters.findIndex(
       (filter) => filter.value === selectedStatus,

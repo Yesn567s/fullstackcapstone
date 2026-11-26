@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveButton = document.getElementById("sjSave");
 
   let deliveries = [];
+  let deliveriesLoaded = false;
   let orders = [];
   let selectedOrder = null;
   let status = "all";
@@ -138,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadDeliveries() {
     try {
       deliveries = await request("/api/admin/deliveries");
+      deliveriesLoaded = true;
       renderDeliveries();
     } catch (error) {
       tableBody.innerHTML = `<tr><td colspan="7">${escapeHtml(error.message)}</td></tr>`;
@@ -146,6 +148,63 @@ document.addEventListener("DOMContentLoaded", () => {
       receivedCount.textContent = "-";
       notify(error.message || "Surat jalan tidak dapat dimuat.");
     }
+  }
+
+  function printReport() {
+    if (!deliveriesLoaded) {
+      notify("Data surat jalan belum tersedia untuk dicetak.");
+      return;
+    }
+
+    const received = deliveries.filter(
+      (delivery) => delivery.received_status,
+    ).length;
+    const inTransit = deliveries.length - received;
+    const rows = deliveries.length
+      ? deliveries
+          .map((delivery) => {
+            const statusLabel = delivery.received_status
+              ? "Selesai diterima"
+              : "Dalam pengiriman";
+            return `
+              <tr>
+                <td>${escapeHtml(delivery.delivery_note_number)}</td>
+                <td>${escapeHtml(delivery.po_number)}</td>
+                <td>${escapeHtml(delivery.company_name)}</td>
+                <td>${formatDate(delivery.delivery_date)}</td>
+                <td>${Number(delivery.quantity_shipped) || 0} pcs</td>
+                <td>${statusLabel}</td>
+              </tr>
+            `;
+          })
+          .join("")
+      : '<tr><td colspan="6">Belum ada surat jalan.</td></tr>';
+
+    const report = document.getElementById("sjPrintReport");
+    report.innerHTML = `
+      <h1>Laporan Surat Jalan</h1>
+      <p class="sj-report-date">Dicetak ${new Date().toLocaleDateString("id-ID")}</p>
+      <div class="sj-report-summary">
+        <p>Total surat jalan<strong>${deliveries.length}</strong></p>
+        <p>Dalam pengiriman<strong>${inTransit}</strong></p>
+        <p>Selesai diterima<strong>${received}</strong></p>
+      </div>
+      <h2>Daftar Surat Jalan</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>No. Surat Jalan</th>
+            <th>No. PO</th>
+            <th>Customer</th>
+            <th>Tanggal Kirim</th>
+            <th>Jumlah</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+    window.print();
   }
 
   async function loadOrders() {
@@ -301,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
       notify(error.message || "PO siap kirim tidak dapat dimuat.");
     }
   });
+  document.getElementById("btnPrintSJ").addEventListener("click", printReport);
 
   document.getElementById("sjModalClose").addEventListener("click", () => {
     createModal.classList.add("hidden");
