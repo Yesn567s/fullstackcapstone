@@ -6,6 +6,7 @@ USE db_sumber_artha_v3;
 -- ============================================================================
 
 -- 1. Tabel Pengguna (Admin, Operator, Customer)
+--    (Digabung dengan migrasi email_verified & 20261119_add_phone_verified.sql)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -14,11 +15,14 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE,
     phone VARCHAR(30),
     role ENUM('admin', 'operator', 'customer') NOT NULL,
+    email_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    phone_verified BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- 1a. Data Pegawai untuk akun Admin dan Operator
+--     (Digabung dari migrations/20261121_create_pegawai.sql)
 CREATE TABLE pegawai (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
@@ -30,6 +34,17 @@ CREATE TABLE pegawai (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 1b. Token Verifikasi Email
+CREATE TABLE email_verification_tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY uq_user_token (user_id, token)
 );
 
 -- 2. Master Loyalty Tiers
@@ -125,19 +140,42 @@ CREATE TABLE orders (
     order_date DATE NOT NULL,
     top_days INT DEFAULT 90,
     total_order_value DECIMAL(15,2) DEFAULT 0.00,
-    status ENUM('draft', 'contract_signed', 'dp_pending', 'ready_for_production', 'in_production', 'partially_shipped', 'completed', 'cancelled') DEFAULT 'draft',
+    required_dp_percent DECIMAL(5,2) NULL,
+    drawing_file_url VARCHAR(255) NULL,
+    negotiation_round INT NOT NULL DEFAULT 1,
+    agreed_at TIMESTAMP NULL,
+    agreed_by_role ENUM('admin', 'customer') NULL,
+    notes TEXT NULL,
+    status ENUM(
+        'draft',
+        'negotiating_admin_review',
+        'negotiating_customer_review',
+        'quote_agreed',
+        'contract_signed',
+        'dp_pending',
+        'ready_for_production',
+        'in_production',
+        'partially_shipped',
+        'completed',
+        'cancelled'
+    ) DEFAULT 'draft',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );
 
--- 9. Persetujuan Kontrak Digital Customer
+-- 9. Persetujuan Kontrak Digital Customer (Dengan Tanda Tangan Digital & Snapshot)
 CREATE TABLE contract_approvals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL UNIQUE,
     legal_contract_id INT NOT NULL,
     customer_id INT NOT NULL,
+    signer_name VARCHAR(120) NULL,
+    signer_title VARCHAR(100) NULL,
+    signature_image_url VARCHAR(255) NULL,
+    contract_snapshot LONGTEXT NULL,
     ip_address VARCHAR(45),
+    user_agent VARCHAR(255) NULL,
     digital_signature_hash VARCHAR(255) NOT NULL,
     approved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
@@ -156,26 +194,60 @@ CREATE TABLE dp_payments (
     payment_proof_url VARCHAR(255),
     verification_status ENUM('pending', 'verified', 'rejected') DEFAULT 'pending',
     verified_by INT NULL,
+    rejection_notes TEXT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (verified_by) REFERENCES users(id)
 );
 
 -- ============================================================================
--- KELOMPOK 3: ITEM ORDER, PRODUKSI, OPTIMASI 2D & OFFCUT INTERNAL
+-- KELOMPOK 3: ITEM ORDER, NEGOSIASI HARGA, PRODUKSI, OPTIMASI 2D & OFFCUT
 -- ============================================================================
 
 -- 11. Detail Item Laci per Pesanan
 CREATE TABLE order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
+    material_id INT NULL,
     drawer_type_code VARCHAR(50) NOT NULL,
     finished_length_mm DECIMAL(8,2) NOT NULL,
     finished_width_mm DECIMAL(8,2) NOT NULL,
     finished_height_mm DECIMAL(8,2) NOT NULL,
     quantity INT NOT NULL,
     unit_price DECIMAL(15,2) DEFAULT 0.00,
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (material_id) REFERENCES materials(id) ON DELETE SET NULL
+);
+
+-- 11a. Riwayat Negosiasi Harga Multi-Ronde (Customer <-> Admin)
+CREATE TABLE order_negotiations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    round_number INT NOT NULL DEFAULT 1,
+    proposed_by_role ENUM('customer', 'admin') NOT NULL,
+    proposed_by_user_id INT NULL,
+    action_type ENUM('initial_offer', 'counter_offer', 'accept', 'reject') NOT NULL,
+    proposed_total_value DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+    proposed_top_days INT NULL,
+    proposed_dp_percent DECIMAL(5,2) NULL,
+    notes TEXT NULL,
+    status ENUM('open', 'countered', 'accepted', 'rejected') NOT NULL DEFAULT 'open',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (proposed_by_user_id) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_order_negotiations_order_round (order_id, round_number)
+);
+
+-- 11b. Rincian Harga per Item pada Setiap Ronde Negosiasi
+CREATE TABLE order_negotiation_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    negotiation_id INT NOT NULL,
+    order_item_id INT NOT NULL,
+    proposed_unit_price DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+    quantity INT NOT NULL,
+    subtotal DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+    FOREIGN KEY (negotiation_id) REFERENCES order_negotiations(id) ON DELETE CASCADE,
+    FOREIGN KEY (order_item_id) REFERENCES order_items(id) ON DELETE CASCADE
 );
 
 -- 12. Komponen Rinci Laci (Panel Breakdown)
@@ -321,7 +393,7 @@ CREATE TABLE invoices (
     FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
--- 21. Pencatatan Pelunasan Tagihan / Invoice Payments (Baru)
+-- 21. Pencatatan Pelunasan Tagihan / Invoice Payments
 CREATE TABLE invoice_payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     invoice_id INT NOT NULL,
@@ -330,6 +402,7 @@ CREATE TABLE invoice_payments (
     amount_paid DECIMAL(15,2) NOT NULL,
     payment_method ENUM('bank_transfer', 'giro', 'cash', 'credit_note') DEFAULT 'bank_transfer',
     payment_proof_url VARCHAR(255),
+    verification_status ENUM('pending', 'verified', 'rejected') NOT NULL DEFAULT 'verified',
     verified_by INT NULL, -- Admin yang memverifikasi pelunasan
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -360,7 +433,19 @@ CREATE TABLE rma_requests (
 CREATE TABLE po_tracking_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
-    stage ENUM('PO_Created', 'Contract_Signed', 'DP_Verified', 'Cutting', 'Assembly', 'QC_Inspection', 'Shipping', 'Completed') NOT NULL,
+    stage ENUM(
+        'PO_Created',
+        'Offer_Submitted',
+        'Counter_Offer',
+        'Quote_Agreed',
+        'Contract_Signed',
+        'DP_Verified',
+        'Cutting',
+        'Assembly',
+        'QC_Inspection',
+        'Shipping',
+        'Completed'
+    ) NOT NULL,
     affected_quantity INT NULL,
     status_description TEXT,
     updated_by INT NULL,
@@ -371,7 +456,7 @@ CREATE TABLE po_tracking_logs (
     FOREIGN KEY (updated_by) REFERENCES users(id)
 );
 
--- 24. History Log Aktivitas (Admin Memantau Aktivitas Operator) (Baru)
+-- 24. History Log Aktivitas (Admin Memantau Aktivitas Operator)
 CREATE TABLE activity_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL, -- ID Operator yang melakukan aksi
@@ -386,24 +471,35 @@ CREATE TABLE activity_logs (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE SET NULL
 );
 
-CREATE TABLE email_verification_tokens (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  token VARCHAR(64) NOT NULL,
-  expires_at DATETIME NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  UNIQUE KEY uq_user_token (user_id, token)
-);
-
-ALTER TABLE users ADD COLUMN email_verified BOOLEAN NOT NULL DEFAULT FALSE;
-
 -- ============================================================================
 -- DATA MASTER DEFAULT
 -- ============================================================================
-INSERT INTO loyalty_tiers (id, tier_name, min_repeat_orders, discount_percentage, priority_level) 
-VALUES (1, 'Bronze', 0, 0.00, 1)
-ON DUPLICATE KEY UPDATE tier_name=VALUES(tier_name);
+INSERT INTO loyalty_tiers (id, tier_name, min_repeat_orders, discount_percentage, priority_level)
+VALUES
+    (1, 'Bronze', 0, 0.00, 1),
+    (2, 'Silver', 3, 2.50, 2),
+    (3, 'Gold', 6, 5.00, 3),
+    (4, 'Platinum', 12, 8.00, 4)
+ON DUPLICATE KEY UPDATE
+    tier_name = VALUES(tier_name),
+    min_repeat_orders = VALUES(min_repeat_orders),
+    discount_percentage = VALUES(discount_percentage),
+    priority_level = VALUES(priority_level);
+
+INSERT INTO legal_contracts (contract_title, terms_and_conditions, version, is_active)
+SELECT
+    'Perjanjian Kerja Sama Produksi Make-to-Order (MTO) CV. Sumber Artha',
+    CONCAT(
+        'PASAL 1 — LINGKUP PEKERJAAN: CV. Sumber Artha memproduksi komponen laci kayu sesuai spesifikasi dimensi (P x L x T), gambar kerja, dan kuantitas yang disepakati pada Purchase Order ini.\n',
+        'PASAL 2 — HARGA & PEMBAYARAN (BILL-BEFORE-PRODUCTION): Harga satuan dan total nilai pesanan mengikat setelah kedua pihak menyetujui negosiasi penawaran. Produksi hanya dimulai setelah Down Payment (DP) diterima dan diverifikasi oleh Admin. Sisa pembayaran mengikuti termin TOP yang tercantum.\n',
+        'PASAL 3 — TOLERANSI PRESISI & QC: Pemotongan mengikuti standar mesin guillotine (kerf 3 mm, dovetail allowance 4 mm) dengan toleransi presisi dimensi ±0.5 mm dan lulus inspeksi QC sebelum penerbitan Surat Jalan.\n',
+        'PASAL 4 — PEMBATALAN & KLAIM RMA: Pembatalan sepihak setelah DP diverifikasi dan bahan baku dipotong dikenakan pemotongan DP sesuai progres pengerjaan. Klaim cacat produksi (RMA) wajib disertai bukti foto/video maksimal 7 hari sejak penerimaan barang.'
+    ),
+    'v1.0-2026',
+    TRUE
+WHERE NOT EXISTS (
+    SELECT 1 FROM legal_contracts WHERE version = 'v1.0-2026'
+);
 
 -- AKUN DUMMY UNTUK PENGUJIAN (password tersimpan dalam format bcrypt)
 INSERT INTO users (
@@ -413,12 +509,16 @@ INSERT INTO users (
     email,
     phone,
     role,
-    email_verified
+    email_verified,
+    phone_verified
 )
 VALUES
-    ('demo_admin', '$2b$12$sn8YSXGibvTp2oLQAzL2Iu1TH.sDuKJhSnEXY1PsufCiiD3WV7TQ.', 'Demo Admin', 'admin@example.com', '080000000001', 'admin', TRUE),
-    ('demo_operator', '$2b$12$SNqP73fqA.9QehzWK7fEBeBlV19BFyGZPflMse6qWcKIeOCiDxcoa', 'Demo Operator', 'operator@example.com', '080000000002', 'operator', TRUE),
-    ('demo_customer', '$2b$12$fkD43JrnLSXmMYrWIfsCje9uaZUSY/CC5wPfophuXCjYL0FtGZUYW', 'Demo Customer', 'customer@example.com', '080000000003', 'customer', TRUE);
+    ('demo_admin', '$2b$12$sn8YSXGibvTp2oLQAzL2Iu1TH.sDuKJhSnEXY1PsufCiiD3WV7TQ.', 'Demo Admin', 'admin@example.com', '080000000001', 'admin', TRUE, TRUE),
+    ('demo_operator', '$2b$12$SNqP73fqA.9QehzWK7fEBeBlV19BFyGZPflMse6qWcKIeOCiDxcoa', 'Demo Operator', 'operator@example.com', '080000000002', 'operator', TRUE, TRUE),
+    ('demo_customer', '$2b$12$fkD43JrnLSXmMYrWIfsCje9uaZUSY/CC5wPfophuXCjYL0FtGZUYW', 'Demo Customer', 'customer@example.com', '080000000003', 'customer', TRUE, TRUE)
+ON DUPLICATE KEY UPDATE
+    email_verified = VALUES(email_verified),
+    phone_verified = VALUES(phone_verified);
 
 INSERT INTO customers (
     user_id,
@@ -441,4 +541,26 @@ WHERE users.username = 'demo_customer'
       SELECT 1
       FROM customers
       WHERE customers.user_id = users.id
+  );
+
+INSERT INTO customer_credit_scores (
+    customer_id,
+    credit_score,
+    recommended_credit_limit,
+    allow_top_90,
+    required_dp_percent
+)
+SELECT
+    c.id,
+    720,
+    50000000.00,
+    TRUE,
+    30.00
+FROM customers c
+JOIN users u ON u.id = c.user_id
+WHERE u.username = 'demo_customer'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM customer_credit_scores ccs
+      WHERE ccs.customer_id = c.id
   );
