@@ -9,7 +9,7 @@ const UPLOAD_ROOT = path.resolve(__dirname, '../../../uploads');
 const ALLOWED_EXT = new Set(['.pdf', '.jpg', '.jpeg', '.png', '.webp', '.mp4']);
 
 // Pastikan direktori uploads tersedia saat server berjalan
-['drawings', 'payments', 'rma'].forEach((sub) =>
+['drawings', 'payments', 'rma', 'signatures'].forEach((sub) =>
   fs.mkdirSync(path.join(UPLOAD_ROOT, sub), { recursive: true }),
 );
 
@@ -63,4 +63,49 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
 });
 
-module.exports = { ktpUpload, upload, UPLOAD_ROOT };
+const DRAWING_EXT = new Set(['.pdf', '.dwg', '.dxf', '.png', '.jpg', '.jpeg', '.webp']);
+const SIGNATURE_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp']);
+
+const drawingUpload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, path.join(UPLOAD_ROOT, 'drawings'));
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname).toLowerCase();
+      cb(null, `drawing-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
+    },
+  }),
+  fileFilter(req, file, cb) {
+    if (DRAWING_EXT.has(path.extname(file.originalname).toLowerCase())) {
+      return cb(null, true);
+    }
+    const err = new Error('Format drawing tidak didukung. Gunakan PDF, DWG, DXF, PNG, JPG, atau WEBP.');
+    err.status = 422;
+    return cb(err);
+  },
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15 MB
+});
+
+const signatureUpload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, path.join(UPLOAD_ROOT, 'signatures'));
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname).toLowerCase();
+      cb(null, `sig-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
+    },
+  }),
+  fileFilter(req, file, cb) {
+    if (SIGNATURE_EXT.has(path.extname(file.originalname).toLowerCase())) {
+      return cb(null, true);
+    }
+    const err = new Error('Format tanda tangan tidak didukung. Gunakan PNG, JPG, JPEG, atau WEBP.');
+    err.status = 422;
+    return cb(err);
+  },
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
+});
+
+module.exports = { ktpUpload, upload, drawingUpload, signatureUpload, UPLOAD_ROOT };

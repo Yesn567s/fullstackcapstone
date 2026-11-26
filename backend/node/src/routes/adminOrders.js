@@ -31,4 +31,46 @@ router.post(
   ctrl.createOrder,
 );
 
+const counterOfferSchema = Joi.object({
+  items: Joi.array()
+    .items(
+      Joi.object({
+        order_item_id: Joi.number().integer().positive().required(),
+        proposed_unit_price: Joi.number().positive().precision(2).required(),
+      }).unknown(false),
+    )
+    .min(1)
+    .required(),
+  proposed_top_days: Joi.number().integer().min(0).max(365).optional(),
+  proposed_dp_percent: Joi.number().min(0).max(100).precision(2).optional(),
+  notes: Joi.string().trim().max(2000).allow("", null).default(""),
+}).unknown(false);
+
+const acceptOfferSchema = Joi.object({
+  top_days: Joi.number().integer().min(0).max(365).optional(),
+  required_dp_percent: Joi.number().min(0).max(100).precision(2).optional(),
+  notes: Joi.string().trim().max(2000).allow("", null).default(""),
+}).unknown(false);
+
+const verifyDpSchema = Joi.object({
+  action: Joi.string().valid("verify", "reject").required(),
+  rejection_notes: Joi.string().trim().max(2000).allow("", null).default(""),
+}).unknown(false);
+
+router.post(
+  "/:id/negotiations/counter",
+  validateBody(counterOfferSchema, "Data counter-offer tidak valid."),
+  ctrl.counterOffer,
+);
+router.post(
+  "/:id/negotiations/accept",
+  validateBody(acceptOfferSchema, "Data persetujuan penawaran tidak valid."),
+  ctrl.acceptOffer,
+);
+router.patch(
+  "/:id/verify-dp",
+  validateBody(verifyDpSchema, "Aksi verifikasi DP tidak valid (gunakan verify atau reject)."),
+  ctrl.verifyDpPayment,
+);
+
 module.exports = router;
