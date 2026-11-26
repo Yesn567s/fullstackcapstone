@@ -22,9 +22,24 @@ const DEFAULT_BUYER_STATE = {
     discountPercent: 5,
   },
   consignment: {
-    lvbPoplar: { received: 240, used: 160, remaining: 80, unit: "Lembar (1220x2440 mm)" },
-    lvbSengon: { received: 180, used: 110, remaining: 70, unit: "Lembar (1220x2440 mm)" },
-    plywood12: { received: 150, used: 95, remaining: 55, unit: "Lembar (1220x2440 mm)" }
+    lvbPoplar: {
+      received: 240,
+      used: 160,
+      remaining: 80,
+      unit: "Lembar (1220x2440 mm)",
+    },
+    lvbSengon: {
+      received: 180,
+      used: 110,
+      remaining: 70,
+      unit: "Lembar (1220x2440 mm)",
+    },
+    plywood12: {
+      received: 150,
+      used: 95,
+      remaining: 55,
+      unit: "Lembar (1220x2440 mm)",
+    },
   },
   orders: [
     {
@@ -47,10 +62,24 @@ const DEFAULT_BUYER_STATE = {
       drawingFile: "DRAWING-REV3-JAYA-DOVETAIL.pdf",
       shippedQty: 0,
       truckSchedules: [
-        { trip: 1, targetQty: 350, nopol: "N-8942-UB", driver: "Slamet Riyadi", eta: "16 Nov 2026", status: "scheduled" },
-        { trip: 2, targetQty: 150, nopol: "N-9104-TA", driver: "Bambang W.", eta: "19 Nov 2026", status: "pending" }
+        {
+          trip: 1,
+          targetQty: 350,
+          nopol: "N-8942-UB",
+          driver: "Slamet Riyadi",
+          eta: "16 Nov 2026",
+          status: "scheduled",
+        },
+        {
+          trip: 2,
+          targetQty: 150,
+          nopol: "N-9104-TA",
+          driver: "Bambang W.",
+          eta: "19 Nov 2026",
+          status: "pending",
+        },
       ],
-      invoices: []
+      invoices: [],
     },
     {
       poNumber: "PO-2026-MTO-087",
@@ -72,7 +101,14 @@ const DEFAULT_BUYER_STATE = {
       drawingFile: "DRAWING-SENGON-DESK-REV2.pdf",
       shippedQty: 350,
       truckSchedules: [
-        { trip: 1, targetQty: 350, nopol: "N-8451-UC", driver: "Hariyanto", eta: "08 Nov 2026", status: "delivered" }
+        {
+          trip: 1,
+          targetQty: 350,
+          nopol: "N-8451-UC",
+          driver: "Hariyanto",
+          eta: "08 Nov 2026",
+          status: "delivered",
+        },
       ],
       invoices: [
         {
@@ -82,10 +118,10 @@ const DEFAULT_BUYER_STATE = {
           issueDate: "2026-11-08",
           dueDate: "2027-02-06", // 90 days TOP
           status: "unpaid",
-          itemsShipped: 350
-        }
-      ]
-    }
+          itemsShipped: 350,
+        },
+      ],
+    },
   ],
   rmaList: [
     {
@@ -96,9 +132,9 @@ const DEFAULT_BUYER_STATE = {
       reason: "Alur dovetail meleset 0.8 mm dari toleransi kontrak",
       resolution: "replacement",
       status: "diproses",
-      date: "2026-11-10"
-    }
-  ]
+      date: "2026-11-10",
+    },
+  ],
 };
 
 // State Manager
@@ -137,7 +173,7 @@ class BuyerStateManager {
   }
 
   updateOrder(poNumber, updates) {
-    const order = this.state.orders.find(o => o.poNumber === poNumber);
+    const order = this.state.orders.find((o) => o.poNumber === poNumber);
     if (order) {
       Object.assign(order, updates);
       this.saveState();
@@ -178,13 +214,15 @@ function initBuyerUI() {
   }
 
   const compElements = document.querySelectorAll(".live-company-name");
-  compElements.forEach(el => el.textContent = profile.company);
+  compElements.forEach((el) => (el.textContent = profile.company));
 
   const picElements = document.querySelectorAll(".live-pic-name");
-  picElements.forEach(el => el.textContent = profile.pic);
+  picElements.forEach((el) => (el.textContent = profile.pic));
 
   const scoreElements = document.querySelectorAll(".live-credit-score");
-  scoreElements.forEach(el => el.textContent = `${profile.creditScore} / 1000`);
+  scoreElements.forEach(
+    (el) => (el.textContent = `${profile.creditScore} / 1000`),
+  );
 
   const dashboardSearch = document.getElementById("buyerDashboardSearch");
   const orderRows = document.querySelectorAll(".portal-table tbody tr");
@@ -208,13 +246,13 @@ function initBuyerUI() {
     ?.addEventListener("click", filterDashboardOrders);
 
   const topElements = document.querySelectorAll(".live-top-status");
-  topElements.forEach(el => {
+  topElements.forEach((el) => {
     el.textContent = `Fasilitas TOP ${profile.topDays} Hari (Disetujui)`;
   });
 
   // Logout Buttons
   const logoutBtns = document.querySelectorAll(".btn-buyer-logout");
-  logoutBtns.forEach(btn => {
+  logoutBtns.forEach((btn) => {
     btn.addEventListener("click", async () => {
       try {
         const response = await fetch(
@@ -241,7 +279,9 @@ function initBuyerUI() {
       sessionStorage.removeItem("adminName");
       sessionStorage.removeItem("sumberartha_logged_user");
       localStorage.removeItem("sumberartha_logged_user");
-      showToast("Sesi akun Buyer telah ditutup. Mengalihkan ke Halaman Depan...");
+      showToast(
+        "Sesi akun Buyer telah ditutup. Mengalihkan ke Halaman Depan...",
+      );
       setTimeout(() => {
         window.location.href = "../landing.html";
       }, 500);
@@ -278,7 +318,7 @@ function initCalculator() {
     // Front + Back = 2 * (L * T)
     // Sides (Left + Right) = 2 * ((P + 8) * T)  [+8mm for dovetail pins]
     // Bottom = P * L
-    const wallArea = (2 * (L * T)) + (2 * ((P + 8) * T));
+    const wallArea = 2 * (L * T) + 2 * ((P + 8) * T);
     const sheetArea = 1220 * 2440; // 2,976,800 mm2
 
     // Estimated efficiency with guillotine 2D cut is typically 86% - 92%
@@ -292,10 +332,11 @@ function initCalculator() {
 
     if (resSheets) resSheets.textContent = `${sheetsNeeded} Lembar Standar`;
     if (resWaste) resWaste.textContent = `± 8.5% (Teroptimasi 2D)`;
-    if (resUnitCost) resUnitCost.textContent = `Rp ${basePrice.toLocaleString("id-ID")} / Unit`;
+    if (resUnitCost)
+      resUnitCost.textContent = `Rp ${basePrice.toLocaleString("id-ID")} / Unit`;
   }
 
-  [pInput, lInput, tInput, qtyInput, matSelect].forEach(el => {
+  [pInput, lInput, tInput, qtyInput, matSelect].forEach((el) => {
     if (el) el.addEventListener("input", calculate);
   });
 
@@ -352,15 +393,20 @@ function initFormSubmissions() {
       const pVal = document.getElementById("calcPanjang")?.value || 450;
       const lVal = document.getElementById("calcLebar")?.value || 380;
       const tVal = document.getElementById("calcTinggi")?.value || 140;
-      const qtyVal = parseInt(document.getElementById("calcQty")?.value || "200");
-      const matVal = document.getElementById("calcMaterial")?.value || "LVB Poplar";
-      const notes = document.getElementById("orderNotes")?.value || "Toleransi presisi ekspor standar dovetail";
+      const qtyVal = parseInt(
+        document.getElementById("calcQty")?.value || "200",
+      );
+      const matVal =
+        document.getElementById("calcMaterial")?.value || "LVB Poplar";
+      const notes =
+        document.getElementById("orderNotes")?.value ||
+        "Toleransi presisi ekspor standar dovetail";
 
       const unitPrice = matVal.includes("Poplar") ? 125000 : 110000;
       const subtotal = unitPrice * qtyVal;
       const discount = subtotal * 0.05; // Gold tier
       const tax = (subtotal - discount) * 0.11;
-      const total = (subtotal - discount) + tax;
+      const total = subtotal - discount + tax;
 
       const newPoNumber = `PO-2026-MTO-0${Math.floor(100 + Math.random() * 900)}`;
 
@@ -381,17 +427,22 @@ function initFormSubmissions() {
         dpStatus: "pending",
         contractSigned: false,
         contractSignedAt: null,
-        drawingFile: fileNameDisplay ? fileNameDisplay.textContent : "DRAWING-SPECS.pdf",
+        drawingFile: fileNameDisplay
+          ? fileNameDisplay.textContent
+          : "DRAWING-SPECS.pdf",
         shippedQty: 0,
         truckSchedules: [],
-        invoices: []
+        invoices: [],
       };
 
       buyerState.addOrder(newOrder);
-      showToast(`Pesanan [${newPoNumber}] berhasil diajukan! Mengalihkan ke menu Quotation...`);
+      showToast(
+        `Pesanan [${newPoNumber}] berhasil diajukan! Mengalihkan ke menu Quotation...`,
+      );
 
       setTimeout(() => {
-        window.location.href = "quotation-kontrak.html?po=" + encodeURIComponent(newPoNumber);
+        window.location.href =
+          "quotation-kontrak.html?po=" + encodeURIComponent(newPoNumber);
       }, 1000);
     });
   }
@@ -413,22 +464,28 @@ function initContractSigning() {
   if (btnSignContract && contractCheck) {
     btnSignContract.addEventListener("click", () => {
       if (!contractCheck.checked) {
-        alert("Harap centang persetujuan klausul kontrak legal lock-in toleransi presisi dan aturan denda.");
+        alert(
+          "Harap centang persetujuan klausul kontrak legal lock-in toleransi presisi dan aturan denda.",
+        );
         return;
       }
       const signer = signatureInput ? signatureInput.value.trim() : "";
       if (!signer) {
-        alert("Harap masukkan nama resmi penanggung jawab penandatanganan kontrak.");
+        alert(
+          "Harap masukkan nama resmi penanggung jawab penandatanganan kontrak.",
+        );
         return;
       }
 
       // Update state for currently inspected order
-      const targetPo = new URLSearchParams(window.location.search).get("po") || buyerState.state.orders[0]?.poNumber;
+      const targetPo =
+        new URLSearchParams(window.location.search).get("po") ||
+        buyerState.state.orders[0]?.poNumber;
       buyerState.updateOrder(targetPo, {
         contractSigned: true,
         contractSignedAt: new Date().toLocaleString("id-ID"),
         status: "dp_pending",
-        stage: "Menunggu Pembayaran Uang Muka (DP 30%)"
+        stage: "Menunggu Pembayaran Uang Muka (DP 30%)",
       });
 
       if (contractSignedNotice) contractSignedNotice.classList.remove("hidden");
@@ -442,8 +499,12 @@ function initContractSigning() {
   if (btnSubmitDP) {
     btnSubmitDP.addEventListener("click", (e) => {
       e.preventDefault();
-      const targetPo = new URLSearchParams(window.location.search).get("po") || buyerState.state.orders[0]?.poNumber;
-      const order = buyerState.state.orders.find(o => o.poNumber === targetPo) || buyerState.state.orders[0];
+      const targetPo =
+        new URLSearchParams(window.location.search).get("po") ||
+        buyerState.state.orders[0]?.poNumber;
+      const order =
+        buyerState.state.orders.find((o) => o.poNumber === targetPo) ||
+        buyerState.state.orders[0];
 
       const dpAmount = Math.round(order.total * 0.3);
 
@@ -452,13 +513,16 @@ function initContractSigning() {
         dpStatus: "verified",
         status: "ready_for_production",
         stage: "DP Terverifikasi — Siap Masuk Antrean Mesin Cutting",
-        progressPercent: 35
+        progressPercent: 35,
       });
 
-      showToast(`Bukti DP sebesar Rp ${dpAmount.toLocaleString("id-ID")} terverifikasi! Status PO: Ready for Production.`);
+      showToast(
+        `Bukti DP sebesar Rp ${dpAmount.toLocaleString("id-ID")} terverifikasi! Status PO: Ready for Production.`,
+      );
 
       setTimeout(() => {
-        window.location.href = "tracking-tagihan.html?po=" + encodeURIComponent(order.poNumber);
+        window.location.href =
+          "tracking-tagihan.html?po=" + encodeURIComponent(order.poNumber);
       }, 1200);
     });
   }
@@ -469,18 +533,23 @@ function initContractSigning() {
 // ----------------------------------------------------------------------------
 function initConsignmentTracking() {
   const simPayBtns = document.querySelectorAll(".btn-simulate-pay");
-  simPayBtns.forEach(btn => {
+  simPayBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       const invNum = btn.dataset.inv || "Invoice Parsial";
       btn.disabled = true;
       btn.textContent = "Lunas (Terverifikasi)";
       btn.style.background = "#059669";
-      
+
       // Credit score boost for paying on time under TOP 90
-      buyerState.state.profile.creditScore = Math.min(1000, buyerState.state.profile.creditScore + 15);
+      buyerState.state.profile.creditScore = Math.min(
+        1000,
+        buyerState.state.profile.creditScore + 15,
+      );
       buyerState.saveState();
 
-      showToast(`Pelunasan [${invNum}] berhasil! Skor Kredit meningkat menjadi ${buyerState.state.profile.creditScore}.`);
+      showToast(
+        `Pelunasan [${invNum}] berhasil! Skor Kredit meningkat menjadi ${buyerState.state.profile.creditScore}.`,
+      );
     });
   });
 }
@@ -495,11 +564,16 @@ function initRMAManager() {
   rmaForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const poNum = document.getElementById("rmaPoSelect")?.value || "PO-2026-MTO-088";
-    const item = document.getElementById("rmaItemName")?.value || "Side Left Dovetail";
+    const poNum =
+      document.getElementById("rmaPoSelect")?.value || "PO-2026-MTO-088";
+    const item =
+      document.getElementById("rmaItemName")?.value || "Side Left Dovetail";
     const qty = parseInt(document.getElementById("rmaQty")?.value || "2");
-    const reason = document.getElementById("rmaReason")?.value || "Kesikuan melebihi batas toleransi 0.5 mm";
-    const resolution = document.getElementById("rmaResolution")?.value || "replacement";
+    const reason =
+      document.getElementById("rmaReason")?.value ||
+      "Kesikuan melebihi batas toleransi 0.5 mm";
+    const resolution =
+      document.getElementById("rmaResolution")?.value || "replacement";
 
     const newRMA = {
       rmaNumber: `RMA-2026-00${Math.floor(5 + Math.random() * 20)}`,
@@ -509,12 +583,14 @@ function initRMAManager() {
       reason: reason,
       resolution: resolution,
       status: "diproses",
-      date: new Date().toISOString().split("T")[0]
+      date: new Date().toISOString().split("T")[0],
     };
 
     buyerState.addRMA(newRMA);
     rmaForm.reset();
-    showToast(`Tiket RMA [${newRMA.rmaNumber}] berhasil dibuat dengan resolusi [${resolution}]!`);
+    showToast(
+      `Tiket RMA [${newRMA.rmaNumber}] berhasil dibuat dengan resolusi [${resolution}]!`,
+    );
 
     setTimeout(() => {
       window.location.reload();

@@ -836,24 +836,36 @@ exports.signContract = async (req, res) => {
 // 4. Pembayaran DP
 // ---------------------------------------------------------------------------
 exports.submitDpPayment = async (req, res) => {
+  const conn = await db.getConnection();
   try {
-    const order = await getOwnedOrder(req.params.id, req.customer.id);
-    if (!order) return fail(res, 404, 'PO tidak ditemukan.');
+    await conn.beginTransaction();
 
-    if (order.status !== 'contract_signed') {
-      return fail(res, 400, 'Bukti DP hanya dapat dikirim setelah kontrak ditandatangani (status: contract_signed).');
+    const order = await getOwnedOrder(req.params.id, req.customer.id, conn);
+    if (!order) {
+      await conn.rollback();
+      return fail(res, 404, 'PO tidak ditemukan.');
+    }
+
+    if (!['quote_agreed', 'contract_signed'].includes(order.status)) {
+      await conn.rollback();
+      return fail(res, 400, 'Bukti DP hanya dapat dikirim setelah harga penawaran disepakati (quote_agreed).');
     }
     if (!(Number(order.total_order_value) > 0)) {
+      await conn.rollback();
       return fail(res, 400, 'Nilai pesanan belum valid untuk pembayaran DP.');
     }
     if (!req.file) {
+      await conn.rollback();
       return fail(res, 400, 'Bukti transfer DP (payment_proof) wajib diunggah.');
     }
 
     const paidAmount = Number(req.body.paid_amount);
-    if (!(paidAmount > 0)) return fail(res, 400, 'Nominal DP tidak valid.');
+    if (!(paidAmount > 0)) {
+      await conn.rollback();
+      return fail(res, 400, 'Nominal DP tidak valid.');
+    }
 
-    const [[credit]] = await db.execute(
+    const [[credit]] = await conn.execute(
       'SELECT required_dp_percent FROM customer_credit_scores WHERE customer_id = ? LIMIT 1',
       [req.customer.id],
     );
@@ -863,6 +875,7 @@ exports.submitDpPayment = async (req, res) => {
     const requiredDpAmount = (Number(order.total_order_value) * dpPercent) / 100;
 
     if (paidAmount < requiredDpAmount) {
+      await conn.rollback();
       return fail(
         res,
         400,
@@ -873,14 +886,14 @@ exports.submitDpPayment = async (req, res) => {
     const proofUrl = `/uploads/payments/${req.file.filename}`;
     const paymentDate = req.body.payment_date ? new Date(req.body.payment_date) : new Date();
 
-    const [[existing]] = await db.execute(
+    const [[existing]] = await conn.execute(
       'SELECT id FROM dp_payments WHERE order_id = ? ORDER BY id DESC LIMIT 1',
       [order.id],
     );
 
     let dpPaymentId;
     if (existing) {
-      await db.execute(
+      await conn.execute(
         `UPDATE dp_payments
          SET required_dp_percent = ?, required_dp_amount = ?, paid_amount = ?,
              payment_date = ?, payment_proof_url = ?,
@@ -890,7 +903,7 @@ exports.submitDpPayment = async (req, res) => {
       );
       dpPaymentId = existing.id;
     } else {
-      const [result] = await db.execute(
+      const [result] = await conn.execute(
         `INSERT INTO dp_payments (order_id, required_dp_percent, required_dp_amount, paid_amount, payment_date, payment_proof_url, verification_status)
          VALUES (?, ?, ?, ?, ?, ?, 'pending')`,
         [order.id, dpPercent, requiredDpAmount, paidAmount, paymentDate, proofUrl],
@@ -898,11 +911,22 @@ exports.submitDpPayment = async (req, res) => {
       dpPaymentId = result.insertId;
     }
 
-    await db.execute(
-      "UPDATE orders SET status = 'dp_pending' WHERE id = ? AND customer_id = ? AND status = 'contract_signed'",
+    await conn.execute(
+      "UPDATE orders SET status = 'dp_pending' WHERE id = ? AND customer_id = ? AND status IN ('quote_agreed', 'contract_signed')",
       [order.id, req.customer.id],
     );
 
+    await conn.execute(
+      `INSERT INTO po_tracking_logs (order_id, stage, status_description, updated_by)
+       VALUES (?, 'DP_Submitted', ?, ?)`,
+      [
+        order.id,
+        `Bukti transfer DP sebesar Rp ${paidAmount.toLocaleString('id-ID')} (${dpPercent}%) diunggah oleh Customer, menunggu verifikasi Admin.`,
+        req.user.userId,
+      ],
+    );
+
+    await conn.commit();
     return ok(
       res,
       {
@@ -916,8 +940,11 @@ exports.submitDpPayment = async (req, res) => {
       'Bukti DP terkirim, menunggu verifikasi Admin.',
     );
   } catch (error) {
+    await conn.rollback();
     console.error('submitDpPayment error:', error);
     return fail(res, 500, 'Pengiriman bukti DP gagal.');
+  } finally {
+    conn.release();
   }
 };
 
@@ -1135,6 +1162,9 @@ exports.createRma = async (req, res) => {
     const orderId = Number(req.body.order_id);
     const deliveryId = Number(req.body.delivery_id);
     const defectQty = Number(req.body.defect_quantity);
+    const actionType = ['replacement', 'credit_note'].includes(req.body.action_type)
+      ? req.body.action_type
+      : 'replacement';
 
     if (!(defectQty > 0)) return fail(res, 400, 'Jumlah unit cacat (defect_quantity) wajib diisi.');
     if (!req.file) return fail(res, 400, 'Bukti foto/video cacat (proof_media) wajib diunggah.');
@@ -1153,9 +1183,9 @@ exports.createRma = async (req, res) => {
     const reason = `[defect_quantity: ${defectQty}] ${String(req.body.claim_reason || '').trim()}`;
 
     await db.execute(
-      `INSERT INTO rma_requests (rma_number, order_id, delivery_id, customer_id, proof_media_url, claim_reason, verification_status)
-       VALUES (?, ?, ?, ?, ?, ?, 'pending')`,
-      [rmaNumber, orderId, deliveryId, req.customer.id, proofUrl, reason],
+      `INSERT INTO rma_requests (rma_number, order_id, delivery_id, customer_id, proof_media_url, claim_reason, action_type, verification_status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`,
+      [rmaNumber, orderId, deliveryId, req.customer.id, proofUrl, reason, actionType],
     );
 
     return ok(res, { rma_number: rmaNumber, status: 'pending' }, 'Klaim RMA terkirim, menunggu verifikasi QC.');

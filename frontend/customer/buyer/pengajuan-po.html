@@ -210,8 +210,23 @@
                   <div class="form-group">
                     <label class="form-label" for="calcQty">KUANTITAS (UNIT LACI)</label>
                     <div class="input-wrapper">
-                      <input type="number" id="calcQty" class="form-control" value="500" min="50" step="50" required />
+                      <input type="number" id="calcQty" class="form-control" value="500" min="50" step="1" required />
                       <span style="position: absolute; right: 12px; font-size: 0.75rem; color: var(--text-light);">pcs</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Nomor PO & Penawaran Harga Awal -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                  <div class="form-group">
+                    <label class="form-label" for="poNumberInput">NOMOR PO BUYER (OPSIONAL)</label>
+                    <input type="text" id="poNumberInput" class="form-control" maxlength="50" placeholder="Otomatis jika dikosongkan" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="calcProposedPrice">PENAWARAN HARGA AWAL / UNIT (RP)</label>
+                    <div class="input-wrapper">
+                      <input type="number" id="calcProposedPrice" class="form-control" value="125000" min="1000" step="500" required />
+                      <span style="position: absolute; right: 12px; font-size: 0.75rem; color: var(--text-light);">Rp</span>
                     </div>
                   </div>
                 </div>
@@ -247,15 +262,17 @@
                   <button type="button" class="btn-chip" style="pointer-events: none;">Pilih Berkas dari Komputer</button>
                 </div>
 
-                <div id="uploadedFileInfo" class="hidden" style="margin-top: 1rem; background: var(--bg-card-subtle); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--wireframe-border); display: flex; align-items: center; justify-content: space-between;">
-                  <div style="display: flex; align-items: center; gap: 0.6rem;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" color="var(--wood-primary)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
-                    <div>
-                      <strong id="fileNameDisplay" style="font-size: 0.82rem; color: var(--wood-darkest);">DRAWING-REV3-JAYA.pdf</strong>
-                      <span style="font-size: 0.68rem; color: var(--status-success); display: block;">✓ Terlampir sebagai acuan resmi standar produksi</span>
+                <div id="uploadedFileInfo" class="hidden" style="margin-top: 1rem; background: var(--bg-card-subtle); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--wireframe-border);">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" color="var(--wood-primary)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                      <div>
+                        <strong id="fileNameDisplay" style="font-size: 0.82rem; color: var(--wood-darkest);">DRAWING-REV3-JAYA.pdf</strong>
+                        <span style="font-size: 0.68rem; color: var(--status-success); display: block;">✓ Terlampir sebagai acuan resmi standar produksi</span>
+                      </div>
                     </div>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Siap Diproses</span>
                   </div>
-                  <span style="font-size: 0.72rem; color: var(--text-light);">Siap Diproses</span>
                 </div>
               </div>
             </div>

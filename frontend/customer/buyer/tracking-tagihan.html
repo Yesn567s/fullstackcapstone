@@ -156,15 +156,17 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                 <span>Tahap 5: Portal Live PO Tracking (Real-Time Terminal Pasuruan)</span>
               </h3>
-              <small style="color: var(--text-light); font-size: 0.72rem;">No. PO: <strong>PO-2026-MTO-088</strong> &bull; 500 unit Komponen Laci LVB Poplar</small>
+              <small id="trackingPoSummary" style="color: var(--text-light); font-size: 0.72rem;">No. PO: <strong>PO-2026-MTO-088</strong> &bull; 500 unit Komponen Laci LVB Poplar</small>
             </div>
-            <span class="status-pill status-production">
+            <span id="trackingProgressBadge" class="status-pill status-production">
               <span class="pulse-dot"></span>
               Progres Produksi: 65% Selesai
             </span>
           </div>
 
-          <div class="tracking-timeline-flow">
+          <select id="trackingOrderSelect" class="form-control select-control" style="max-width: 340px; margin-bottom: 1rem;"></select>
+
+          <div id="trackingTimelineList" class="tracking-timeline-flow">
             <!-- Node 1: Pemotongan Selesai -->
             <div class="track-node-item done">
               <div class="track-node-dot"></div>
@@ -245,7 +247,7 @@
                   <th>Status Pasokan</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="buyerConsignmentTableBody">
                 <tr>
                   <td><strong>LVB Poplar</strong></td>
                   <td>1220 × 2440 mm</td>
@@ -291,63 +293,76 @@
             <table class="portal-table">
               <thead>
                 <tr>
-                  <th>No. Pengiriman</th>
+                  <th>No. Surat Jalan</th>
                   <th>Truk &amp; Sopir</th>
                   <th>Kuantitas</th>
-                  <th>No. Surat Jalan</th>
-                  <th>Invoice Parsial</th>
-                  <th>Jatuh Tempo (TOP 90)</th>
-                  <th>Status &amp; Tindakan</th>
+                  <th>Tanggal Kirim</th>
+                  <th>Status Penerimaan</th>
+                  <th>Catatan</th>
+                  <th>Tindakan</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="buyerDeliveriesTableBody">
                 <tr>
-                  <td><strong>Rit #1 (PO-087)</strong></td>
-                  <td>
-                    <div>N-8451-UC</div>
-                    <small style="color: var(--text-muted);">Sopir: Hariyanto</small>
-                  </td>
-                  <td>350 pcs</td>
                   <td>
                     <span style="font-family: monospace; font-size: 0.75rem;">SJ-SA-2026-1102</span>
                     <span style="display: block; font-size: 0.68rem; color: var(--status-success);">✓ QC Passed</span>
                   </td>
                   <td>
-                    <strong>Rp 28.418.775</strong>
+                    <div>N-8451-UC</div>
+                    <small style="color: var(--text-muted);">Sopir: Hariyanto</small>
+                  </td>
+                  <td>350 pcs</td>
+                  <td>14 Nov 2026</td>
+                  <td><span class="status-pill status-completed">Diterima</span></td>
+                  <td>
                     <small style="display: block; color: var(--text-light);">INV-2026-PARS-041</small>
                   </td>
-                  <td>
-                    <strong style="color: var(--wood-primary);">06 Feb 2027</strong>
-                    <small style="display: block; color: var(--text-muted);">(90 hari sejak SJ)</small>
-                  </td>
-                  <td>
-                    <button type="button" class="btn-chip btn-simulate-pay" data-inv="INV-2026-PARS-041" style="background: var(--wood-primary); color: #fff;">
-                      Simulasi Bayar Lunas
-                    </button>
-                  </td>
+                  <td>✓ Terkonfirmasi</td>
                 </tr>
                 <tr>
-                  <td><strong>Rit #1 (PO-088)</strong></td>
+                  <td>
+                    <span style="color: var(--text-light); font-style: italic;">Menunggu QC</span>
+                  </td>
                   <td>
                     <div>N-8942-UB</div>
                     <small style="color: var(--text-muted);">Sopir: Slamet Riyadi</small>
                   </td>
                   <td>350 pcs</td>
+                  <td>16 Nov 2026</td>
+                  <td><span class="status-pill status-ready">Dalam Pengiriman</span></td>
                   <td>
-                    <span style="color: var(--text-light); font-style: italic;">Menunggu QC</span>
+                    <small style="display: block; color: var(--text-light);">Auto-Split Terbit saat SJ</small>
                   </td>
                   <td>
-                    <span style="color: var(--text-light); font-style: italic;">Auto-Split Terbit saat SJ</span>
-                  </td>
-                  <td>
-                    <span style="color: var(--text-light);">-</span>
-                  </td>
-                  <td>
-                    <span class="status-pill status-ready">Jadwal: 16 Nov 2026</span>
+                    <button type="button" class="btn-chip btn-simulate-pay" style="background: #2E6B4F; color: #fff;">
+                      Konfirmasi Terima
+                    </button>
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <div id="invoice" style="margin-top: 1.5rem; border-top: 1px solid var(--wireframe-border); padding-top: 1.25rem;">
+            <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--wood-darkest); margin-bottom: 0.75rem;">Daftar Tagihan (Invoice TOP 90 Hari)</h4>
+            <div class="portal-table-wrap">
+              <table class="portal-table">
+                <thead>
+                  <tr>
+                    <th>No. Invoice</th>
+                    <th>Jatuh Tempo</th>
+                    <th>Total Tagihan</th>
+                    <th>Sisa Tagihan</th>
+                    <th>Status</th>
+                    <th>Upload Bukti Bayar</th>
+                  </tr>
+                </thead>
+                <tbody id="buyerInvoicesTableBody">
+                  <tr><td colspan="6">Memuat tagihan...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -372,6 +387,13 @@
                 <select id="rmaPoSelect" class="form-control select-control" required>
                   <option value="PO-2026-MTO-087">PO-2026-MTO-087 (Sengon 350 pcs Terkirim)</option>
                   <option value="PO-2026-MTO-088">PO-2026-MTO-088 (Poplar 500 pcs)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="rmaDeliverySelect">PILIH SURAT JALAN / PENGIRIMAN</label>
+                <select id="rmaDeliverySelect" class="form-control select-control" required>
+                  <option value="">Pilih PO terlebih dahulu</option>
                 </select>
               </div>
 
@@ -400,8 +422,8 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label">UNGGAH BUKTI FOTO / VIDEO KERUSAKAN</label>
-                <input type="file" class="form-control" accept="image/*,video/*" />
+                <label class="form-label" for="rmaProofInput">UNGGAH BUKTI FOTO / VIDEO KERUSAKAN</label>
+                <input type="file" id="rmaProofInput" class="form-control" accept="image/*,video/*" required />
               </div>
 
               <button type="submit" class="btn-primary-auth" style="width: 100%; height: 42px; border-radius: 8px; margin-top: 0.5rem;">
@@ -423,7 +445,7 @@
                       <th>Status</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="rmaTableBody">
                     <tr>
                       <td><strong>RMA-2026-004</strong></td>
                       <td>
