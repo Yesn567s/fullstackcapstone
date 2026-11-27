@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
       : window.location.pathname.includes("invoice") ? "invoice"
       : window.location.pathname.includes("monitoring-produksi") ? "monitoring-produksi"
       : window.location.pathname.includes("inventaris-offcut") ? "inventaris-offcut"
+      : window.location.pathname.includes("rma") ? "rma"
       : "dashboard");
   const base = placeholder.dataset.base || (
     window.location.pathname.includes("/admin/") ? "." : ".."
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "cutting-optimize": `<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" x2="8.12" y1="4" y2="15.88"></line><line x1="14.47" x2="20" y1="14.48" y2="20"></line><line x1="8.12" x2="12" y1="8.12" y2="12"></line></svg>`,
     "monitoring-produksi": `<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>`,
     "inventaris-offcut": `<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>`,
+    rma: `<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>`,
   };
 
   const labels = {
@@ -54,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "cutting-optimize": "Cutting Optimize",
     "monitoring-produksi": "Monitoring Produksi",
     "inventaris-offcut": "Inventaris Offcut",
+    rma: "Klaim RMA",
   };
 
   const link = (name, href) =>
@@ -88,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ${isAdmin ? `
         <div class="admin-nav-group">
           <span class="nav-group-title">TRANSACTION</span>
-          <ul class="nav-group-list">${link("transaksi-po", base + "/transaksi-po.html")}${link("surat-jalan", base + "/surat-jalan.html")}${link("invoice", base + "/invoice.html")}</ul>
+          <ul class="nav-group-list">${link("transaksi-po", base + "/transaksi-po.html")}${link("surat-jalan", base + "/surat-jalan.html")}${link("rma", base + "/rma.html")}${link("invoice", base + "/invoice.html")}</ul>
         </div>
         <div class="admin-nav-group">
           <span class="nav-group-title">PRODUCTION</span>

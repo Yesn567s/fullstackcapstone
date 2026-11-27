@@ -49,6 +49,7 @@ router.post('/orders/:id/dp-payment', handleUpload(upload.single('payment_proof'
 // Tracking & Penerimaan
 router.get('/orders/:id/tracking', ctrl.getTracking);
 router.patch('/deliveries/:id/confirm', ctrl.confirmDelivery);
+router.post('/orders/:id/accept-final', ctrl.acceptFinalOrder);
 
 // Invoice TOP 90
 router.get('/invoices', ctrl.getInvoices);

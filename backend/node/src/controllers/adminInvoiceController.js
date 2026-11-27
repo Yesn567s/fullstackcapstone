@@ -65,6 +65,17 @@ async function listAvailableOrders(req, res) {
        JOIN customers c ON c.id = o.customer_id
        LEFT JOIN invoices i ON i.order_id = o.id
        WHERE i.id IS NULL
+         AND EXISTS (
+           SELECT 1 FROM po_tracking_logs ptl
+           WHERE ptl.order_id = o.id
+             AND ptl.stage = 'Completed'
+             AND ptl.status_description LIKE '%ACC Final%'
+         )
+         AND NOT EXISTS (
+           SELECT 1 FROM rma_requests r
+           WHERE r.order_id = o.id
+             AND r.verification_status = 'pending'
+         )
        ORDER BY o.order_date DESC, o.id DESC`,
     );
     return res.json({ success: true, data: rows });

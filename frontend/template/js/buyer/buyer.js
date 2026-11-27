@@ -1237,12 +1237,67 @@ function initConsignmentTracking() {
   const summaryEl = document.getElementById("trackingPoSummary");
   const badgeEl = document.getElementById("trackingProgressBadge");
   const timelineEl = document.getElementById("trackingTimelineList");
+  const acceptanceBox = document.getElementById("orderAcceptanceBox");
+  const acceptanceTitle = document.getElementById("acceptanceTitle");
+  const acceptanceSubtitle = document.getElementById("acceptanceSubtitle");
+  const btnAcceptFinal = document.getElementById("btnAcceptFinalOrder");
+  const btnOpenRmaClaim = document.getElementById("btnOpenRmaClaim");
+
+  function renderAcceptanceBox(data) {
+    if (!acceptanceBox) return;
+    const {
+      deliveries = [],
+      final_accepted: finalAccepted = false,
+      pending_rma_count: pendingRmaCount = 0,
+    } = data || {};
+    const hasReceived = deliveries.some((d) => Boolean(d.received_status));
+
+    if (!hasReceived) {
+      acceptanceBox.style.display = "none";
+      return;
+    }
+
+    acceptanceBox.style.display = "block";
+    if (finalAccepted) {
+      acceptanceTitle.textContent = "✓ Barang Sudah Diterima & Di-ACC Final";
+      acceptanceSubtitle.textContent =
+        "Pesanan dinyatakan sesuai ekspektasi. Invoice penagihan TOP 90 Hari akan tersedia di Tahap 8.";
+      if (btnAcceptFinal) {
+        btnAcceptFinal.style.display = "none";
+      }
+      if (btnOpenRmaClaim) {
+        btnOpenRmaClaim.style.display = "none";
+      }
+      return;
+    }
+
+    if (btnAcceptFinal) {
+      btnAcceptFinal.style.display = "inline-flex";
+      btnAcceptFinal.disabled = pendingRmaCount > 0;
+    }
+    if (btnOpenRmaClaim) {
+      btnOpenRmaClaim.style.display = "inline-flex";
+    }
+
+    if (pendingRmaCount > 0) {
+      acceptanceTitle.textContent =
+        "Ada Tiket Klaim RMA yang Sedang Ditinjau Admin";
+      acceptanceSubtitle.textContent =
+        "Selesaikan proses klaim RMA terlebih dahulu (atau tunggu pengiriman pengganti) sebelum melakukan ACC Final.";
+    } else {
+      acceptanceTitle.textContent =
+        "Barang sudah diterima. Apakah semua sudah sesuai ekspektasi?";
+      acceptanceSubtitle.textContent =
+        "Jika ada yang ingin dikomplain, buat tiket klaim RMA di Tahap 7. Jika semua sudah sesuai, klik ACC Final agar Invoice dapat diterbitkan.";
+    }
+  }
 
   async function loadOrderTracking(orderId) {
     if (!orderId || !deliveriesBody) return;
     try {
       const json = await apiRequest(`/api/customer/orders/${orderId}/tracking`);
       const { order, timeline = [], deliveries = [] } = json.data || {};
+      renderAcceptanceBox(json.data);
       if (summaryEl && order) {
         const meta = getOrderStatusMeta(order.status);
         summaryEl.innerHTML = `No. PO: <strong>${escHtml(order.order_number)}</strong> &bull; Status: <strong>${escHtml(meta.label)}</strong>`;
@@ -1347,6 +1402,37 @@ function initConsignmentTracking() {
         btn.disabled = false;
         showToast(err.message || "Gagal konfirmasi penerimaan.");
       }
+    });
+  }
+
+  if (btnAcceptFinal) {
+    btnAcceptFinal.addEventListener("click", async () => {
+      const orderId = orderSelect?.value;
+      if (!orderId) return;
+      btnAcceptFinal.disabled = true;
+      try {
+        const res = await apiRequest(
+          `/api/customer/orders/${orderId}/accept-final`,
+          { method: "POST" },
+        );
+        showToast(res.message || "ACC Final berhasil!");
+        await loadOrderTracking(orderId);
+      } catch (err) {
+        btnAcceptFinal.disabled = false;
+        showToast(err.message || "Gagal melakukan ACC Final.");
+      }
+    });
+  }
+
+  if (btnOpenRmaClaim) {
+    btnOpenRmaClaim.addEventListener("click", () => {
+      const rmaSection = document.getElementById("rma");
+      const rmaPoSelect = document.getElementById("rmaPoSelect");
+      if (rmaPoSelect && orderSelect?.value) {
+        rmaPoSelect.value = orderSelect.value;
+        rmaPoSelect.dispatchEvent(new Event("change"));
+      }
+      rmaSection?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 
@@ -1564,10 +1650,18 @@ function initRMAManager() {
           <tr>
             <td><strong>${escHtml(r.rma_number)}</strong></td>
             <td>
-              <div>${escHtml(r.order_number)}</div>
-              <small style="color:var(--text-muted);">${escHtml(r.claim_reason)}</small>
+              <div>${escHtml(r.po_number || r.order_number)} ${r.delivery_note_number ? `<small style="color:var(--text-muted)">(${escHtml(r.delivery_note_number)})</small>` : ""}</div>
+              <small style="color:var(--text-muted);white-space:pre-line;">${escHtml(r.claim_reason)}</small>
             </td>
             <td>-</td>
+            <td>${escHtml(r.action_type || "-")}</td>
+            <td><span class="status-pill ${r.verification_status === "verified" ? "status-completed" : r.verification_status === "rejected" ? "status-dp-pending" : "status-ready"}">${
+              r.verification_status === "verified"
+                ? "Di-acknowledge Admin (Kirim Balik / Rework)"
+                : r.verification_status === "rejected"
+                  ? "Ditolak"
+                  : "Menunggu Review Admin"
+            }</span></td>
             <td><span style="font-size:0.7rem;font-weight:700;color:var(--wood-primary);">${escHtml(r.action_type || "-")}</span></td>
             <td><span class="status-pill ${r.verification_status === "verified" ? "status-completed" : "status-ready"}">${escHtml(r.verification_status)}</span></td>
           </tr>`,

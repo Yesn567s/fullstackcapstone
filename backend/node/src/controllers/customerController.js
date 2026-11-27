@@ -1056,7 +1056,28 @@ exports.getTracking = async (req, res) => {
       [order.id],
     );
 
-    return ok(res, { order, timeline, cutting_summary: cuttingSummary, deliveries });
+    const [[rmaStats]] = await db.execute(
+      `SELECT COALESCE(SUM(verification_status = 'pending'), 0) AS pending_rma_count,
+              COALESCE(SUM(verification_status = 'verified'), 0) AS verified_rma_count
+       FROM rma_requests WHERE order_id = ?`,
+      [order.id],
+    );
+
+    const finalAccepted = logs.some(
+      (l) =>
+        l.stage === 'Completed' &&
+        String(l.status_description || '').includes('ACC Final'),
+    );
+
+    return ok(res, {
+      order,
+      timeline,
+      cutting_summary: cuttingSummary,
+      deliveries,
+      final_accepted: finalAccepted,
+      pending_rma_count: Number(rmaStats?.pending_rma_count || 0),
+      verified_rma_count: Number(rmaStats?.verified_rma_count || 0),
+    });
   } catch (error) {
     console.error('getTracking error:', error);
     return fail(res, 500, 'Tracking gagal dimuat.');
@@ -1130,6 +1151,71 @@ exports.confirmDelivery = async (req, res) => {
     await conn.rollback();
     console.error('confirmDelivery error:', error);
     return fail(res, 500, 'Konfirmasi penerimaan gagal.');
+  } finally {
+    conn.release();
+  }
+};
+
+exports.acceptFinalOrder = async (req, res) => {
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    const order = await getOwnedOrder(req.params.id, req.customer.id, conn);
+    if (!order) {
+      await conn.rollback();
+      return fail(res, 404, 'PO tidak ditemukan.');
+    }
+
+    const [[deliveryStats]] = await conn.execute(
+      `SELECT COALESCE(SUM(received_status = TRUE), 0) AS received_count
+       FROM deliveries WHERE order_id = ?`,
+      [order.id],
+    );
+    if (Number(deliveryStats?.received_count || 0) < 1) {
+      await conn.rollback();
+      return fail(
+        res,
+        409,
+        'Konfirmasi penerimaan barang terlebih dahulu sebelum menyetujui ACC Final.',
+      );
+    }
+
+    const [[pendingRma]] = await conn.execute(
+      `SELECT COUNT(*) AS cnt FROM rma_requests
+       WHERE order_id = ? AND verification_status = 'pending'`,
+      [order.id],
+    );
+    if (Number(pendingRma?.cnt || 0) > 0) {
+      await conn.rollback();
+      return fail(
+        res,
+        409,
+        'Masih ada tiket klaim RMA yang menunggu proses Admin.',
+      );
+    }
+
+    await conn.execute("UPDATE orders SET status = 'completed' WHERE id = ?", [order.id]);
+    await conn.execute(
+      `INSERT INTO po_tracking_logs (order_id, stage, status_description, updated_by)
+       VALUES (?, 'Completed', ?, ?)`,
+      [
+        order.id,
+        'Customer mengonfirmasi seluruh barang sesuai ekspektasi (ACC Final). Siap diterbitkan Invoice.',
+        req.user.userId,
+      ],
+    );
+
+    await conn.commit();
+    return ok(
+      res,
+      { order_id: order.id, status: 'completed', final_accepted: true },
+      'ACC Final berhasil! Pesanan telah sesuai dan siap untuk penerbitan Invoice.',
+    );
+  } catch (error) {
+    await conn.rollback();
+    console.error('acceptFinalOrder error:', error);
+    return fail(res, 500, 'ACC Final gagal diproses.');
   } finally {
     conn.release();
   }
@@ -1229,11 +1315,13 @@ exports.listRma = async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT r.id, r.rma_number, r.request_date, r.claim_reason, r.verification_status,
-              r.action_type, r.credit_note_amount, r.order_id, o.order_number
+              r.action_type, r.credit_note_amount, r.order_id, o.order_number, o.po_number,
+              d.delivery_note_number
        FROM rma_requests r
        JOIN orders o ON o.id = r.order_id
+       LEFT JOIN deliveries d ON d.id = r.delivery_id
        WHERE r.customer_id = ?
-       ORDER BY r.request_date DESC`,
+       ORDER BY r.request_date DESC, r.id DESC`,
       [req.customer.id],
     );
     return ok(res, rows);

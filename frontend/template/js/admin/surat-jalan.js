@@ -321,6 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
           quantity_shipped: Number(quantityInput.value),
         },
       ],
+      rma_replacement: Boolean(selectedOrder.is_rma_replacement),
     };
 
     saveButton.disabled = true;

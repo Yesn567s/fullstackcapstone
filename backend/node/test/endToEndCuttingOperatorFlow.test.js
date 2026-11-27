@@ -339,4 +339,108 @@ describe('Upload static serving & End-to-End Admin Optimize -> Operator -> QC ->
     expect(doneCutting[0].status_description).toMatch(/semua proses pemotongan.*selesai/i);
     expect(doneRes.body.data.cutting_summary.all_completed).toBe(true);
   });
+
+  test('RMA & ACC Final flow: Admin acknowledge -> Send rework to Operator -> Customer ACC Final', async () => {
+    // 1. Admin lists RMA
+    mockConnectionExecute.mockImplementation((query) => {
+      if (query.includes('SELECT id, username, role FROM users WHERE id = ?')) {
+        return Promise.resolve([[{ id: 1, username: 'admin', role: 'admin' }], []]);
+      }
+      return Promise.resolve([[], []]);
+    });
+    mockDbExecute.mockImplementation((query) => {
+      if (query.includes('FROM rma_requests r')) {
+        return Promise.resolve([
+          [{ id: 15, rma_number: 'RMA-15', order_id: 7, verification_status: 'pending', action_type: 'replacement' }],
+          [],
+        ]);
+      }
+      return Promise.resolve([[], []]);
+    });
+
+    const listRmaRes = await request(app)
+      .get('/api/admin/rma')
+      .set('Cookie', adminCookie);
+    expect(listRmaRes.status).toBe(200);
+    expect(listRmaRes.body.data[0].rma_number).toBe('RMA-15');
+
+    // 2. Admin acknowledges RMA
+    mockConnectionExecute.mockImplementation((query) => {
+      if (query.includes('SELECT id, username, role FROM users WHERE id = ?')) {
+        return Promise.resolve([[{ id: 1, username: 'admin', role: 'admin' }], []]);
+      }
+      if (query.includes('FROM rma_requests r') && query.includes('FOR UPDATE')) {
+        return Promise.resolve([
+          [{ id: 15, rma_number: 'RMA-15', order_id: 7, verification_status: 'pending', claim_reason: 'Retak', order_number: 'PO-7' }],
+          [],
+        ]);
+      }
+      return Promise.resolve([{ affectedRows: 1, insertId: 1 }, []]);
+    });
+
+    const ackRes = await request(app)
+      .patch('/api/admin/rma/15/acknowledge')
+      .set('Cookie', adminCookie)
+      .send({ action: 'acknowledge', admin_notes: 'Kirim balik barang cacat.' });
+    expect(ackRes.status).toBe(200);
+    expect(ackRes.body.data.verification_status).toBe('verified');
+
+    // 3. Admin sends RMA rework job to Operator
+    mockConnectionExecute.mockImplementation((query) => {
+      if (query.includes('SELECT id, username, role FROM users WHERE id = ?')) {
+        return Promise.resolve([[{ id: 1, username: 'admin', role: 'admin' }], []]);
+      }
+      if (query.includes('FROM rma_requests r') && query.includes('FOR UPDATE')) {
+        return Promise.resolve([
+          [{ id: 15, rma_number: 'RMA-15', order_id: 7, verification_status: 'verified', action_type: 'replacement', order_number: 'PO-7' }],
+          [],
+        ]);
+      }
+      if (query.includes('FROM cutting_jobs') && query.includes('job_number LIKE ?')) {
+        return Promise.resolve([[], []]);
+      }
+      if (query.includes('FROM order_items oi')) {
+        return Promise.resolve([[{ material_id: 1, default_length_mm: 2440, default_width_mm: 1220 }], []]);
+      }
+      if (query.includes('INSERT INTO cutting_jobs')) {
+        return Promise.resolve([{ insertId: 99 }, []]);
+      }
+      return Promise.resolve([{ affectedRows: 1, insertId: 1 }, []]);
+    });
+
+    const reworkRes = await request(app)
+      .post('/api/admin/rma/15/send-to-operator')
+      .set('Cookie', adminCookie);
+    expect(reworkRes.status).toBe(201);
+    expect(reworkRes.body.data.job_number).toMatch(/^CJ-RMA-15-/);
+
+    // 4. Customer confirms ACC Final after receiving goods
+    mockDbExecute.mockImplementation((query) => {
+      if (query.includes('SELECT id, username, role FROM users WHERE id = ?')) {
+        return Promise.resolve([[{ id: 9, username: 'buyer1', role: 'customer' }], []]);
+      }
+      if (query.includes('FROM customers c')) {
+        return Promise.resolve([[{ id: 10, company_name: 'PT Buyer Test', loyalty_tier_id: 1 }], []]);
+      }
+      return Promise.resolve([[], []]);
+    });
+    mockConnectionExecute.mockImplementation((query) => {
+      if (query.includes('SELECT * FROM orders WHERE id = ? AND customer_id = ?')) {
+        return Promise.resolve([[{ id: 7, order_number: 'PO-7', status: 'partially_shipped' }], []]);
+      }
+      if (query.includes('FROM deliveries WHERE order_id = ?')) {
+        return Promise.resolve([[{ received_count: 1 }], []]);
+      }
+      if (query.includes('FROM rma_requests')) {
+        return Promise.resolve([[{ cnt: 0 }], []]);
+      }
+      return Promise.resolve([{ affectedRows: 1, insertId: 1 }, []]);
+    });
+
+    const accFinalRes = await request(app)
+      .post('/api/customer/orders/7/accept-final')
+      .set('Cookie', customerCookie);
+    expect(accFinalRes.status).toBe(200);
+    expect(accFinalRes.body.data.final_accepted).toBe(true);
+  });
 });

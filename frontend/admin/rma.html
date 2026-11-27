@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CV. SUMBER ARTHA - Klaim RMA</title>
+    <link href="../../assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../template/css/style.css" rel="stylesheet" />
+    <link href="../template/css/base.css" rel="stylesheet" />
+    <link href="../template/css/dashboard.css" rel="stylesheet" />
+    <link href="../template/css/components.css" rel="stylesheet" />
+    <link href="../template/css/responsive.css" rel="stylesheet" />
+  </head>
+  <body class="view-admin-dashboard">
+    <div style="background:#111827;color:#94a3b8;font-size:.76rem;padding:.4rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="display:flex;align-items:center;gap:.5rem"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#10b981"></span><strong style="color:#f8fafc">Admin - Tiket Klaim RMA</strong></div>
+      <a href="../auth/adminlogin.html" style="color:#f59e0b;text-decoration:none;font-weight:600">&larr; Kembali ke Halaman Login</a>
+    </div>
+    <div class="admin-dashboard-wrapper" id="adminDashboardView">
+      <aside data-staff-sidebar data-role="admin" data-active="rma" data-base="."></aside>
+
+      <section class="admin-main-content">
+        <div class="admin-top-mobile-bar">
+          <button aria-label="Toggle Menu" class="admin-sidebar-toggle" id="btnSidebarToggle" type="button">
+            <svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22"><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
+          </button>
+          <div class="mobile-brand-title">Admin - CV. Sumber Artha</div>
+          <a class="btn-mobile-logout" href="../auth/adminlogin.html" title="Keluar">
+            <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline></svg>
+          </a>
+        </div>
+
+        <div class="admin-view-panel po-view">
+          <header class="po-header">
+            <div>
+              <h1>Klaim Garansi &amp; Retur (RMA)</h1>
+              <p>Tinjau klaim customer, minta pengembalian barang cacat, dan kirim pekerjaan perbaikan ke Operator</p>
+            </div>
+            <div class="production-actions">
+              <button class="po-add-button" id="btnRefreshRma" type="button"><span>&#8635;</span> Refresh</button>
+            </div>
+          </header>
+
+          <div class="po-summary-grid">
+            <div class="po-summary-card"><span>Total Tiket RMA</span><strong id="rmaTotal">-</strong></div>
+            <div class="po-summary-card"><span>Menunggu Review</span><strong id="rmaPending">-</strong><small>Perlu acknowledge Admin</small></div>
+            <div class="po-summary-card"><span>Di-acknowledge / Rework</span><strong id="rmaVerified">-</strong><small>Siap kirim ke Operator / Pengganti</small></div>
+          </div>
+
+          <section class="po-panel po-list-panel">
+            <div class="po-list-heading">
+              <div>
+                <h2>Daftar Tiket Klaim Customer</h2>
+                <p><span class="po-sync-dot"></span> Alur: Acknowledge &rarr; Minta Kirim Balik &rarr; Kirim ke Operator &rarr; QC &rarr; Surat Jalan Pengganti</p>
+              </div>
+            </div>
+            <div class="po-table-wrap">
+              <table class="po-table">
+                <thead>
+                  <tr>
+                    <th>No. RMA</th>
+                    <th>No. PO &amp; SJ</th>
+                    <th>Customer</th>
+                    <th>Alasan &amp; Bukti</th>
+                    <th>Solusi</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="adminRmaTableBody">
+                  <tr><td colspan="7">Memuat tiket klaim RMA...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+    <div aria-live="polite" class="toast-container" id="toastContainer"></div>
+    <script src="../template/js/common/ui.js"></script>
+    <script src="../template/js/common/staff-sidebar.js"></script>
+    <script src="../template/js/common/staff-guard.js"></script>
+    <script src="../template/js/admin/rma.js"></script>
+  </body>
+</html>

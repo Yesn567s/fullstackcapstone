@@ -26,6 +26,7 @@ const createDeliverySchema = Joi.object({
     .max(100)
     .unique("order_item_id")
     .required(),
+  rma_replacement: Joi.boolean().default(false),
 }).unknown(false);
 
 // Read + create: staff (admin/operator). Lainnya tetap admin-only.

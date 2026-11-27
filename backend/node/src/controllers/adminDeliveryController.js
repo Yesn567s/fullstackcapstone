@@ -45,14 +45,22 @@ async function listShippableOrders(req, res) {
            )
              AND qi.overall_status = 'passed'
          )
-         AND EXISTS (
-           SELECT 1 FROM order_items oi
-           WHERE oi.order_id = o.id
-             AND oi.quantity > COALESCE((
-               SELECT SUM(di.quantity_shipped)
-               FROM delivery_items di
-               WHERE di.order_item_id = oi.id
-             ), 0)
+         AND (
+           EXISTS (
+             SELECT 1 FROM order_items oi
+             WHERE oi.order_id = o.id
+               AND oi.quantity > COALESCE((
+                 SELECT SUM(di.quantity_shipped)
+                 FROM delivery_items di
+                 WHERE di.order_item_id = oi.id
+               ), 0)
+           )
+           OR EXISTS (
+             SELECT 1 FROM rma_requests r
+             WHERE r.order_id = o.id
+               AND r.verification_status = 'verified'
+               AND r.action_type = 'replacement'
+           )
          )
        ORDER BY o.order_date DESC, o.id DESC`,
       SHIPPABLE_ORDER_STATUSES,
@@ -113,7 +121,7 @@ async function getOrderForDelivery(req, res) {
       });
     }
 
-    const [items] = await db.execute(
+    let [items] = await db.execute(
       `SELECT oi.id, oi.drawer_type_code, oi.quantity,
               COALESCE(SUM(di.quantity_shipped), 0) AS shipped_quantity,
               oi.quantity - COALESCE(SUM(di.quantity_shipped), 0) AS remaining_quantity
@@ -126,11 +134,35 @@ async function getOrderForDelivery(req, res) {
       [orderId],
     );
 
+    let isRmaReplacement = false;
+    if (!items.length) {
+      const [[verifiedRma]] = await db.execute(
+        `SELECT id FROM rma_requests
+         WHERE order_id = ? AND verification_status = 'verified' AND action_type = 'replacement'
+         LIMIT 1`,
+        [orderId],
+      );
+      if (verifiedRma) {
+        isRmaReplacement = true;
+        const [allItems] = await db.execute(
+          `SELECT oi.id, oi.drawer_type_code, oi.quantity,
+                  0 AS shipped_quantity,
+                  oi.quantity AS remaining_quantity
+           FROM order_items oi
+           WHERE oi.order_id = ?
+           ORDER BY oi.id`,
+          [orderId],
+        );
+        items = allItems;
+      }
+    }
+
     return res.json({
       success: true,
       data: {
         ...order,
         qc_inspection_id: inspection.id,
+        is_rma_replacement: isRmaReplacement,
         items,
       },
     });
@@ -203,6 +235,7 @@ async function createDelivery(req, res) {
     truck_plate_number: truckPlate,
     driver_name: driverName,
     items,
+    rma_replacement: rmaReplacement = false,
   } = req.body;
   let connection;
 
@@ -283,11 +316,23 @@ async function createDelivery(req, res) {
       const remaining =
         Number(orderItem.quantity) - Number(orderItem.shipped_quantity);
       if (item.quantity > remaining) {
-        await connection.rollback();
-        return res.status(409).json({
-          success: false,
-          message: `Jumlah kirim melebihi sisa item ${item.orderItemId} (${remaining}).`,
-        });
+        let allowedViaRma = false;
+        if (rmaReplacement) {
+          const [[verifiedRma]] = await connection.execute(
+            `SELECT id FROM rma_requests
+             WHERE order_id = ? AND verification_status = 'verified' AND action_type = 'replacement'
+             LIMIT 1`,
+            [orderId],
+          );
+          allowedViaRma = Boolean(verifiedRma && item.quantity <= Number(orderItem.quantity));
+        }
+        if (!allowedViaRma) {
+          await connection.rollback();
+          return res.status(409).json({
+            success: false,
+            message: `Jumlah kirim melebihi sisa item ${item.orderItemId} (${remaining}).`,
+          });
+        }
       }
     }
 
