@@ -116,3 +116,98 @@ describe('cuttingOptimizationService.simulateCustomCutting', () => {
     ).toThrow('tidak muat pada lembaran');
   });
 });
+
+describe('cuttingOptimizationService.optimizeOrder', () => {
+  const { optimizeOrder } = require('../src/services/cuttingOptimizationService');
+
+  test('auto-generates component_items and fallback material for new customer order', async () => {
+    let componentLoadCount = 0;
+    const insertedComponents = [];
+    const mockConn = {
+      beginTransaction: jest.fn().mockResolvedValue(),
+      commit: jest.fn().mockResolvedValue(),
+      rollback: jest.fn().mockResolvedValue(),
+      release: jest.fn(),
+      execute: jest.fn(async (query, params) => {
+        if (query.includes('FROM component_items ci')) {
+          componentLoadCount += 1;
+          if (componentLoadCount === 1) return [[], []];
+          return [
+            insertedComponents.map((c, idx) => ({
+              id: idx + 1,
+              component_type: c.component_type,
+              raw_length_mm: c.raw_length_mm,
+              raw_width_mm: c.raw_width_mm,
+              grain_orientation: c.grain_orientation,
+              quantity: c.quantity,
+              material_id: c.material_id,
+              material_name: 'LVB Standar (1220x2440 mm)',
+              default_length_mm: 2440,
+              default_width_mm: 1220,
+            })),
+            [],
+          ];
+        }
+        if (query.includes('SELECT order_number, customer_id FROM orders')) {
+          return [[{ order_number: 'PO-NEW-001', customer_id: 2 }], []];
+        }
+        if (query.includes('FROM order_items WHERE order_id = ?')) {
+          return [
+            [
+              {
+                id: 11,
+                material_id: null,
+                finished_length_mm: 450,
+                finished_width_mm: 380,
+                finished_height_mm: 140,
+                quantity: 2,
+              },
+            ],
+            [],
+          ];
+        }
+        if (query.includes('SELECT COUNT(*) AS cnt FROM component_items')) {
+          return [[{ cnt: 0 }], []];
+        }
+        if (query.includes('FROM materials')) {
+          if (query.includes("material_code = 'STD-LVB-12'")) {
+            return [[{ id: 99 }], []];
+          }
+          return [[], []];
+        }
+        if (query.includes('INSERT INTO component_items')) {
+          insertedComponents.push({
+            order_item_id: params[0],
+            component_type: params[1],
+            material_id: params[2],
+            raw_length_mm: params[3],
+            raw_width_mm: params[4],
+            grain_orientation: params[5],
+            quantity: params[6],
+          });
+          return [{ insertId: insertedComponents.length }, []];
+        }
+        if (query.includes('SELECT COUNT(*) AS cnt FROM cutting_jobs')) {
+          return [[{ cnt: 0 }], []];
+        }
+        if (query.includes('FROM offcuts')) {
+          return [[], []];
+        }
+        if (query.includes('INSERT INTO cutting_jobs')) {
+          return [{ insertId: 77 }, []];
+        }
+        return [{ insertId: 1 }, []];
+      }),
+    };
+
+    const mockPool = { getConnection: jest.fn().mockResolvedValue(mockConn) };
+    const result = await optimizeOrder(mockPool, 42, null);
+
+    expect(insertedComponents).toHaveLength(5);
+    expect(insertedComponents.every((c) => c.material_id === 99)).toBe(true);
+    expect(result.order_id).toBe(42);
+    expect(result.total_sheets).toBe(1);
+    expect(result.jobs[0].pieces).toHaveLength(10);
+    expect(mockConn.commit).toHaveBeenCalledTimes(1);
+  });
+});

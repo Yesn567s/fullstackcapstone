@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showToast(`Optimasi selesai: ${result.data.total_sheets} lembar dipakai.`);
         statusEl.textContent = "Optimasi selesai dan tersimpan ke database.";
       } catch (error) {
-        statusEl.textContent = "";
+        statusEl.textContent = error.message || "Tidak dapat menghubungi server.";
         showToast(error.message || "Tidak dapat menghubungi server.");
       } finally {
         btnRun.disabled = false;

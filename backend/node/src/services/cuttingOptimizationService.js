@@ -242,6 +242,86 @@ async function persistCuttingJob(
   };
 }
 
+async function resolveFallbackMaterialId(connection, customerId) {
+  const [[customerOrShared]] = await connection.execute(
+    `SELECT id FROM materials
+     WHERE customer_id = ? OR customer_id IS NULL
+     ORDER BY (customer_id = ?) DESC, id ASC LIMIT 1`,
+    [customerId, customerId],
+  );
+  if (customerOrShared) return customerOrShared.id;
+
+  const [[anyMaterial]] = await connection.execute(
+    'SELECT id FROM materials ORDER BY id ASC LIMIT 1',
+  );
+  if (anyMaterial) return anyMaterial.id;
+
+  await connection.execute(
+    `INSERT IGNORE INTO materials (
+       customer_id, material_code, material_name, thickness_mm,
+       default_length_mm, default_width_mm, stock_sheets, has_grain_constraint
+     ) VALUES (NULL, 'STD-LVB-12', 'LVB Standar (1220x2440 mm)', 12.00, 2440.00, 1220.00, 100, TRUE)`,
+  );
+  const [[created]] = await connection.execute(
+    "SELECT id FROM materials WHERE material_code = 'STD-LVB-12' LIMIT 1",
+  );
+  return created ? created.id : null;
+}
+
+/**
+ * Auto-breakdown order_items -> component_items (+4 mm dovetail) jika belum ada,
+ * agar PO baru langsung siap dijalankan oleh Engine Optimasi 2D (/api/cutting/optimize).
+ */
+async function ensureOrderComponents(connection, orderId, customerId) {
+  const [items] = await connection.execute(
+    `SELECT id, material_id, finished_length_mm, finished_width_mm, finished_height_mm, quantity
+     FROM order_items WHERE order_id = ?`,
+    [orderId],
+  );
+  if (!items.length) return;
+
+  let fallbackMaterialId;
+  for (const it of items) {
+    const [[existing]] = await connection.execute(
+      'SELECT COUNT(*) AS cnt FROM component_items WHERE order_item_id = ?',
+      [it.id],
+    );
+    if (Number(existing.cnt) > 0) continue;
+
+    let materialId = it.material_id;
+    if (!materialId) {
+      if (fallbackMaterialId === undefined) {
+        fallbackMaterialId = await resolveFallbackMaterialId(connection, customerId);
+      }
+      materialId = fallbackMaterialId;
+    }
+    if (!materialId) continue;
+
+    const L = Number(it.finished_length_mm);
+    const W = Number(it.finished_width_mm);
+    const H = Number(it.finished_height_mm);
+    const qty = Number(it.quantity);
+
+    const panels = [
+      ['front', W + DOVETAIL_MM, H, 'lengthwise', qty],
+      ['back', W + DOVETAIL_MM, H, 'lengthwise', qty],
+      ['side_left', L + DOVETAIL_MM, H, 'lengthwise', qty],
+      ['side_right', L + DOVETAIL_MM, H, 'lengthwise', qty],
+      ['bottom', L, W, 'any', qty],
+    ];
+
+    for (const [type, rawLen, rawWid, grain, pQty] of panels) {
+      await connection.execute(
+        `INSERT INTO component_items (
+           order_item_id, component_type, material_id,
+           raw_length_mm, raw_width_mm, grain_orientation, quantity
+         ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [it.id, type, materialId, rawLen, rawWid, grain, pQty],
+      );
+    }
+  }
+}
+
 /**
  * Jalankan optimasi untuk 1 order. Mengembalikan ringkasan cutting jobs
  * beserta pola potong JSON-ready untuk Canvas.
@@ -251,20 +331,37 @@ async function optimizeOrder(pool, orderId, operatorId) {
   try {
     await connection.beginTransaction();
 
-    const components = await loadOrderComponents(connection, orderId);
-    if (components.length === 0) {
-      throw Object.assign(
-        new Error('Order tidak memiliki component_items untuk dioptimasi.'),
-        { statusCode: 422 },
-      );
-    }
+    let components = await loadOrderComponents(connection, orderId);
+    let order = null;
 
-    const [[order]] = await connection.execute(
-      'SELECT order_number, customer_id FROM orders WHERE id = ? LIMIT 1',
-      [orderId],
-    );
-    if (!order) {
-      throw Object.assign(new Error('Order tidak ditemukan.'), { statusCode: 404 });
+    if (components.length === 0) {
+      const [[foundOrder]] = await connection.execute(
+        'SELECT order_number, customer_id FROM orders WHERE id = ? LIMIT 1',
+        [orderId],
+      );
+      if (!foundOrder) {
+        throw Object.assign(new Error('Order tidak ditemukan.'), { statusCode: 404 });
+      }
+      order = foundOrder;
+
+      await ensureOrderComponents(connection, orderId, order.customer_id);
+      components = await loadOrderComponents(connection, orderId);
+
+      if (components.length === 0) {
+        throw Object.assign(
+          new Error('Order tidak memiliki component_items untuk dioptimasi.'),
+          { statusCode: 422 },
+        );
+      }
+    } else {
+      const [[foundOrder]] = await connection.execute(
+        'SELECT order_number, customer_id FROM orders WHERE id = ? LIMIT 1',
+        [orderId],
+      );
+      if (!foundOrder) {
+        throw Object.assign(new Error('Order tidak ditemukan.'), { statusCode: 404 });
+      }
+      order = foundOrder;
     }
 
     const [[existingJob]] = await connection.execute(
@@ -345,8 +442,9 @@ async function optimizeOrder(pool, orderId, operatorId) {
 
     // Persist semua cutting jobs + patterns dalam transaksi yang sama.
     const jobs = [];
+    let jobIndex = 0;
     for (const { materialId, sheets } of sheetsByMaterial) {
-      for (let index = 0; index < sheets.length; index++) {
+      for (const sheet of sheets) {
         jobs.push(
           await persistCuttingJob(
             connection,
@@ -354,8 +452,8 @@ async function optimizeOrder(pool, orderId, operatorId) {
             order.order_number,
             materialId,
             operatorId,
-            sheets[index],
-            index,
+            sheet,
+            jobIndex++,
           ),
         );
       }
@@ -503,6 +601,7 @@ function simulateCustomCutting(payload) {
 }
 
 module.exports = {
+  ensureOrderComponents,
   optimizeOrder,
   packSheet,
   simulateCustomCutting,

@@ -266,4 +266,77 @@ describe('Upload static serving & End-to-End Admin Optimize -> Operator -> QC ->
       [7],
     );
   });
+
+  test('GET /api/customer/orders/:id/tracking consolidates multiple Cutting logs into one summary status', async () => {
+    const setupTrackingMocks = (cuttingSummaryRow) => {
+      mockDbExecute.mockImplementation((query) => {
+        if (query.includes('SELECT id, username, role FROM users WHERE id = ?')) {
+          return Promise.resolve([[{ id: 9, username: 'buyer1', role: 'customer' }], []]);
+        }
+        if (query.includes('FROM customers c')) {
+          return Promise.resolve([[{ id: 10, company_name: 'PT Buyer Test', loyalty_tier_id: 1 }], []]);
+        }
+        if (query.includes('SELECT * FROM orders WHERE id = ? AND customer_id = ?')) {
+          return Promise.resolve([[{ id: 7, order_number: 'PO-TEST-001', order_date: '2026-11-27', status: 'in_production' }], []]);
+        }
+        if (query.includes('FROM po_tracking_logs')) {
+          return Promise.resolve([
+            [
+              { stage: 'DP_Verified', affected_quantity: null, status_description: 'DP diverifikasi.', updated_at: '2026-11-27T08:00:00Z' },
+              { stage: 'Cutting', affected_quantity: null, status_description: 'Pemotongan dimulai (CJ-001).', updated_at: '2026-11-27T09:00:00Z' },
+              { stage: 'Cutting', affected_quantity: null, status_description: 'Pemotongan selesai (CJ-001).', updated_at: '2026-11-27T09:30:00Z' },
+              { stage: 'Cutting', affected_quantity: null, status_description: 'Pemotongan dimulai (CJ-002).', updated_at: '2026-11-27T10:00:00Z' },
+            ],
+            [],
+          ]);
+        }
+        if (query.includes('FROM cutting_jobs')) {
+          return Promise.resolve([[cuttingSummaryRow], []]);
+        }
+        return Promise.resolve([[], []]);
+      });
+    };
+
+    // 1. Not all cutting jobs finished yet (1 of 2 finished)
+    setupTrackingMocks({
+      total_jobs: 2,
+      completed_jobs: 1,
+      in_progress_jobs: 1,
+      pending_jobs: 0,
+      last_finished_at: '2026-11-27T09:30:00Z',
+      last_created_at: '2026-11-27T08:30:00Z',
+    });
+
+    const partialRes = await request(app)
+      .get('/api/customer/orders/7/tracking')
+      .set('Cookie', customerCookie);
+
+    expect(partialRes.status).toBe(200);
+    const partialCutting = partialRes.body.data.timeline.filter((t) => t.stage === 'Cutting');
+    expect(partialCutting).toHaveLength(1);
+    expect(partialCutting[0].is_completed).toBe(false);
+    expect(partialCutting[0].status_description).toMatch(/belum semua selesai/i);
+    expect(partialRes.body.data.cutting_summary.all_completed).toBe(false);
+
+    // 2. All cutting jobs finished (2 of 2 finished)
+    setupTrackingMocks({
+      total_jobs: 2,
+      completed_jobs: 2,
+      in_progress_jobs: 0,
+      pending_jobs: 0,
+      last_finished_at: '2026-11-27T11:00:00Z',
+      last_created_at: '2026-11-27T08:30:00Z',
+    });
+
+    const doneRes = await request(app)
+      .get('/api/customer/orders/7/tracking')
+      .set('Cookie', customerCookie);
+
+    expect(doneRes.status).toBe(200);
+    const doneCutting = doneRes.body.data.timeline.filter((t) => t.stage === 'Cutting');
+    expect(doneCutting).toHaveLength(1);
+    expect(doneCutting[0].is_completed).toBe(true);
+    expect(doneCutting[0].status_description).toMatch(/semua proses pemotongan.*selesai/i);
+    expect(doneRes.body.data.cutting_summary.all_completed).toBe(true);
+  });
 });

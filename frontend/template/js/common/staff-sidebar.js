@@ -85,13 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <ul class="nav-group-list">${link("add-user", base + "/adduser.html")}</ul>
         </div>
       ` : ""}
-      <div class="admin-nav-group">
-        <span class="nav-group-title">TRANSACTION</span>
-        <ul class="nav-group-list">${isAdmin
-          ? `${link("transaksi-po", base + "/transaksi-po.html")}${link("surat-jalan", base + "/surat-jalan.html")}${link("invoice", base + "/invoice.html")}`
-          : `${link("surat-jalan", base + "/../admin/surat-jalan.html")}${link("monitoring-produksi", base + "/../admin/monitoring-produksi.html")}`}</ul>
-      </div>
       ${isAdmin ? `
+        <div class="admin-nav-group">
+          <span class="nav-group-title">TRANSACTION</span>
+          <ul class="nav-group-list">${link("transaksi-po", base + "/transaksi-po.html")}${link("surat-jalan", base + "/surat-jalan.html")}${link("invoice", base + "/invoice.html")}</ul>
+        </div>
         <div class="admin-nav-group">
           <span class="nav-group-title">PRODUCTION</span>
           <ul class="nav-group-list">${link("cutting-optimize", base + "/cutting-optimize.html")}${link("monitoring-produksi", base + "/monitoring-produksi.html")}</ul>
@@ -100,12 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="nav-group-title">INVENTORY</span>
           <ul class="nav-group-list">${link("inventaris-offcut", base + "/inventaris-offcut.html")}</ul>
         </div>
-      ` : `
-        <div class="admin-nav-group">
-          <span class="nav-group-title">PRODUCTION</span>
-          <ul class="nav-group-list">${link("cutting-optimize", base + "/../admin/cutting-optimize.html")}</ul>
-        </div>
-      `}
+      ` : ""}
     </nav>
     <div class="admin-sidebar-footer">
       <div class="admin-user-card">

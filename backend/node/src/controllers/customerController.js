@@ -374,10 +374,12 @@ exports.getOrderDetail = async (req, res) => {
       'SELECT credit_score, recommended_credit_limit, allow_top_90, required_dp_percent FROM customer_credit_scores WHERE customer_id = ? LIMIT 1',
       [req.customer.id],
     );
-    const [tracking] = await db.execute(
+    const [rawTracking] = await db.execute(
       'SELECT stage, affected_quantity, status_description, updated_at FROM po_tracking_logs WHERE order_id = ? ORDER BY updated_at ASC',
       [order.id],
     );
+    const cuttingSummary = await getCuttingSummary(order.id);
+    const tracking = buildCustomerTimeline(rawTracking, cuttingSummary, order.order_date);
     const [deliveries] = await db.execute(
       `SELECT d.*, (SELECT COUNT(*) FROM delivery_items di WHERE di.delivery_id = d.id) AS item_lines
        FROM deliveries d WHERE d.order_id = ?`,
@@ -918,7 +920,7 @@ exports.submitDpPayment = async (req, res) => {
 
     await conn.execute(
       `INSERT INTO po_tracking_logs (order_id, stage, status_description, updated_by)
-       VALUES (?, 'DP_Submitted', ?, ?)`,
+       VALUES (?, 'Contract_Signed', ?, ?)`,
       [
         order.id,
         `Bukti transfer DP sebesar Rp ${paidAmount.toLocaleString('id-ID')} (${dpPercent}%) diunggah oleh Customer, menunggu verifikasi Admin.`,
@@ -948,6 +950,88 @@ exports.submitDpPayment = async (req, res) => {
   }
 };
 
+async function getCuttingSummary(orderId) {
+  const [[row]] = await db.execute(
+    `SELECT COUNT(*) AS total_jobs,
+            COALESCE(SUM(status = 'completed'), 0) AS completed_jobs,
+            COALESCE(SUM(status = 'in_progress'), 0) AS in_progress_jobs,
+            COALESCE(SUM(status = 'pending'), 0) AS pending_jobs,
+            MAX(finished_at) AS last_finished_at,
+            MAX(created_at) AS last_created_at
+     FROM cutting_jobs
+     WHERE order_id = ?`,
+    [orderId],
+  );
+  const totalJobs = Number(row?.total_jobs || 0);
+  const completedJobs = Number(row?.completed_jobs || 0);
+  const inProgressJobs = Number(row?.in_progress_jobs || 0);
+  const pendingJobs = Number(row?.pending_jobs || 0);
+
+  return {
+    total_jobs: totalJobs,
+    completed_jobs: completedJobs,
+    in_progress_jobs: inProgressJobs,
+    pending_jobs: pendingJobs,
+    all_completed: totalJobs > 0 && completedJobs >= totalJobs,
+    last_finished_at: row?.last_finished_at || null,
+    last_created_at: row?.last_created_at || null,
+  };
+}
+
+function buildCustomerTimeline(logs, cuttingSummary, fallbackDate) {
+  const nonCuttingLogs = [];
+  const cuttingLogs = [];
+  for (const log of logs || []) {
+    if (log.stage === 'Cutting') cuttingLogs.push(log);
+    else nonCuttingLogs.push(log);
+  }
+
+  let consolidatedCutting = null;
+  const totalJobs = Number(cuttingSummary?.total_jobs || 0);
+  const completedJobs = Number(cuttingSummary?.completed_jobs || 0);
+  const latestCuttingLog = cuttingLogs[cuttingLogs.length - 1] || null;
+
+  if (totalJobs > 0) {
+    const allCompleted = Boolean(cuttingSummary.all_completed);
+    consolidatedCutting = {
+      stage: 'Cutting',
+      affected_quantity: null,
+      status_description: allCompleted
+        ? `Semua proses pemotongan (${completedJobs}/${totalJobs} job) telah selesai.`
+        : `Proses pemotongan belum semua selesai (${completedJobs}/${totalJobs} job selesai).`,
+      updated_at:
+        latestCuttingLog?.updated_at ||
+        (allCompleted ? cuttingSummary.last_finished_at : cuttingSummary.last_created_at) ||
+        fallbackDate ||
+        null,
+      is_completed: allCompleted,
+    };
+  } else if (cuttingLogs.length > 0) {
+    const isCompleted = String(latestCuttingLog.status_description || '')
+      .toLowerCase()
+      .includes('selesai');
+    consolidatedCutting = {
+      stage: 'Cutting',
+      affected_quantity: latestCuttingLog.affected_quantity ?? null,
+      status_description: isCompleted
+        ? 'Semua proses pemotongan telah selesai.'
+        : 'Proses pemotongan sedang berlangsung (belum semua selesai).',
+      updated_at: latestCuttingLog.updated_at || fallbackDate || null,
+      is_completed: isCompleted,
+    };
+  }
+
+  if (!consolidatedCutting) return nonCuttingLogs;
+
+  const combined = [...nonCuttingLogs, consolidatedCutting];
+  combined.sort((a, b) => {
+    const ta = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+    const tb = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+    return ta - tb;
+  });
+  return combined;
+}
+
 // ---------------------------------------------------------------------------
 // 5. Live Tracking & Konfirmasi Penerimaan
 // ---------------------------------------------------------------------------
@@ -961,6 +1045,8 @@ exports.getTracking = async (req, res) => {
        FROM po_tracking_logs WHERE order_id = ? ORDER BY updated_at ASC`,
       [order.id],
     );
+    const cuttingSummary = await getCuttingSummary(order.id);
+    const timeline = buildCustomerTimeline(logs, cuttingSummary, order.order_date);
 
     const [deliveries] = await db.execute(
       `SELECT d.id, d.delivery_note_number, d.delivery_date, d.truck_plate_number, d.driver_name,
@@ -970,7 +1056,7 @@ exports.getTracking = async (req, res) => {
       [order.id],
     );
 
-    return ok(res, { order, timeline: logs, deliveries });
+    return ok(res, { order, timeline, cutting_summary: cuttingSummary, deliveries });
   } catch (error) {
     console.error('getTracking error:', error);
     return fail(res, 500, 'Tracking gagal dimuat.');
