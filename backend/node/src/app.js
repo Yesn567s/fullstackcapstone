@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+const adminDashboardRoutes = require('./routes/adminDashboard');
 const adminDeliveryRoutes = require('./routes/adminDeliveries');
 const adminInvoiceRoutes = require('./routes/adminInvoices');
 const adminOrderRoutes = require('./routes/adminOrders');
@@ -74,6 +75,7 @@ app.use(express.json());
 // Mount API routers under /api
 app.use('/api', apiRouter);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin/dashboard', adminDashboardRoutes);
 app.use('/api/admin/deliveries', adminDeliveryRoutes);
 app.use('/api/admin/invoices', adminInvoiceRoutes);
 app.use('/api/admin/orders', adminOrderRoutes);

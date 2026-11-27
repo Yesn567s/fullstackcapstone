@@ -173,7 +173,7 @@
                     </svg>
                   </span>
                   <span class="nav-text">Transaksi PO</span>
-                  <span class="nav-counter-badge">12</span>
+                  <span class="nav-counter-badge" id="dashboardOrderNavCount">-</span>
                 </a>
               </li>
               <li>
@@ -216,7 +216,7 @@
                     </svg>
                   </span>
                   <span class="nav-text">Invoice</span>
-                  <span class="nav-counter-badge warn">2</span>
+                  <span class="nav-counter-badge warn" id="dashboardInvoiceNavCount">-</span>
                 </a>
               </li>
             </ul>
@@ -400,7 +400,7 @@
                     <line x1="3" x2="21" y1="10" y2="10"></line>
                   </svg>
                   <span id="currentPeriodLabel"
-                    >Periode: Bulan Ini (Okt 2026)</span
+                    >Periode: Bulan Ini</span
                   >
                   <svg
                     class="chevron-icon"
@@ -417,31 +417,31 @@
                 <div class="period-dropdown-menu hidden" id="periodMenu">
                   <button
                     class="dropdown-item active"
-                    data-period="Bulan Ini (Okt 2026)"
+                    data-period="this-month"
                     type="button"
                   >
-                    Bulan Ini (Okt 2026)
+                    Bulan Ini
                   </button>
                   <button
                     class="dropdown-item"
-                    data-period="Bulan Lalu (Sep 2026)"
+                    data-period="last-month"
                     type="button"
                   >
-                    Bulan Lalu (Sep 2026)
+                    Bulan Lalu
                   </button>
                   <button
                     class="dropdown-item"
-                    data-period="Kuartal 3 (Jul - Sep 2026)"
+                    data-period="this-quarter"
                     type="button"
                   >
-                    Kuartal 3 (Jul - Sep 2026)
+                    Kuartal Berjalan
                   </button>
                   <button
                     class="dropdown-item"
-                    data-period="Tahun Berjalan (2026)"
+                    data-period="this-year"
                     type="button"
                   >
-                    Tahun Berjalan (2026)
+                    Tahun Berjalan
                   </button>
                 </div>
               </div>
@@ -469,41 +469,41 @@
         <div class="kpi-cards-grid">
           <!-- KPI 1 -->
           <div class="kpi-card" tabindex="0">
-            <span class="kpi-label">Total PO Berjalan</span>
+            <span class="kpi-label">Total PO Periode</span>
             <div class="kpi-value-row">
-              <span class="kpi-value" id="kpiTotalPO">12 PO</span>
+              <span class="kpi-value" id="kpiTotalPO">Memuat...</span>
             </div>
-            <span class="kpi-subtext" id="kpiPOSub">+2 PO bulan ini</span>
+            <span class="kpi-subtext" id="kpiPOSub">Memuat data...</span>
           </div>
           <!-- KPI 2 -->
           <div class="kpi-card" tabindex="0">
             <span class="kpi-label">Rata-rata Efisiensi Bahan</span>
             <div class="kpi-value-row">
               <span class="kpi-value highlight-val" id="kpiEfisiensi"
-                >94,2%</span
+                >Memuat...</span
               >
             </div>
             <span class="kpi-subtext positive" id="kpiEfisiensiSub"
-              >+1,8% yield</span
+              >Memuat data...</span
             >
           </div>
           <!-- KPI 3 -->
           <div class="kpi-card" tabindex="0">
             <span class="kpi-label">Limbah Kayu (Waste)</span>
             <div class="kpi-value-row">
-              <span class="kpi-value" id="kpiWaste">3,4%</span>
+              <span class="kpi-value" id="kpiWaste">Memuat...</span>
             </div>
-            <span class="kpi-subtext positive" id="kpiWasteSub"
-              >Turun 0,6%</span
+            <span class="kpi-subtext" id="kpiWasteSub"
+              >Memuat data...</span
             >
           </div>
           <!-- KPI 4 -->
           <div class="kpi-card" tabindex="0">
             <span class="kpi-label">Total Piutang (TOP 90)</span>
             <div class="kpi-value-row">
-              <span class="kpi-value" id="kpiPiutang">Rp 18,5 jt</span>
+              <span class="kpi-value" id="kpiPiutang">Memuat...</span>
             </div>
-            <span class="kpi-subtext" id="kpiPiutangSub">2 invoice aktif</span>
+            <span class="kpi-subtext" id="kpiPiutangSub">Memuat data...</span>
           </div>
         </div>
         <!-- Row 2: Charts (Tren Efisiensi & Distribusi Penggunaan Material) -->
@@ -511,85 +511,12 @@
           <!-- Left Card: Bar Chart -->
           <div class="analytics-card bar-chart-card">
             <div class="card-top-header">
-              <h3 class="card-section-title">
-                Tren Efisiensi Penggunaan Bahan Baku (LVB &amp; Triplek)
-              </h3>
+              <h3 class="card-section-title">Tren Efisiensi Pemotongan</h3>
             </div>
             <div class="chart-canvas-container">
               <!-- Bars Container -->
               <div class="chart-bars-wrap" id="chartBarsContainer">
-                <!-- Mei -->
-                <div class="bar-col" data-month="Mei" data-val="90.8%">
-                  <span class="bar-val-label">90.8%</span>
-                  <div class="bar-track">
-                    <div
-                      class="bar-fill"
-                      style="height: 78%"
-                      title="Mei: 90.8%"
-                    ></div>
-                  </div>
-                  <span class="bar-month-label">Mei</span>
-                </div>
-                <!-- Jun -->
-                <div class="bar-col" data-month="Jun" data-val="92.5%">
-                  <span class="bar-val-label">92.5%</span>
-                  <div class="bar-track">
-                    <div
-                      class="bar-fill"
-                      style="height: 84%"
-                      title="Jun: 92.5%"
-                    ></div>
-                  </div>
-                  <span class="bar-month-label">Jun</span>
-                </div>
-                <!-- Jul -->
-                <div class="bar-col" data-month="Jul" data-val="91.6%">
-                  <span class="bar-val-label">91.6%</span>
-                  <div class="bar-track">
-                    <div
-                      class="bar-fill"
-                      style="height: 81%"
-                      title="Jul: 91.6%"
-                    ></div>
-                  </div>
-                  <span class="bar-month-label">Jul</span>
-                </div>
-                <!-- Agu -->
-                <div class="bar-col" data-month="Agu" data-val="93.3%">
-                  <span class="bar-val-label">93.3%</span>
-                  <div class="bar-track">
-                    <div
-                      class="bar-fill"
-                      style="height: 88%"
-                      title="Agu: 93.3%"
-                    ></div>
-                  </div>
-                  <span class="bar-month-label">Agu</span>
-                </div>
-                <!-- Sep -->
-                <div class="bar-col" data-month="Sep" data-val="94.7%">
-                  <span class="bar-val-label">94.7%</span>
-                  <div class="bar-track">
-                    <div
-                      class="bar-fill"
-                      style="height: 94%"
-                      title="Sep: 94.7%"
-                    ></div>
-                  </div>
-                  <span class="bar-month-label">Sep</span>
-                </div>
-                <!-- Okt -->
-                <div class="bar-col" data-month="Okt" data-val="94.2%">
-                  <span class="bar-val-label">94.2%</span>
-                  <div class="bar-track">
-                    <div
-                      class="bar-fill"
-                      style="height: 92%"
-                      title="Okt: 94.2%"
-                    ></div>
-                  </div>
-                  <span class="bar-month-label">Okt</span>
-                </div>
+                <span>Memuat data produksi...</span>
               </div>
             </div>
             <!-- Legend / Notes below Bar Chart -->
@@ -597,7 +524,7 @@
               <div class="chart-summary-stat">
                 <span class="legend-box color-yield"></span>
                 <span class="summary-text"
-                  >Yield rata-rata: <strong>94,2%</strong></span
+                  >Yield rata-rata: <strong id="chartAverageYield">-</strong></span
                 >
               </div>
               <div class="chart-legend-row">
@@ -619,34 +546,34 @@
           <!-- Right Card: Material Distribution Progress Bars -->
           <div class="analytics-card distribution-card">
             <div class="card-top-header">
-              <h3 class="card-section-title">Distribusi Penggunaan Material</h3>
+              <h3 class="card-section-title">Efisiensi &amp; Penggunaan Offcut</h3>
             </div>
             <div class="dist-bars-container">
               <!-- Item 1: Yield -->
               <div class="dist-item">
                 <div class="dist-label-row">
                   <span class="dist-name">Yield</span>
-                  <span class="dist-percentage" id="distYieldVal">94.2%</span>
+                  <span class="dist-percentage" id="distYieldVal">-</span>
                 </div>
                 <div class="dist-track">
                   <div
                     class="dist-fill bg-yield"
                     id="distYieldBar"
-                    style="width: 94.2%"
+                    style="width: 0%"
                   ></div>
                 </div>
               </div>
               <!-- Item 2: Offcut -->
               <div class="dist-item">
                 <div class="dist-label-row">
-                  <span class="dist-name">Offcut</span>
-                  <span class="dist-percentage" id="distOffcutVal">2.4%</span>
+                  <span class="dist-name">Job pakai offcut</span>
+                  <span class="dist-percentage" id="distOffcutVal">-</span>
                 </div>
                 <div class="dist-track">
                   <div
                     class="dist-fill bg-offcut"
                     id="distOffcutBar"
-                    style="width: 2.4%"
+                    style="width: 0%"
                   ></div>
                 </div>
               </div>
@@ -654,13 +581,13 @@
               <div class="dist-item">
                 <div class="dist-label-row">
                   <span class="dist-name">Waste</span>
-                  <span class="dist-percentage" id="distWasteVal">3.4%</span>
+                  <span class="dist-percentage" id="distWasteVal">-</span>
                 </div>
                 <div class="dist-track">
                   <div
                     class="dist-fill bg-waste"
                     id="distWasteBar"
-                    style="width: 3.4%"
+                    style="width: 0%"
                   ></div>
                 </div>
               </div>
@@ -673,7 +600,7 @@
               </div>
               <div class="legend-item">
                 <span class="legend-box color-offcut"></span>
-                <span>Offcut Usable</span>
+                <span>Job pakai offcut</span>
               </div>
               <div class="legend-item">
                 <span class="legend-box color-waste"></span>
@@ -696,36 +623,13 @@
                   <th>No. Invoice</th>
                   <th>Nama Customer</th>
                   <th>Jatuh Tempo</th>
-                  <th>Total Nominal</th>
+                  <th>Sisa Tagihan</th>
                   <th>Status Tagihan</th>
                   <th>Pembayaran</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="cell-invoice">INV-26-001</td>
-                  <td class="cell-customer">PT Artha Furnitur</td>
-                  <td class="cell-tempo">10 Nov 2026</td>
-                  <td class="cell-nominal">Rp 12.500.000</td>
-                  <td class="cell-status">
-                    <span class="status-text-unpaid">Belum Lunas</span>
-                  </td>
-                  <td class="cell-action">
-                    <span class="status-pill-active">Aktif</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="cell-invoice">INV-26-002</td>
-                  <td class="cell-customer">CV Mebel Jaya</td>
-                  <td class="cell-tempo">13 Nov 2026</td>
-                  <td class="cell-nominal">Rp 6.000.000</td>
-                  <td class="cell-status">
-                    <span class="status-text-partial">Cicilan</span>
-                  </td>
-                  <td class="cell-action">
-                    <span class="status-pill-active">Aktif</span>
-                  </td>
-                </tr>
+              <tbody id="dashboardInvoiceTableBody">
+                <tr><td colspan="6">Memuat invoice...</td></tr>
               </tbody>
             </table>
           </div>

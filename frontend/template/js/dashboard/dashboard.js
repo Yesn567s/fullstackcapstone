@@ -18,12 +18,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const kpiWasteSub = document.getElementById("kpiWasteSub");
   const kpiPiutang = document.getElementById("kpiPiutang");
   const kpiPiutangSub = document.getElementById("kpiPiutangSub");
+  const dashboardOrderNavCount = document.getElementById("dashboardOrderNavCount");
+  const dashboardInvoiceNavCount = document.getElementById("dashboardInvoiceNavCount");
   const distYieldVal = document.getElementById("distYieldVal");
   const distYieldBar = document.getElementById("distYieldBar");
   const distOffcutVal = document.getElementById("distOffcutVal");
   const distOffcutBar = document.getElementById("distOffcutBar");
   const distWasteVal = document.getElementById("distWasteVal");
   const distWasteBar = document.getElementById("distWasteBar");
+  const chartBarsContainer = document.getElementById("chartBarsContainer");
+  const chartAverageYield = document.getElementById("chartAverageYield");
+  const invoiceTableBody = document.getElementById("dashboardInvoiceTableBody");
 
   // 10. Admin Dashboard Routing & UX Interactions (Analitik & Monitoring)
   // ----------------------------------------------------------------------------
@@ -123,64 +128,299 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Period Selector Dropdown
-  const periodData = {
-    "Bulan Ini (Okt 2026)": {
-      po: "12 PO",
-      poSub: "+2 PO bulan ini",
-      efisiensi: "94,2%",
-      efisiensiSub: "+1,8% yield",
-      waste: "3,4%",
-      wasteSub: "Turun 0,6%",
-      piutang: "Rp 18,5 jt",
-      piutangSub: "2 invoice aktif",
-      yield: "94.2%",
-      offcut: "2.4%",
-      wastePct: "3.4%",
-    },
-    "Bulan Lalu (Sep 2026)": {
-      po: "10 PO",
-      poSub: "+1 PO bulan lalu",
-      efisiensi: "94,7%",
-      efisiensiSub: "+1,4% yield",
-      waste: "3,1%",
-      wasteSub: "Turun 0,4%",
-      piutang: "Rp 14,2 jt",
-      piutangSub: "1 invoice aktif",
-      yield: "94.7%",
-      offcut: "2.2%",
-      wastePct: "3.1%",
-    },
-    "Kuartal 3 (Jul - Sep 2026)": {
-      po: "32 PO",
-      poSub: "+5 PO dibanding Q2",
-      efisiensi: "93,2%",
-      efisiensiSub: "+2,1% yield",
-      waste: "3,8%",
-      wasteSub: "Turun 1,0%",
-      piutang: "Rp 45,8 jt",
-      piutangSub: "5 invoice aktif",
-      yield: "93.2%",
-      offcut: "3.0%",
-      wastePct: "3.8%",
-    },
-    "Tahun Berjalan (2026)": {
-      po: "98 PO",
-      poSub: "Realisasi target 92%",
-      efisiensi: "92,9%",
-      efisiensiSub: "+2,5% YoY",
-      waste: "3,9%",
-      wasteSub: "Turun 1,2% YoY",
-      piutang: "Rp 128,4 jt",
-      piutangSub: "6 invoice aktif",
-      yield: "92.9%",
-      offcut: "3.2%",
-      wastePct: "3.9%",
-    },
-  };
-
+  const periodItems = periodMenu?.querySelectorAll(".dropdown-item") || [];
+  const periodData = {};
   let selectedPeriodKey =
     periodMenu?.querySelector(".dropdown-item.active")?.dataset.period ||
-    Object.keys(periodData)[0];
+    "this-month";
+  let dashboardRequestId = 0;
+
+  function getPeriodLabel(periodKey) {
+    const now = new Date();
+    const monthName = (date) =>
+      new Intl.DateTimeFormat("id-ID", {
+        month: "short",
+        year: "numeric",
+      }).format(date);
+    const month = now.getMonth();
+
+    if (periodKey === "this-month") return `Bulan Ini (${monthName(now)})`;
+    if (periodKey === "last-month") {
+      return `Bulan Lalu (${monthName(new Date(now.getFullYear(), month - 1, 1))})`;
+    }
+    if (periodKey === "this-quarter") {
+      const quarter = Math.floor(month / 3);
+      const quarterStart = new Date(now.getFullYear(), quarter * 3, 1);
+      const quarterEnd = new Date(now.getFullYear(), quarter * 3 + 2, 1);
+      return `Kuartal ${quarter + 1} (${monthName(quarterStart)} - ${monthName(quarterEnd)})`;
+    }
+    return `Tahun Berjalan (${now.getFullYear()})`;
+  }
+
+  function updatePeriodLabels() {
+    periodItems.forEach((item) => {
+      item.textContent = getPeriodLabel(item.dataset.period);
+    });
+    if (currentPeriodLabel) {
+      currentPeriodLabel.textContent = `Periode: ${getPeriodLabel(selectedPeriodKey)}`;
+    }
+  }
+
+  function formatPercent(value) {
+    const number = Number(value);
+    return `${Number.isFinite(number) ? number.toLocaleString("id-ID", { maximumFractionDigits: 1 }) : "0"}%`;
+  }
+
+  function formatRupiah(value) {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    }).format(Number(value) || 0);
+  }
+
+  function setPercentBar(element, value) {
+    if (!element) return;
+    const percent = Math.max(0, Math.min(100, Number(value) || 0));
+    element.style.width = `${percent}%`;
+  }
+
+  function renderProductionTrend(trend) {
+    if (!chartBarsContainer) return;
+    chartBarsContainer.replaceChildren();
+
+    if (!Array.isArray(trend) || !trend.length) {
+      chartBarsContainer.textContent = "Belum ada data produksi pada enam bulan terakhir.";
+      if (chartAverageYield) chartAverageYield.textContent = "-";
+      return;
+    }
+
+    const trendAverage =
+      trend.reduce((sum, row) => sum + (Number(row.average_yield) || 0), 0) /
+      trend.length;
+    if (chartAverageYield) {
+      chartAverageYield.textContent = formatPercent(trendAverage);
+    }
+
+    trend.forEach((row) => {
+      const monthDate = new Date(`${row.month}-01T00:00:00`);
+      const monthLabel = Number.isNaN(monthDate.getTime())
+        ? row.month
+        : new Intl.DateTimeFormat("id-ID", { month: "short" }).format(monthDate);
+      const yieldRate = Number(row.average_yield) || 0;
+      const bar = document.createElement("div");
+      bar.className = "bar-col";
+      bar.dataset.month = monthLabel;
+      bar.dataset.val = formatPercent(yieldRate);
+      bar.title = `${monthLabel}: ${formatPercent(yieldRate)}`;
+
+      const valueLabel = document.createElement("span");
+      valueLabel.className = "bar-val-label";
+      valueLabel.textContent = formatPercent(yieldRate);
+      const track = document.createElement("div");
+      track.className = "bar-track";
+      const fill = document.createElement("div");
+      fill.className = "bar-fill";
+      fill.style.height = `${Math.max(0, Math.min(100, yieldRate))}%`;
+      track.appendChild(fill);
+      const label = document.createElement("span");
+      label.className = "bar-month-label";
+      label.textContent = monthLabel;
+
+      bar.append(valueLabel, track, label);
+      bar.addEventListener("click", () => {
+        showToast(`Bulan ${monthLabel}: Efisiensi Bahan ${formatPercent(yieldRate)}`);
+      });
+      chartBarsContainer.appendChild(bar);
+    });
+  }
+
+  function renderDashboardInvoices(invoices) {
+    if (!invoiceTableBody) return;
+    invoiceTableBody.replaceChildren();
+
+    if (!Array.isArray(invoices) || !invoices.length) {
+      const row = invoiceTableBody.insertRow();
+      const cell = row.insertCell();
+      cell.colSpan = 6;
+      cell.textContent = "Tidak ada tagihan aktif.";
+      return;
+    }
+
+    const statusLabels = {
+      overdue: "Jatuh Tempo",
+      partially_paid: "Cicilan",
+      unpaid: "Belum Lunas",
+    };
+
+    invoices.forEach((invoice) => {
+      const row = invoiceTableBody.insertRow();
+      const invoiceCell = row.insertCell();
+      invoiceCell.className = "cell-invoice";
+      invoiceCell.textContent = invoice.invoice_number || "-";
+
+      const customerCell = row.insertCell();
+      customerCell.className = "cell-customer";
+      customerCell.textContent = invoice.company_name || "-";
+
+      const dueDateCell = row.insertCell();
+      dueDateCell.className = "cell-tempo";
+      const dueDate = new Date(`${String(invoice.due_date).slice(0, 10)}T00:00:00`);
+      dueDateCell.textContent = Number.isNaN(dueDate.getTime())
+        ? String(invoice.due_date || "-")
+        : new Intl.DateTimeFormat("id-ID", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          }).format(dueDate);
+
+      const amountCell = row.insertCell();
+      amountCell.className = "cell-nominal";
+      amountCell.textContent = formatRupiah(invoice.remaining_amount);
+
+      const statusCell = row.insertCell();
+      statusCell.className = "cell-status";
+      const status = document.createElement("span");
+      status.className =
+        invoice.status === "partially_paid"
+          ? "status-text-partial"
+          : "status-text-unpaid";
+      status.textContent = statusLabels[invoice.status] || invoice.status || "-";
+      statusCell.appendChild(status);
+
+      const paymentCell = row.insertCell();
+      paymentCell.className = "cell-action";
+      const paymentStatus = document.createElement("span");
+      paymentStatus.className =
+        invoice.status === "overdue" ? "status-text-unpaid" : "status-pill-active";
+      paymentStatus.textContent =
+        invoice.status === "overdue" ? "Tertunggak" : "Aktif";
+      paymentCell.appendChild(paymentStatus);
+    });
+  }
+
+  function renderDashboardData(data) {
+    const kpis = data.kpis;
+    const jobCount = Number(kpis.job_count) || 0;
+    const yieldRate = Number(kpis.average_yield) || 0;
+    const wasteRate = Number(kpis.average_waste) || 0;
+    const offcutRate = Number(kpis.offcut_usage_percent) || 0;
+    const formattedData = {
+      po: `${Number(kpis.total_orders) || 0} PO`,
+      poSub: `${Number(kpis.active_orders) || 0} PO masih aktif`,
+      efisiensi: formatPercent(yieldRate),
+      efisiensiSub: `Dari ${jobCount} cutting job`,
+      waste: formatPercent(wasteRate),
+      wasteSub: `Dari ${jobCount} cutting job`,
+      piutang: formatRupiah(kpis.active_receivables),
+      piutangSub: `${Number(kpis.active_invoice_count) || 0} invoice aktif`,
+      yield: formatPercent(yieldRate),
+      offcut: formatPercent(offcutRate),
+      wastePct: formatPercent(wasteRate),
+    };
+    periodData[selectedPeriodKey] = formattedData;
+
+    if (kpiTotalPO) kpiTotalPO.textContent = formattedData.po;
+    if (kpiPOSub) kpiPOSub.textContent = formattedData.poSub;
+    if (kpiEfisiensi) kpiEfisiensi.textContent = formattedData.efisiensi;
+    if (kpiEfisiensiSub) kpiEfisiensiSub.textContent = formattedData.efisiensiSub;
+    if (kpiWaste) kpiWaste.textContent = formattedData.waste;
+    if (kpiWasteSub) kpiWasteSub.textContent = formattedData.wasteSub;
+    if (kpiPiutang) kpiPiutang.textContent = formattedData.piutang;
+    if (kpiPiutangSub) kpiPiutangSub.textContent = formattedData.piutangSub;
+    if (dashboardOrderNavCount) {
+      dashboardOrderNavCount.textContent = String(
+        Number(kpis.all_active_orders) || 0,
+      );
+    }
+    if (dashboardInvoiceNavCount) {
+      dashboardInvoiceNavCount.textContent = String(
+        Number(kpis.active_invoice_count) || 0,
+      );
+    }
+    if (distYieldVal) distYieldVal.textContent = formattedData.yield;
+    if (distOffcutVal) distOffcutVal.textContent = formattedData.offcut;
+    if (distWasteVal) distWasteVal.textContent = formattedData.wastePct;
+    setPercentBar(distYieldBar, yieldRate);
+    setPercentBar(distOffcutBar, offcutRate);
+    setPercentBar(distWasteBar, wasteRate);
+    renderProductionTrend(data.trend);
+    renderDashboardInvoices(data.invoices);
+    animateDashboardStats();
+  }
+
+  async function loadDashboardData(periodKey) {
+    const requestId = ++dashboardRequestId;
+    const apiBase = `${window.location.protocol}//${window.location.hostname}:4000`;
+    delete periodData[periodKey];
+    [
+      kpiTotalPO,
+      kpiEfisiensi,
+      kpiWaste,
+      kpiPiutang,
+    ].forEach((element) => {
+      if (element) element.textContent = "Memuat...";
+    });
+    [kpiPOSub, kpiEfisiensiSub, kpiWasteSub, kpiPiutangSub].forEach(
+      (element) => {
+        if (element) element.textContent = "Memuat data...";
+      },
+    );
+
+    try {
+      const response = await fetch(
+        `${apiBase}/api/admin/dashboard?period=${encodeURIComponent(periodKey)}`,
+        {
+          credentials: "include",
+          headers: { Accept: "application/json" },
+        },
+      );
+      let result;
+      try {
+        result = await response.json();
+      } catch {
+        throw new Error("Server mengembalikan respons dashboard yang tidak valid.");
+      }
+
+      if (!response.ok || !result || result.success !== true || !result.data) {
+        throw new Error(
+          (result && result.message) ||
+            `Dashboard gagal dimuat (HTTP ${response.status}).`,
+        );
+      }
+      if (requestId !== dashboardRequestId) return;
+
+      renderDashboardData(result.data);
+      showToast(`Data dashboard diperbarui: ${getPeriodLabel(periodKey)}.`);
+    } catch (error) {
+      if (requestId !== dashboardRequestId) return;
+      [
+        kpiTotalPO,
+        kpiEfisiensi,
+        kpiWaste,
+        kpiPiutang,
+      ].forEach((element) => {
+        if (element) element.textContent = "Gagal memuat";
+      });
+      [kpiPOSub, kpiEfisiensiSub, kpiWasteSub, kpiPiutangSub].forEach(
+        (element) => {
+          if (element) element.textContent = error.message;
+        },
+      );
+      if (chartBarsContainer) chartBarsContainer.textContent = error.message;
+      if (invoiceTableBody) {
+        invoiceTableBody.replaceChildren();
+        const row = invoiceTableBody.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 6;
+        cell.textContent = error.message;
+      }
+      showToast(error.message || "Tidak dapat memuat data dashboard.");
+    }
+  }
+
+  updatePeriodLabels();
+
 
   function normalizePdfText(value) {
     return String(value)
@@ -234,10 +474,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ["Status invoice", data.piutangSub],
     ].forEach(([label, value]) => addRow(`${label}: ${value}`));
 
-    addRow("DISTRIBUSI MATERIAL", "F2", 12, 23);
+    addRow("EFISIENSI DAN PENGGUNAAN OFFCUT", "F2", 12, 23);
     [
       ["Yield material", data.yield],
-      ["Offcut", data.offcut],
+      ["Job pakai offcut", data.offcut],
       ["Waste", data.wastePct],
     ].forEach(([label, value]) => addRow(`${label}: ${value}`));
     addRow(
@@ -291,12 +531,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const reportFile = createDashboardReportPdf(
-        selectedPeriodKey,
+        getPeriodLabel(selectedPeriodKey),
         reportData,
       );
       const downloadUrl = URL.createObjectURL(reportFile);
       const downloadLink = document.createElement("a");
-      const periodSlug = normalizePdfText(selectedPeriodKey)
+      const periodSlug = normalizePdfText(getPeriodLabel(selectedPeriodKey))
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
@@ -306,7 +546,7 @@ document.addEventListener("DOMContentLoaded", () => {
       downloadLink.click();
       downloadLink.remove();
       window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
-      showToast(`Laporan PDF untuk ${selectedPeriodKey} berhasil diunduh.`);
+      showToast(`Laporan PDF untuk ${getPeriodLabel(selectedPeriodKey)} berhasil diunduh.`);
     });
   }
 
@@ -316,39 +556,14 @@ document.addEventListener("DOMContentLoaded", () => {
       periodMenu.classList.toggle("hidden");
     });
 
-    const periodItems = periodMenu.querySelectorAll(".dropdown-item");
     periodItems.forEach((item) => {
       item.addEventListener("click", () => {
         periodItems.forEach((i) => i.classList.remove("active"));
         item.classList.add("active");
-        const periodKey = item.dataset.period;
-        selectedPeriodKey = periodKey;
-        if (currentPeriodLabel)
-          currentPeriodLabel.textContent = `Periode: ${periodKey}`;
+        selectedPeriodKey = item.dataset.period;
+        updatePeriodLabels();
         periodMenu.classList.add("hidden");
-
-        // Update metrics
-        const data = periodData[periodKey];
-        if (data) {
-          if (kpiTotalPO) kpiTotalPO.textContent = data.po;
-          if (kpiPOSub) kpiPOSub.textContent = data.poSub;
-          if (kpiEfisiensi) kpiEfisiensi.textContent = data.efisiensi;
-          if (kpiEfisiensiSub) kpiEfisiensiSub.textContent = data.efisiensiSub;
-          if (kpiWaste) kpiWaste.textContent = data.waste;
-          if (kpiWasteSub) kpiWasteSub.textContent = data.wasteSub;
-          if (kpiPiutang) kpiPiutang.textContent = data.piutang;
-          if (kpiPiutangSub) kpiPiutangSub.textContent = data.piutangSub;
-
-          if (distYieldVal) distYieldVal.textContent = data.yield;
-          if (distYieldBar) distYieldBar.style.width = data.yield;
-          if (distOffcutVal) distOffcutVal.textContent = data.offcut;
-          if (distOffcutBar) distOffcutBar.style.width = data.offcut;
-          if (distWasteVal) distWasteVal.textContent = data.wastePct;
-          if (distWasteBar) distWasteBar.style.width = data.wastePct;
-
-          animateDashboardStats();
-          showToast(`Data analitik diperbarui untuk ${periodKey}`);
-        }
+        loadDashboardData(selectedPeriodKey);
       });
     });
 
@@ -359,20 +574,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Bar Chart Interaction (Click on bar)
-  const barCols = document.querySelectorAll(".bar-col");
-  barCols.forEach((col) => {
-    col.addEventListener("click", () => {
-      const month = col.dataset.month;
-      const val = col.dataset.val;
-      showToast(`Bulan ${month} 2026: Efisiensi Bahan ${val}`);
-    });
-  });
-
   // Table Row Click Detail
-  const tableRows = document.querySelectorAll(".admin-data-table tbody tr");
-  tableRows.forEach((row) => {
-    row.addEventListener("click", () => {
+  if (invoiceTableBody) {
+    invoiceTableBody.addEventListener("click", (event) => {
+      const row = event.target.closest("tr");
+      if (!row || !row.querySelector(".cell-invoice")) return;
       const inv = row.querySelector(".cell-invoice")
         ? row.querySelector(".cell-invoice").textContent
         : "";
@@ -384,7 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
         : "";
       showToast(`Invoice ${inv} (${cust}) • ${nominal}`);
     });
-  });
+  }
 
   // Chart Animation on Load
   function animateDashboardStats() {
@@ -406,6 +612,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 120);
     });
   }
+
+  loadDashboardData(selectedPeriodKey);
 
   // Hash-based Routing on Page Load
   function handleInitialRoute() {
