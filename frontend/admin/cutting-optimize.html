@@ -493,9 +493,11 @@
               <code>cutting_jobs</code> dan <code>cutting_patterns</code> untuk
               dipakai lantai produksi.
             </p>
-            <label class="po-field" style="max-width: 320px">
-              <span>Order ID</span>
-              <input id="inputOrderId" min="1" placeholder="Contoh: 1" type="number" />
+            <label class="po-field" style="max-width: 480px">
+              <span>Pilih Order</span>
+              <select id="inputOrderId">
+                <option value="">Memuat daftar order...</option>
+              </select>
             </label>
             <button class="po-save-button" id="btnRunOptimize" type="button">
               Jalankan Optimasi

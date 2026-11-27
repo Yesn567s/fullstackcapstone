@@ -149,6 +149,57 @@ async function getDeliveries(req, res) {
   }
 }
 
+async function applyJobTransition(connection, jobs, status, staffId) {
+  const checkedOrders = new Set();
+
+  for (const job of jobs) {
+    if (status === 'in_progress') {
+      await connection.execute(
+        'UPDATE cutting_jobs SET status = ?, operator_id = ? WHERE id = ?',
+        ['in_progress', staffId, job.id],
+      );
+      await connection.execute(
+        `INSERT INTO activity_logs (user_id, order_id, action_type, module_name, reference_id, description)
+         VALUES (?, ?, 'START_CUTTING', 'cutting_jobs', ?, ?)`,
+        [staffId, job.order_id, job.id, `Operator memulai pekerjaan ${job.job_number}.`],
+      );
+    } else {
+      await connection.execute(
+        'UPDATE cutting_jobs SET status = ?, finished_at = NOW() WHERE id = ?',
+        ['completed', job.id],
+      );
+      await connection.execute(
+        `INSERT INTO activity_logs (user_id, order_id, action_type, module_name, reference_id, description)
+         VALUES (?, ?, 'FINISH_CUTTING', 'cutting_jobs', ?, ?)`,
+        [staffId, job.order_id, job.id, `Operator menyelesaikan pekerjaan ${job.job_number}.`],
+      );
+    }
+
+    if (!checkedOrders.has(job.order_id)) {
+      checkedOrders.add(job.order_id);
+      const [[orderRow]] = await connection.execute(
+        'SELECT status FROM orders WHERE id = ? FOR UPDATE',
+        [job.order_id],
+      );
+      if (orderRow && orderRow.status === 'ready_for_production') {
+        await connection.execute("UPDATE orders SET status = 'in_production' WHERE id = ?", [job.order_id]);
+      }
+    }
+
+    await connection.execute(
+      `INSERT INTO po_tracking_logs (order_id, stage, status_description, updated_by)
+       VALUES (?, 'Cutting', ?, ?)`,
+      [
+        job.order_id,
+        status === 'in_progress'
+          ? `Pemotongan dimulai (${job.job_number}).`
+          : `Pemotongan selesai (${job.job_number}).`,
+        staffId,
+      ],
+    );
+  }
+}
+
 async function updateJobStatus(req, res) {
   const staffId = req.staff.id;
 
@@ -194,45 +245,13 @@ async function updateJobStatus(req, res) {
         await connection.rollback();
         return res.status(409).json({ success: false, message: 'Pekerjaan sudah diambil operator lain.' });
       }
-      await connection.execute(
-        'UPDATE cutting_jobs SET status = ?, operator_id = ? WHERE id = ?',
-        ['in_progress', staffId, jobId],
-      );
-      await connection.execute(
-        `INSERT INTO activity_logs (user_id, order_id, action_type, module_name, reference_id, description)
-         VALUES (?, ?, 'START_CUTTING', 'cutting_jobs', ?, ?)`,
-        [staffId, job.order_id, jobId, `Operator memulai pekerjaan ${job.job_number}.`],
-      );
-    } else {
+    } else if (job.operator_id === null || Number(job.operator_id) !== Number(staffId)) {
       // completed: hanya operator pemilik job.
-      if (job.operator_id === null || Number(job.operator_id) !== Number(staffId)) {
-        await connection.rollback();
-        return res.status(403).json({ success: false, message: 'Hanya operator pemilik pekerjaan yang dapat menyelesaikannya.' });
-      }
-      await connection.execute(
-        'UPDATE cutting_jobs SET status = ?, finished_at = NOW() WHERE id = ?',
-        ['completed', jobId],
-      );
-      await connection.execute(
-        `INSERT INTO activity_logs (user_id, order_id, action_type, module_name, reference_id, description)
-         VALUES (?, ?, 'FINISH_CUTTING', 'cutting_jobs', ?, ?)`,
-        [staffId, job.order_id, jobId, `Operator menyelesaikan pekerjaan ${job.job_number}.`],
-      );
+      await connection.rollback();
+      return res.status(403).json({ success: false, message: 'Hanya operator pemilik pekerjaan yang dapat menyelesaikannya.' });
     }
 
-    // Dorong order ke in_production jika masih ready_for_production.
-    const [[orderRow]] = await connection.execute(
-      'SELECT status FROM orders WHERE id = ? FOR UPDATE',
-      [job.order_id],
-    );
-    if (orderRow && orderRow.status === 'ready_for_production') {
-      await connection.execute("UPDATE orders SET status = 'in_production' WHERE id = ?", [job.order_id]);
-    }
-    await connection.execute(
-      `INSERT INTO po_tracking_logs (order_id, stage, status_description, updated_by)
-       VALUES (?, 'Cutting', ?, ?)`,
-      [job.order_id, status === 'in_progress' ? `Pemotongan dimulai (${job.job_number}).` : `Pemotongan selesai (${job.job_number}).`, staffId],
-    );
+    await applyJobTransition(connection, [job], status, staffId);
 
     await connection.commit();
     return res.json({ success: true, message: `Status diubah ke ${status}.` });
@@ -242,6 +261,74 @@ async function updateJobStatus(req, res) {
     }
     console.error('Operator update job status error:', error);
     return res.status(500).json({ success: false, message: 'Gagal mengubah status pekerjaan.' });
+  } finally {
+    if (connection) connection.release();
+  }
+}
+
+async function bulkUpdateJobStatus(req, res) {
+  const staffId = req.staff.id;
+
+  if (!staffId) {
+    return res.status(403).json({
+      success: false,
+      message: 'Gunakan akun staff terdaftar di database untuk mencatat aktivitas produksi.',
+    });
+  }
+
+  const { status } = req.body;
+  if (!['in_progress', 'completed'].includes(status)) {
+    return res.status(422).json({ success: false, message: 'Status tidak valid.' });
+  }
+
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+
+    const query = status === 'in_progress'
+      ? `SELECT id, order_id, status, operator_id, job_number
+         FROM cutting_jobs
+         WHERE status = 'pending' AND (operator_id IS NULL OR operator_id = ?)
+         ORDER BY id ASC
+         FOR UPDATE`
+      : `SELECT id, order_id, status, operator_id, job_number
+         FROM cutting_jobs
+         WHERE status = 'in_progress' AND operator_id = ?
+         ORDER BY id ASC
+         FOR UPDATE`;
+
+    const [jobs] = await connection.execute(query, [staffId]);
+
+    if (!jobs.length) {
+      await connection.rollback();
+      return res.status(409).json({
+        success: false,
+        message: status === 'in_progress'
+          ? 'Tidak ada pekerjaan pending yang dapat dimulai.'
+          : 'Tidak ada pekerjaan yang sedang dikerjakan untuk diselesaikan.',
+      });
+    }
+
+    await applyJobTransition(connection, jobs, status, staffId);
+
+    await connection.commit();
+    return res.json({
+      success: true,
+      message: status === 'in_progress'
+        ? `${jobs.length} pekerjaan berhasil dimulai.`
+        : `${jobs.length} pekerjaan berhasil diselesaikan.`,
+      data: {
+        updatedCount: jobs.length,
+        status,
+      },
+    });
+  } catch (error) {
+    if (connection) {
+      try { await connection.rollback(); } catch (rollbackError) { console.error('Bulk update job rollback error:', rollbackError); }
+    }
+    console.error('Operator bulk update job status error:', error);
+    return res.status(500).json({ success: false, message: 'Gagal memperbarui status semua pekerjaan.' });
   } finally {
     if (connection) connection.release();
   }
@@ -555,6 +642,7 @@ module.exports = {
   getJobs,
   getDeliveries,
   updateJobStatus,
+  bulkUpdateJobStatus,
   getJobPatterns,
   updateOrderStage,
   listOffcuts,

@@ -201,6 +201,105 @@ describe("Operator API", () => {
     });
   });
 
+  describe("PATCH /api/operator/jobs/bulk-status", () => {
+    test("starts all eligible pending jobs in one transaction", async () => {
+      mockConnectionExecute.mockImplementation((query) => {
+        if (query.includes("FROM cutting_jobs") && query.includes("FOR UPDATE")) {
+          return Promise.resolve([
+            [
+              { id: 3, order_id: 10, status: "pending", operator_id: null, job_number: "CJ-001" },
+              { id: 4, order_id: 10, status: "pending", operator_id: 5, job_number: "CJ-002" },
+            ],
+            [],
+          ]);
+        }
+        if (query.includes("SELECT status FROM orders")) {
+          return Promise.resolve([[{ status: "ready_for_production" }], []]);
+        }
+        return Promise.resolve([{ insertId: 1 }], []);
+      });
+
+      const response = await request(app)
+        .patch("/api/operator/jobs/bulk-status")
+        .set("Cookie", operatorCookie)
+        .send({ status: "in_progress" });
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toEqual({ updatedCount: 2, status: "in_progress" });
+      expect(mockConnectionExecute).toHaveBeenCalledWith(
+        "UPDATE cutting_jobs SET status = ?, operator_id = ? WHERE id = ?",
+        ["in_progress", 5, 3],
+      );
+      expect(mockConnectionExecute).toHaveBeenCalledWith(
+        "UPDATE cutting_jobs SET status = ?, operator_id = ? WHERE id = ?",
+        ["in_progress", 5, 4],
+      );
+      expect(mockConnectionExecute).toHaveBeenCalledWith(
+        "UPDATE orders SET status = 'in_production' WHERE id = ?",
+        [10],
+      );
+      expect(mockCommit).toHaveBeenCalledTimes(1);
+    });
+
+    test("completes all in-progress jobs owned by the operator", async () => {
+      mockConnectionExecute.mockImplementation((query) => {
+        if (query.includes("FROM cutting_jobs") && query.includes("FOR UPDATE")) {
+          return Promise.resolve([
+            [
+              { id: 3, order_id: 10, status: "in_progress", operator_id: 5, job_number: "CJ-001" },
+              { id: 4, order_id: 10, status: "in_progress", operator_id: 5, job_number: "CJ-002" },
+            ],
+            [],
+          ]);
+        }
+        if (query.includes("SELECT status FROM orders")) {
+          return Promise.resolve([[{ status: "in_production" }], []]);
+        }
+        return Promise.resolve([{ insertId: 1 }], []);
+      });
+
+      const response = await request(app)
+        .patch("/api/operator/jobs/bulk-status")
+        .set("Cookie", operatorCookie)
+        .send({ status: "completed" });
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toEqual({ updatedCount: 2, status: "completed" });
+      expect(mockConnectionExecute).toHaveBeenCalledWith(
+        "UPDATE cutting_jobs SET status = ?, finished_at = NOW() WHERE id = ?",
+        ["completed", 3],
+      );
+      expect(mockConnectionExecute).toHaveBeenCalledWith(
+        "UPDATE cutting_jobs SET status = ?, finished_at = NOW() WHERE id = ?",
+        ["completed", 4],
+      );
+      expect(mockCommit).toHaveBeenCalledTimes(1);
+    });
+
+    test("returns 409 when no eligible jobs exist for bulk transition", async () => {
+      mockConnectionExecute.mockResolvedValueOnce([[], []]);
+
+      const response = await request(app)
+        .patch("/api/operator/jobs/bulk-status")
+        .set("Cookie", operatorCookie)
+        .send({ status: "in_progress" });
+
+      expect(response.status).toBe(409);
+      expect(mockRollback).toHaveBeenCalledTimes(1);
+      expect(mockCommit).not.toHaveBeenCalled();
+    });
+
+    test("rejects invalid bulk status values", async () => {
+      const response = await request(app)
+        .patch("/api/operator/jobs/bulk-status")
+        .set("Cookie", operatorCookie)
+        .send({ status: "pending" });
+
+      expect(response.status).toBe(422);
+      expect(mockGetConnection).not.toHaveBeenCalled();
+    });
+  });
+
   describe("GET /api/operator/jobs/:id/patterns", () => {
     test("returns job with patterns ordered by cut_step_order", async () => {
       mockDbExecute.mockImplementation((query) => {

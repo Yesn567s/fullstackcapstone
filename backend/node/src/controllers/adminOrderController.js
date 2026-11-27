@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 
 const db = require("../config/db");
+const { ensureOrderComponents } = require("../services/cuttingOptimizationService");
 
 function generateOrderNumber() {
   const date = new Date();
@@ -265,60 +266,6 @@ async function createOrder(req, res) {
     });
   } finally {
     connection.release();
-  }
-}
-
-// Auto-breakdown order_items -> component_items (+4 mm dovetail) saat DP terverifikasi
-// agar PO langsung siap dijalankan oleh Engine Optimasi 2D (/api/cutting/optimize)
-async function ensureOrderComponents(connection, orderId, customerId) {
-  const DOVETAIL_MM = 4.0;
-  const [items] = await connection.execute(
-    `SELECT id, material_id, finished_length_mm, finished_width_mm, finished_height_mm, quantity
-     FROM order_items WHERE order_id = ?`,
-    [orderId],
-  );
-  if (!items.length) return;
-
-  const [[fallbackMat]] = await connection.execute(
-    `SELECT id FROM materials
-     WHERE customer_id = ? OR customer_id IS NULL
-     ORDER BY (customer_id = ?) DESC, id ASC LIMIT 1`,
-    [customerId, customerId],
-  );
-  const fallbackMaterialId = fallbackMat ? fallbackMat.id : null;
-
-  for (const it of items) {
-    const [[existing]] = await connection.execute(
-      "SELECT COUNT(*) AS cnt FROM component_items WHERE order_item_id = ?",
-      [it.id],
-    );
-    if (Number(existing.cnt) > 0) continue;
-
-    const materialId = it.material_id || fallbackMaterialId;
-    if (!materialId) continue;
-
-    const L = Number(it.finished_length_mm);
-    const W = Number(it.finished_width_mm);
-    const H = Number(it.finished_height_mm);
-    const qty = Number(it.quantity);
-
-    const panels = [
-      ["front", W + DOVETAIL_MM, H, "lengthwise", qty],
-      ["back", W + DOVETAIL_MM, H, "lengthwise", qty],
-      ["side_left", L + DOVETAIL_MM, H, "lengthwise", qty],
-      ["side_right", L + DOVETAIL_MM, H, "lengthwise", qty],
-      ["bottom", L, W, "any", qty],
-    ];
-
-    for (const [type, rawLen, rawWid, grain, pQty] of panels) {
-      await connection.execute(
-        `INSERT INTO component_items (
-           order_item_id, component_type, material_id,
-           raw_length_mm, raw_width_mm, grain_orientation, quantity
-         ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [it.id, type, materialId, rawLen, rawWid, grain, pQty],
-      );
-    }
   }
 }
 

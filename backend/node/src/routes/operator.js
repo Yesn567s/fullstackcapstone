@@ -52,6 +52,13 @@ router.get('/deliveries', ctrl.getDeliveries);
 router.get('/offcuts/materials', ctrl.listOffcutMaterials);
 router.get('/offcuts', ctrl.listOffcuts);
 
+// PATCH /api/operator/jobs/bulk-status  body: { status: in_progress|completed }
+router.patch(
+  '/jobs/bulk-status',
+  validateBody(jobStatusSchema, 'Status pekerjaan tidak valid.'),
+  ctrl.bulkUpdateJobStatus,
+);
+
 // PATCH /api/operator/jobs/:id/status  body: { status: in_progress|completed }
 router.patch(
   '/jobs/:id/status',

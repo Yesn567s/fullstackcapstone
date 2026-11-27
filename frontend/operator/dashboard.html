@@ -39,7 +39,13 @@
           </div>
 
           <div class="po-section" style="margin-top:1.5rem">
-            <h2 style="font-size:1.05rem;margin-bottom:.75rem">Pekerjaan Cutting Saya</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem">
+              <h2 style="font-size:1.05rem;margin:0">Pekerjaan Cutting Saya</h2>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                <button class="po-detail-button" id="btnStartAllJobs" type="button" disabled>Mulai Semua</button>
+                <button class="po-detail-button" id="btnCompleteAllJobs" type="button" disabled>Selesaikan Semua</button>
+              </div>
+            </div>
             <div style="overflow-x:auto">
               <table class="po-table" style="width:100%;border-collapse:collapse;font-size:.85rem">
                 <thead>
@@ -53,7 +59,7 @@
                   </tr>
                 </thead>
                 <tbody id="jobsBody">
-                  <tr><td colspan="5" style="padding:1rem;color:#94a3b8">Memuat…</td></tr>
+                  <tr><td colspan="6" style="padding:1rem;color:#94a3b8">Memuat…</td></tr>
                 </tbody>
               </table>
             </div>
@@ -128,10 +134,15 @@
               <div id="patternSteps" style="max-height:260px;overflow:auto;padding:.75rem;background:#1f2937;border-radius:.5rem;margin-top:1rem;font-size:.8rem"></div>
             </div>
           </div>
+        </div>
+      </section>
+    </div>
     <script src="../template/js/common/staff-sidebar.js"></script>
     <script src="../template/js/common/staff-guard.js"></script>
     <script>
       const API_BASE = `${window.location.protocol}//${window.location.hostname}:4000`;
+      const btnStartAllJobs = document.getElementById("btnStartAllJobs");
+      const btnCompleteAllJobs = document.getElementById("btnCompleteAllJobs");
 
       async function api(path, options = {}) {
         const res = await fetch(`${API_BASE}${path}`, {
@@ -159,16 +170,28 @@
         return `<span style="background:${bg};color:${fg};padding:.15rem .6rem;border-radius:999px;font-size:.72rem;font-weight:600">${label}</span>`;
       }
 
+      function updateBulkButtons(jobs) {
+        const pendingCount = jobs.filter((j) => j.status === "pending").length;
+        const inProgressCount = jobs.filter((j) => j.status === "in_progress").length;
+
+        btnStartAllJobs.disabled = pendingCount === 0;
+        btnStartAllJobs.textContent = pendingCount > 0 ? `Mulai Semua (${pendingCount})` : "Mulai Semua";
+
+        btnCompleteAllJobs.disabled = inProgressCount === 0;
+        btnCompleteAllJobs.textContent = inProgressCount > 0 ? `Selesaikan Semua (${inProgressCount})` : "Selesaikan Semua";
+      }
+
       function renderJobs(jobs) {
+        updateBulkButtons(jobs);
         const body = document.getElementById("jobsBody");
         if (!jobs.length) {
-          body.innerHTML = `<tr><td colspan="5" style="padding:1rem;color:#94a3b8">Belum ada pekerjaan aktif.</td></tr>`;
+          body.innerHTML = `<tr><td colspan="6" style="padding:1rem;color:#94a3b8">Belum ada pekerjaan aktif.</td></tr>`;
           return;
         }
         body.innerHTML = jobs.map((j) => `
           <tr style="border-bottom:1px solid #f1f5f9">
             <td style="padding:.6rem;font-weight:600">${j.job_number}</td>
-            <td style="padding:.6rem">${j.order_number}</td>
+            <td style="padding:.6rem">${j.order_number} <small style="color:#64748b">(ID: ${j.order_id})</small></td>
             <td style="padding:.6rem">${j.material_name} (${j.thickness_mm}mm)</td>
             <td style="padding:.6rem">${badge(j.status)}</td>
             <td style="padding:.6rem"><button class="po-detail-button" data-patterns="${j.id}">Lihat Pola Potong</button></td>
@@ -204,11 +227,29 @@
           renderDeliveries(summary.todaysDeliveries);
         } catch (e) {
           if (e.message !== "unauthorized") {
+            updateBulkButtons([]);
             document.getElementById("jobsBody").innerHTML =
-              `<tr><td colspan="5" style="padding:1rem;color:#ef4444">Gagal memuat: ${e.message}</td></tr>`;
+              `<tr><td colspan="6" style="padding:1rem;color:#ef4444">Gagal memuat: ${e.message}</td></tr>`;
           }
         }
       }
+
+      async function bulkUpdateJobs(status, button) {
+        button.disabled = true;
+        try {
+          await api("/api/operator/jobs/bulk-status", {
+            method: "PATCH",
+            body: JSON.stringify({ status }),
+          });
+          await load();
+        } catch (e) {
+          button.disabled = false;
+          if (e.message !== "unauthorized") alert(e.message);
+        }
+      }
+
+      btnStartAllJobs.addEventListener("click", () => bulkUpdateJobs("in_progress", btnStartAllJobs));
+      btnCompleteAllJobs.addEventListener("click", () => bulkUpdateJobs("completed", btnCompleteAllJobs));
 
       document.getElementById("jobsBody").addEventListener("click", async (ev) => {
         const btn = ev.target.closest("button[data-job]");

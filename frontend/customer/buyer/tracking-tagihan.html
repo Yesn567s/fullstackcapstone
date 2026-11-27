@@ -148,7 +148,59 @@
           </div>
         </div>
 
-        <!-- Section 1: Live PO Tracking (Tahap 5) -->
+        <!-- Section 1: Consignment Stock Balance (Tahap 4) -->
+        <div class="portal-card" id="konsinyasi">
+          <div class="portal-card-header">
+            <h3 class="portal-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <span>Tahap 4: Transparansi Stok Bahan Titipan (Konsinyasi Gudang Pasuruan)</span>
+            </h3>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Diperbarui Otomatis Berdasarkan Surat Jalan Masuk</span>
+          </div>
+
+          <div class="portal-table-wrap">
+            <table class="portal-table">
+              <thead>
+                <tr>
+                  <th>Jenis Material</th>
+                  <th>Ukuran Standar</th>
+                  <th>Total Diterima</th>
+                  <th>Alokasi Terpakai di PO</th>
+                  <th>Saldo Sisa di Pabrik</th>
+                  <th>Status Pasokan</th>
+                </tr>
+              </thead>
+              <tbody id="buyerConsignmentTableBody">
+                <tr>
+                  <td><strong>LVB Poplar</strong></td>
+                  <td>1220 × 2440 mm</td>
+                  <td>240 Lembar</td>
+                  <td>160 Lembar (PO-088: 42 lbr)</td>
+                  <td><strong style="color: var(--status-success);">80 Lembar</strong></td>
+                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>LVB Sengon</strong></td>
+                  <td>1220 × 2440 mm</td>
+                  <td>180 Lembar</td>
+                  <td>110 Lembar (PO-087: 35 lbr)</td>
+                  <td><strong style="color: var(--status-success);">70 Lembar</strong></td>
+                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Plywood / MDF 12 mm</strong></td>
+                  <td>1220 × 2440 mm</td>
+                  <td>150 Lembar</td>
+                  <td>95 Lembar (Alas Laci)</td>
+                  <td><strong style="color: var(--status-success);">55 Lembar</strong></td>
+                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 2: Live PO Tracking (Tahap 5) -->
         <div class="portal-card">
           <div class="portal-card-header">
             <div>
@@ -222,58 +274,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Section 2: Consignment Stock Balance (Tahap 4) -->
-        <div class="portal-card" id="konsinyasi">
-          <div class="portal-card-header">
-            <h3 class="portal-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-              <span>Tahap 4: Transparansi Stok Bahan Titipan (Konsinyasi Gudang Pasuruan)</span>
-            </h3>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">Diperbarui Otomatis Berdasarkan Surat Jalan Masuk</span>
-          </div>
-
-          <div class="portal-table-wrap">
-            <table class="portal-table">
-              <thead>
-                <tr>
-                  <th>Jenis Material</th>
-                  <th>Ukuran Standar</th>
-                  <th>Total Diterima</th>
-                  <th>Alokasi Terpakai di PO</th>
-                  <th>Saldo Sisa di Pabrik</th>
-                  <th>Status Pasokan</th>
-                </tr>
-              </thead>
-              <tbody id="buyerConsignmentTableBody">
-                <tr>
-                  <td><strong>LVB Poplar</strong></td>
-                  <td>1220 × 2440 mm</td>
-                  <td>240 Lembar</td>
-                  <td>160 Lembar (PO-088: 42 lbr)</td>
-                  <td><strong style="color: var(--status-success);">80 Lembar</strong></td>
-                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
-                </tr>
-                <tr>
-                  <td><strong>LVB Sengon</strong></td>
-                  <td>1220 × 2440 mm</td>
-                  <td>180 Lembar</td>
-                  <td>110 Lembar (PO-087: 35 lbr)</td>
-                  <td><strong style="color: var(--status-success);">70 Lembar</strong></td>
-                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Plywood / MDF 12 mm</strong></td>
-                  <td>1220 × 2440 mm</td>
-                  <td>150 Lembar</td>
-                  <td>95 Lembar (Alas Laci)</td>
-                  <td><strong style="color: var(--status-success);">55 Lembar</strong></td>
-                  <td><span class="status-pill status-completed">Aman (Tersedia)</span></td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
 
